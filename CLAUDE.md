@@ -29,6 +29,17 @@ pnpm format            # prettier --write
 
 These are also blocked via `deny` rules in `.claude/settings.json`.
 
+## Tooling
+
+- **Versions** (verified 2026-04-11, pinned list in `.claude/research/2026-04-11-expert-setup-findings.md` §5): SvelteKit 2.57, Svelte 5.55, Vite 8.0, svelte-check 4.4, ESLint 10.2, typescript-eslint 8.58, eslint-plugin-svelte 3.17, Prettier 3.8, prettier-plugin-svelte 3.5, lefthook 2.1.
+- **ESLint:** flat config only. Compose `js.configs.recommended`, `tseslint.configs.recommended`, `eslint-plugin-svelte` `flat/recommended` + `flat/prettier`. `.svelte` parser is `svelte-eslint-parser` with `parserOptions.parser: tseslint.parser`. Stay on `recommended` — no strict/stylistic tiers.
+- **Prettier (`.prettierrc`):** `useTabs: true`, `singleQuote: true`, `trailingComma: "none"`, `printWidth: 100`, plugin `prettier-plugin-svelte`, override `*.svelte` → parser `svelte`.
+- **Pre-commit: lefthook.** Runs `prettier --write` + `eslint` on staged files, parallel. **Never put `svelte-check` in pre-commit** — too slow. Run it manually and in CI only.
+- **CI:** single GitHub Actions job on `ubuntu-latest` — checkout → pnpm setup → node setup (`cache: pnpm`) → `pnpm install --frozen-lockfile` → `pnpm check` → `pnpm lint` → `pnpm build`. Triggers: `push` + `pull_request` on `main`.
+- **In-session feedback vs commit gates:** lefthook gates commits (fast, staged only). Claude Code `PostToolUse` hooks run `prettier --write` on the edited file only. **Never** run `svelte-check` on `PostToolUse`.
+- **.gitignore additions:** `Thumbs.db`, `Desktop.ini`, `*.lnk`, `.vscode/*` (keep `!.vscode/extensions.json`), `.idea/`.
+- **Windows gotchas:** `core.longpaths=true`, `core.autocrlf=input` + `.gitattributes` `* text=auto eol=lf`, Defender exclusion for the project folder, use git-bash or PowerShell (not `cmd.exe`).
+
 ## Workflow
 
 1. **Setup phase = one step at a time.** Propose → wait for confirmation → execute → confirm done → next step. No batching.
@@ -224,3 +235,26 @@ Project-specific research and domain knowledge live in `.claude/` subfolders:
 - `.claude/resources/products/` — flooring product knowledge (moved from ay3)
 
 The ay3 archive at `C:\dev\youngcarpets\_archive\ay3\` holds the prior project. Read from it when needed but do not re-port its Claude-protocol files (agents, commands, rules, settings) — those are stale and replaced by this CLAUDE.md.
+
+## Claude Harness
+
+- **`.claude/` layout:**
+  ```
+  .claude/
+  ├── settings.json          permissions + hooks (committed)
+  ├── settings.local.json    local overrides (gitignored)
+  ├── hooks/                 hook scripts
+  ├── skills/                custom slash commands
+  ├── agents/                project subagents
+  ├── research/              expert research outputs
+  ├── reference/             ported ay3 reference material
+  └── resources/products/    flooring product knowledge
+  ```
+- **Hook scope:** parent `.claude/settings.json` hooks fire for subagent tool calls too. Define critical gates there, not in delegated skills. Do **not** hook `PreToolUse` on `Skill` invocations — loop risk.
+- **Custom skills** (scaffold under `.claude/skills/`):
+  - `/add-page <slug>` — create marketing page with SEO metadata + nav integration
+  - `/check-a11y <file>` — audit component against WCAG 2.2 AA
+  - `/component-review <file>` — review runes, types, prop design
+- **Project subagents** (scaffold under `.claude/agents/`):
+  - `svelte-reviewer` — Svelte 5 + TS expert, reports only, no auto-fix
+  - `a11y-checker` — WCAG 2.2 AA auditor, reports only
