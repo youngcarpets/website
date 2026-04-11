@@ -4,19 +4,9 @@ SvelteKit 2 + Svelte 5 + TypeScript. Phase 1: public marketing site. Phase 2: au
 
 Interaction style is governed by global memory at `~/.claude/`. Do not restate those rules here.
 
-## Current Status — Read First
+## Task List
 
-**Last updated:** 2026-04-11 (mobile session, branch `claude/mobile-todo-access-zZA4B`).
-
-**Done so far:**
-- `CLAUDE.md` complete with all protocols (Commands, Tooling, Workflow, Architecture, Svelte 5, TS, SEO, a11y, Motion, Claude Harness).
-- Claude harness scaffolded: `.claude/settings.json`, `.claude/hooks/format-on-edit.sh`, `.claude/commands/{add-page,check-a11y,component-review}.md`, `.claude/agents/{svelte-reviewer,a11y-checker}.md`, empty `.claude/reference/` + `.claude/resources/products/`.
-- Expert research preserved at `.claude/research/2026-04-11-expert-setup-findings.md`.
-
-**Next step — pick up here:**
-Plan the port of resources from the **ay3 archive** (`C:\dev\youngcarpets\_archive\ay3\`) into this project. Target folders: `.claude/reference/` (design + domain reference) and `.claude/resources/products/` (flooring product knowledge). Specifically scope out Apple design resources first. This step **must be done on the laptop** — the ay3 archive is a Windows path not reachable from remote/mobile sandboxes.
-
-Before starting the port: produce a plan (which folders/files to bring, what to rename, what to skip). Do **not** port the ay3 Claude-protocol files (`agents/`, `commands/`, `rules/`, `settings/`) — those are stale and superseded by this CLAUDE.md.
+The durable project to-do list lives in **`TODO.md`** at the repo root. Read it at the start of every session before doing any work. Update and commit it at the end of every session. Do not duplicate its contents here.
 
 ## Commands
 
