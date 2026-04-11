@@ -1,14 +1,44 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-11 (mobile session, branch `claude/mobile-todo-access-zZA4B`).
+Last updated: 2026-04-11 (mobile session handoff to laptop, branch `claude/review-todo-list-CfdHE`).
 
 This file is the durable cross-session to-do list. Claude Code's in-session `TodoWrite` tool does **not** persist across sessions or machines — this file does. Edit it, commit it, push it. Both Claude and you read it at session start.
 
 ---
 
-## Blocker — fix before starting ay3 work
+## Handoff from mobile session (2026-04-11)
 
-- [ ] **Enable ay3 repo access for Claude Code sessions.** Whichever interface you use to launch Claude Code (web, mobile, or laptop CLI), add the ay3 repo to the session's allowed-repositories list so Claude can read it directly. The current session can only see `youngcarpets/website`; any attempt to read from ay3 is rejected before it reaches GitHub. Once ay3 is in the allowlist, the Windows-path dependency goes away — Claude can port resources from any device. (Exact repo name TBD — assume `youngcarpets/ay3` unless proven otherwise.)
+**What happened:** Tried to give Claude Code access to `ay3` from mobile. Confirmed blocked at two layers:
+
+1. **claude.ai/code per-project allowlist** — the `website` project is hard-wired to `youngcarpets/website`. No UI to edit this from mobile web.
+2. **GitHub App install scope** — the Claude GitHub App on the `onerrorgotowtf` personal account has only `onErrorGoToWTF/ay3` selected. The `youngcarpets/website` repo is in the **YCI** org, a different account entirely.
+
+**Cross-account means** getting Claude to read ay3 over GitHub requires: Claude GitHub App installed on BOTH accounts, repo access granted in BOTH, AND the claude.ai/code project allowlist edited. Too many moving parts for a mobile session. **Abandoned.**
+
+**Chosen shortcut:** dump the entire ay3 archive into `_archive/ay3/` inside the website repo. Then Claude reads it like any other file. Not clean, not final — it's a staging area for the real port.
+
+**Status:** user moving to laptop to do the copy manually. Mobile chat is done.
+
+## First task on laptop (do this before anything else)
+
+- [ ] **Copy ay3 into the website repo.** Destination: `<website-repo>\_archive\ay3\`. Method: Explorer copy/paste is fine, or `xcopy "<ay3-source>" "_archive\ay3" /E /I /H` (paths must be quoted on Windows).
+- [ ] **Delete `_archive\ay3\.git`** if it exists — don't commit a nested git dir.
+- [ ] **Commit + push** to branch `claude/review-todo-list-CfdHE`:
+  ```
+  git add _archive/ay3
+  git commit -m "Dump ay3 archive into _archive/ay3 for porting"
+  git push -u origin claude/review-todo-list-CfdHE
+  ```
+- [ ] **Tell Claude on laptop: "ay3 is in _archive/ay3, go."** Claude then reads the tree and proceeds with the port plan.
+
+### Unknowns to tell Claude at laptop session start
+- Exact path of the website repo on the C: drive (assumed `C:\dev\youngcarpets\website` — verify).
+- Exact path of the ay3 source on the C: drive (assumed `C:\dev\youngcarpets\_archive\ay3` — verify).
+- Whether `YCI/ay3` exists on GitHub (unclear from mobile chat — probably not, ay3 lives only at `onErrorGoToWTF/ay3` and/or local disk).
+
+## Blocker — proper fix (deferred, not urgent)
+
+- [ ] **Long-term: fix cross-account repo access for Claude Code.** Once the shortcut works, decide whether to (a) install Claude GitHub App on YCI org and grant it `ay3` access after moving/forking ay3 there, or (b) leave the archive in `_archive/ay3/` permanently. Only do this if the shortcut proves painful.
 
 ## Next Up (after the blocker is cleared)
 
