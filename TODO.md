@@ -1,50 +1,25 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-11 (mobile session handoff to laptop, branch `claude/review-todo-list-CfdHE`).
+Last updated: 2026-04-11 (laptop session — reversed the ay3-to-GitHub plan).
 
 This file is the durable cross-session to-do list. Claude Code's in-session `TodoWrite` tool does **not** persist across sessions or machines — this file does. Edit it, commit it, push it. Both Claude and you read it at session start.
 
+Working branch: `claude/review-todo-list-CfdHE`. All pushes fast-forward into `main` on GitHub (`youngcarpets/website`).
+
 ---
 
-## Handoff from mobile session (2026-04-11)
+## Decisions locked in this session (2026-04-11)
 
-**What happened:** Tried to give Claude Code access to `ay3` from mobile. Confirmed blocked at two layers:
+- **ay3 archive stays local-only.** The folder lives at `_archive/ay3/` on this laptop (215 MB, full tree, nested `.git` intact so it's still its own functional git repo). It is **gitignored** by the outer website repo via root `.gitignore` containing `_archive/`. It does **not** go to GitHub. Reason: 215 MB in git history forever would bloat every future clone of the website repo, and the archive is reference-only — when we need something from it, we port/copy deliberately rather than carry the whole thing.
+- **Implication for other devices.** On the work computer or any fresh clone, `_archive/` will not exist. If reference material is needed there, either re-copy ay3 from its canonical location or port specific pieces into the website repo proper.
+- **Push target.** Everything under `website/` goes to `main` on GitHub. No long-lived feature branches for solo work.
 
-1. **claude.ai/code per-project allowlist** — the `website` project is hard-wired to `youngcarpets/website`. No UI to edit this from mobile web.
-2. **GitHub App install scope** — the Claude GitHub App on the `onerrorgotowtf` personal account has only `onErrorGoToWTF/ay3` selected. The `youngcarpets/website` repo is in the **YCI** org, a different account entirely.
+## Next Up
 
-**Cross-account means** getting Claude to read ay3 over GitHub requires: Claude GitHub App installed on BOTH accounts, repo access granted in BOTH, AND the claude.ai/code project allowlist edited. Too many moving parts for a mobile session. **Abandoned.**
-
-**Chosen shortcut:** dump the entire ay3 archive into `_archive/ay3/` inside the website repo. Then Claude reads it like any other file. Not clean, not final — it's a staging area for the real port.
-
-**Status:** user moving to laptop to do the copy manually. Mobile chat is done.
-
-## First task on laptop (do this before anything else)
-
-- [ ] **Copy ay3 into the website repo.** Destination: `<website-repo>\_archive\ay3\`. Method: Explorer copy/paste is fine, or `xcopy "<ay3-source>" "_archive\ay3" /E /I /H` (paths must be quoted on Windows).
-- [ ] **Delete `_archive\ay3\.git`** if it exists — don't commit a nested git dir.
-- [ ] **Commit + push** to branch `claude/review-todo-list-CfdHE`:
-  ```
-  git add _archive/ay3
-  git commit -m "Dump ay3 archive into _archive/ay3 for porting"
-  git push -u origin claude/review-todo-list-CfdHE
-  ```
-- [ ] **Tell Claude on laptop: "ay3 is in _archive/ay3, go."** Claude then reads the tree and proceeds with the port plan.
-
-### Unknowns to tell Claude at laptop session start
-- Exact path of the website repo on the C: drive (assumed `C:\dev\youngcarpets\website` — verify).
-- Exact path of the ay3 source on the C: drive (assumed `C:\dev\youngcarpets\_archive\ay3` — verify).
-- Whether `YCI/ay3` exists on GitHub (unclear from mobile chat — probably not, ay3 lives only at `onErrorGoToWTF/ay3` and/or local disk).
-
-## Blocker — proper fix (deferred, not urgent)
-
-- [ ] **Long-term: fix cross-account repo access for Claude Code.** Once the shortcut works, decide whether to (a) install Claude GitHub App on YCI org and grant it `ay3` access after moving/forking ay3 there, or (b) leave the archive in `_archive/ay3/` permanently. Only do this if the shortcut proves painful.
-
-## Next Up (after the blocker is cleared)
-
-- [ ] **Plan the ay3 archive port.** Source: either the GitHub repo (preferred) or the local archive at `C:\dev\youngcarpets\_archive\ay3\`.
-  - [ ] Start with **Apple design resources** (locate them in the ay3 tree, list the files).
+- [ ] **Plan the ay3 archive port.** Source: local `_archive/ay3/` on this laptop.
+  - [ ] Start with **Apple/design resources** — locate them in the ay3 tree, list the files.
   - [ ] Identify **domain content** to port: products, Ontario accounting, any brand/design material.
+  - [ ] **v7 reference** — `_archive/ay3/my-portal/src/routes/young-carpets/dev/v7/+page.svelte` is the visual target. Also relevant: sibling `v1–v12` folders and shared components under `_archive/ay3/my-portal/src/routes/young-carpets/components/`. These are reference snippets for animations and layout ideas, not code to import.
   - [ ] Decide final destinations:
     - Design + domain reference → `.claude/reference/`
     - Flooring product knowledge → `.claude/resources/products/`
@@ -57,7 +32,7 @@ The Claude harness is complete, but the SvelteKit project itself is still a skel
 
 - [ ] `package.json` + `pnpm-lock.yaml` with pinned versions from `.claude/research/2026-04-11-expert-setup-findings.md` §5
 - [ ] `svelte.config.js`, `vite.config.ts`, `tsconfig.json` (extends `./.svelte-kit/tsconfig.json`)
-- [ ] `.gitignore`, `.gitattributes` (Windows LF rules)
+- [ ] `.gitignore` expansion (currently only has `_archive/` — add Node/SvelteKit/OS entries at scaffold time), `.gitattributes` (Windows LF rules)
 - [ ] `.prettierrc` (tabs, single quotes, no trailing comma, printWidth 100)
 - [ ] `eslint.config.js` (flat config, recommended only)
 - [ ] `lefthook.yml` (pre-commit: prettier + eslint, parallel — **never** svelte-check)
@@ -77,6 +52,10 @@ The Claude harness is complete, but the SvelteKit project itself is still a skel
 - [ ] `(marketing)/about/+page.svelte`
 - [ ] `quote/+page.svelte` + `quote/+page.server.ts` (form action, Zod, honeypot, rate limit, Resend)
 
+## Phase 2 (deferred — not started)
+
+- [ ] Authenticated employee portal with a database. Deferred until Phase 1 marketing site ships.
+
 ## Done ✓
 
 - [x] CLAUDE.md written with all protocols (Current Status, Commands, Tooling, Workflow, Architecture, Svelte 5, TS, Import Order, Naming, Error Handling, Code Generation, SEO, a11y, Motion, Project Context, Claude Harness)
@@ -87,12 +66,16 @@ The Claude harness is complete, but the SvelteKit project itself is still a skel
   - [x] `.claude/commands/add-page.md`, `check-a11y.md`, `component-review.md`
   - [x] `.claude/agents/svelte-reviewer.md`, `a11y-checker.md`
   - [x] `.claude/reference/` and `.claude/resources/products/` placeholders
+- [x] ay3 archive copied to `_archive/ay3/` on this laptop for local reference (2026-04-11)
+- [x] Root `.gitignore` created with `_archive/` so the archive stays local-only
+- [x] **Superseded:** "copy + commit + push ay3 to GitHub" plan from the mobile handoff. Briefly executed and immediately reverted via force-push back to `c172a31` after deciding the 215 MB would bloat history forever. Replaced by the local-only decision above.
 
 ---
 
 ## How to use this file
 
-- **Start of a session:** read this file first, then read `CLAUDE.md`'s "Current Status — Read First" block.
-- **End of a session:** update the checkboxes, move finished items to "Done", commit and push.
-- **Switching devices:** `git pull origin <branch>` on the other device; this file travels with the repo.
+- **Start of a session:** read this file first, then read `CLAUDE.md`.
+- **Mid-session:** whenever a decision changes, update this file immediately — don't leave stale instructions at the top.
+- **End of a session:** update checkboxes, move finished items to Done, commit and push.
+- **Switching devices:** `git pull origin main` on the other device; this file travels with the repo.
 - Keep the list short and current. Delete stale items — don't let it rot.
