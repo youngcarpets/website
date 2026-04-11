@@ -62,6 +62,9 @@ importers:
       vite:
         specifier: ^8.0.8
         version: 8.0.8(@types/node@22.19.17)(esbuild@0.27.3)
+      wrangler:
+        specifier: ^4.81.1
+        version: 4.81.1(@cloudflare/workers-types@4.20260411.1)
 
 packages:
 
