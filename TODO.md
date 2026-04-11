@@ -6,9 +6,13 @@ This file is the durable cross-session to-do list. Claude Code's in-session `Tod
 
 ---
 
-## Next Up (do this first)
+## Blocker — fix before starting ay3 work
 
-- [ ] **Plan the ay3 archive port.** Source: `C:\dev\youngcarpets\_archive\ay3\`. Must be done on the **laptop** — this path is not reachable from remote/mobile sandboxes.
+- [ ] **Enable ay3 repo access for Claude Code sessions.** Whichever interface you use to launch Claude Code (web, mobile, or laptop CLI), add the ay3 repo to the session's allowed-repositories list so Claude can read it directly. The current session can only see `youngcarpets/website`; any attempt to read from ay3 is rejected before it reaches GitHub. Once ay3 is in the allowlist, the Windows-path dependency goes away — Claude can port resources from any device. (Exact repo name TBD — assume `youngcarpets/ay3` unless proven otherwise.)
+
+## Next Up (after the blocker is cleared)
+
+- [ ] **Plan the ay3 archive port.** Source: either the GitHub repo (preferred) or the local archive at `C:\dev\youngcarpets\_archive\ay3\`.
   - [ ] Start with **Apple design resources** (locate them in the ay3 tree, list the files).
   - [ ] Identify **domain content** to port: products, Ontario accounting, any brand/design material.
   - [ ] Decide final destinations:
