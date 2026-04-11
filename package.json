@@ -1,0 +1,34 @@
+{
+  "name": "youngcarpets-website",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-cloudflare": "^4.9.0",
+    "@sveltejs/enhanced-img": "^0.4.4",
+    "@sveltejs/kit": "2.57.1",
+    "@sveltejs/vite-plugin-svelte": "^4.0.0",
+    "eslint": "10.2.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-svelte": "3.17.0",
+    "globals": "^15.0.0",
+    "lefthook": "2.1.5",
+    "prettier": "3.8.2",
+    "prettier-plugin-svelte": "3.5.1",
+    "svelte": "5.55.3",
+    "svelte-check": "4.4.6",
+    "svelte-eslint-parser": "^1.0.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "8.58.1",
+    "vite": "8.0.8"
+  }
+}
