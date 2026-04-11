@@ -8,7 +8,7 @@ This file is the durable cross-session to-do list. Claude Code's in-session `Tod
 
 ## Blocker — fix before starting ay3 work
 
-- [ ] **Enable ay3 repo access for Claude Code sessions.** Whichever interface you use to launch Claude Code (web, mobile, or laptop CLI), add the ay3 repo to the session's allowed-repositories list so Claude can read it directly. The current session can only see `youngcarpets/website`; any attempt to read from ay3 is rejected before it reaches GitHub. Once ay3 is in the allowlist, the Windows-path dependency goes away — Claude can port resources from any device. (Exact repo name TBD — assume `youngcarpets/ay3` unless proven otherwise.)
+- [ ] **Enable ay3 repo access for Claude Code sessions.** Real repo name: `onErrorGoToWTF/ay3`. GitHub App access has been granted (2026-04-11). Remaining step: start a **new** Claude Code session with `onErrorGoToWTF/ay3` in the session's allowed-repositories list — the current session is still locked to `youngcarpets/website`.
 
 ## Next Up (after the blocker is cleared)
 
