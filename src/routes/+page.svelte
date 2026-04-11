@@ -4,7 +4,7 @@
 </svelte:head>
 
 <section class="hero">
-	<h1>Young Carpets</h1>
+	<h1>hello</h1>
 </section>
 
 <style>
