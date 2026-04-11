@@ -244,17 +244,18 @@ The ay3 archive at `C:\dev\youngcarpets\_archive\ay3\` holds the prior project. 
   ├── settings.json          permissions + hooks (committed)
   ├── settings.local.json    local overrides (gitignored)
   ├── hooks/                 hook scripts
-  ├── skills/                custom slash commands
+  ├── commands/              project slash commands
   ├── agents/                project subagents
   ├── research/              expert research outputs
   ├── reference/             ported ay3 reference material
   └── resources/products/    flooring product knowledge
   ```
-- **Hook scope:** parent `.claude/settings.json` hooks fire for subagent tool calls too. Define critical gates there, not in delegated skills. Do **not** hook `PreToolUse` on `Skill` invocations — loop risk.
-- **Custom skills** (scaffold under `.claude/skills/`):
+- **Hook scope:** parent `.claude/settings.json` hooks fire for subagent tool calls too. Define critical gates there, not in delegated commands. Do **not** hook `PreToolUse` on `Skill` invocations — loop risk.
+- **PostToolUse formatter:** `.claude/hooks/format-on-edit.sh` runs `prettier --write` on the edited file after every `Edit`/`Write`. Silently no-ops until `package.json` + `pnpm` exist.
+- **Slash commands** (in `.claude/commands/`):
   - `/add-page <slug>` — create marketing page with SEO metadata + nav integration
-  - `/check-a11y <file>` — audit component against WCAG 2.2 AA
-  - `/component-review <file>` — review runes, types, prop design
-- **Project subagents** (scaffold under `.claude/agents/`):
+  - `/check-a11y <file>` — audit component against WCAG 2.2 AA (dispatches `a11y-checker`)
+  - `/component-review <file>` — review runes, types, prop design (dispatches `svelte-reviewer`)
+- **Project subagents** (in `.claude/agents/`):
   - `svelte-reviewer` — Svelte 5 + TS expert, reports only, no auto-fix
   - `a11y-checker` — WCAG 2.2 AA auditor, reports only

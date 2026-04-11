@@ -17,6 +17,8 @@
       "Bash(pnpm run lint)",
       "Bash(pnpm run format)",
       "Bash(pnpm exec svelte-check)",
+      "Bash(pnpm exec prettier *)",
+      "Bash(pnpm exec eslint *)",
       "Bash(git status)",
       "Bash(git status -uno)",
       "Bash(git diff)",
@@ -52,6 +54,20 @@
       "Edit(.env.*)",
       "Read(.env)",
       "Read(.env.*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/format-on-edit.sh",
+            "timeout": 15
+          }
+        ]
+      }
     ]
   }
 }
