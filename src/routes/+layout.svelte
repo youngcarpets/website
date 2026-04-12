@@ -134,7 +134,6 @@
 			</div>
 
 			<div class="site-footer-col">
-				<p class="site-footer-col-title">Visit</p>
 				<address class="site-footer-address">
 					Young Carpets Inc.<br />
 					Unit 316 — 1228 Old Innes Road<br />
