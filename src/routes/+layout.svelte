@@ -148,18 +148,15 @@
 				<ul class="site-footer-list">
 					<li>
 						<span class="site-footer-list-key">Phone</span>
-						<a href="tel:+16137442744" class="site-footer-list-val">613-744-2744</a>
+						<span class="site-footer-list-val">613-744-2744</span>
 					</li>
 					<li>
 						<span class="site-footer-list-key">Email</span>
-						<a href="mailto:info@youngcarpets.com" class="site-footer-list-val"
-							>info@youngcarpets.com</a
-						>
+						<span class="site-footer-list-val">info@youngcarpets.com</span>
 					</li>
 					<li>
 						<span class="site-footer-list-key">AP</span>
-						<a href="mailto:ap@youngcarpets.com" class="site-footer-list-val">ap@youngcarpets.com</a
-						>
+						<span class="site-footer-list-val">ap@youngcarpets.com</span>
 					</li>
 				</ul>
 			</div>
@@ -601,13 +598,8 @@
 	.site-footer-list-val {
 		font-size: 0.82rem;
 		color: #e6e6e8;
-		text-decoration: none;
 		font-feature-settings: 'tnum';
-		transition: color 180ms;
-	}
-
-	a.site-footer-list-val:hover {
-		color: #fff;
+		user-select: text;
 	}
 
 	.site-footer-bottom {
