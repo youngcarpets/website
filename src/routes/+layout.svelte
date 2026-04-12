@@ -142,7 +142,6 @@
 			</div>
 
 			<div class="site-footer-col">
-				<p class="site-footer-col-title">Contact</p>
 				<ul class="site-footer-list">
 					<li>
 						<span class="site-footer-list-key">Phone</span>
@@ -160,15 +159,10 @@
 			</div>
 
 			<div class="site-footer-col">
-				<p class="site-footer-col-title">Hours</p>
 				<ul class="site-footer-list">
 					<li>
 						<span class="site-footer-list-key">Office</span>
 						<span class="site-footer-list-val">Mon–Fri 8 AM – 4 PM</span>
-					</li>
-					<li>
-						<span class="site-footer-list-key">Installation</span>
-						<span class="site-footer-list-val">24/7, 365</span>
 					</li>
 				</ul>
 			</div>
@@ -229,7 +223,7 @@
 
 	.site-version {
 		position: fixed;
-		top: 6px;
+		top: calc(6px + env(safe-area-inset-top, 0px));
 		left: 50%;
 		transform: translateX(-50%);
 		z-index: 200;
@@ -280,9 +274,9 @@
 
 	.site-nav {
 		position: fixed;
-		top: 12px;
-		left: 12px;
-		right: 12px;
+		top: calc(12px + env(safe-area-inset-top, 0px));
+		left: calc(12px + env(safe-area-inset-left, 0px));
+		right: calc(12px + env(safe-area-inset-right, 0px));
 		z-index: 100;
 		display: flex;
 		align-items: center;
@@ -384,10 +378,16 @@
 			background 0.2s;
 	}
 
-	.site-nav-menu a:hover,
 	.site-nav-menu a:focus-visible {
 		color: #e6e6e8;
 		background: rgba(255, 255, 255, 0.06);
+	}
+
+	@media (hover: hover) {
+		.site-nav-menu a:hover {
+			color: #e6e6e8;
+			background: rgba(255, 255, 255, 0.06);
+		}
 	}
 
 	.site-theme {
@@ -410,10 +410,12 @@
 			transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
-	.site-theme:hover {
-		background: color-mix(in oklab, currentColor 8%, transparent);
-		border-color: color-mix(in oklab, currentColor 18%, transparent);
-		transform: scale(1.04);
+	@media (hover: hover) {
+		.site-theme:hover {
+			background: color-mix(in oklab, currentColor 8%, transparent);
+			border-color: color-mix(in oklab, currentColor 18%, transparent);
+			transform: scale(1.04);
+		}
 	}
 
 	.site-theme:focus-visible {
@@ -493,6 +495,7 @@
 	.site-footer {
 		background: #07070a;
 		color: #9a9aa1;
+		padding: 2.5rem 0 calc(1.5rem + env(safe-area-inset-bottom, 0px));
 		position: relative;
 		z-index: 1;
 		border-top: 1px solid #2a2a2f;
@@ -505,7 +508,8 @@
 	.site-footer-inner {
 		max-width: 1200px;
 		margin: 0 auto;
-		padding: 0 1.5rem;
+		padding: 0 calc(1.5rem + env(safe-area-inset-right, 0px)) 0
+			calc(1.5rem + env(safe-area-inset-left, 0px));
 	}
 
 	.site-footer-grid {
@@ -545,21 +549,6 @@
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
 		color: #9a9aa1;
-	}
-
-	.site-footer-col-title {
-		display: inline-block;
-		margin: 0 0 0.85rem;
-		padding: 0.3rem 0.7rem;
-		font-family: ui-monospace, 'SF Mono', monospace;
-		font-size: 0.6rem;
-		font-weight: 700;
-		text-transform: uppercase;
-		letter-spacing: 0.18em;
-		color: #9a9aa1;
-		border-radius: 8px;
-		background: transparent;
-		border: 1px solid rgba(255, 255, 255, 0.1);
 	}
 
 	.site-footer-address {
@@ -615,14 +604,7 @@
 		color: #8e8e96;
 	}
 
-	@media (max-width: 880px) {
-		.site-footer-grid {
-			grid-template-columns: 1fr 1fr;
-			gap: 2.25rem 1.5rem;
-		}
-	}
-
-	@media (max-width: 880px) {
+	@media (max-width: 960px) {
 		.site-footer-grid {
 			grid-template-columns: 1fr 1fr;
 			gap: 2.25rem 1.5rem;
@@ -630,9 +612,6 @@
 	}
 
 	@media (max-width: 520px) {
-		.site-footer {
-			padding: 2.75rem 0 calc(1.5rem + env(safe-area-inset-bottom, 0px));
-		}
 		.site-footer-grid {
 			grid-template-columns: 1fr;
 			gap: 1.75rem;

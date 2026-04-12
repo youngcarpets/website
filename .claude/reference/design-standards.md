@@ -79,3 +79,4 @@ Phone numbers and email addresses are **plain text** site-wide — no `tel:` or 
 | 2026-04-12 | Inter Variable instead of system font | Cross-platform consistency, weight 200 for headings |
 | 2026-04-12 | `blur(24px)` not `blur(20px)` on nav | Stronger glass effect, per CLAUDE.md design tokens |
 | 2026-04-12 | Grayscale only — no gold/color accents | Colors will be added later; everything stays black/white/gray for now |
+| 2026-04-12 | Dev components exempt from design review | Version badge, debug overlays, etc. should stand out (e.g. purple badge). Don't normalize them to site palette. |
