@@ -203,15 +203,22 @@
 			aria-expanded={footerOpen}
 			aria-label={footerOpen ? 'Collapse footer' : 'Expand footer for details'}
 		>
-			<span class="site-footer-bar-brand">YOUNG</span>
-			<span class="site-footer-bar-sep" aria-hidden="true"></span>
-			<span class="site-footer-bar-item">1228 Old Innes Rd, Ottawa</span>
-			<span class="site-footer-bar-sep" aria-hidden="true"></span>
-			<span class="site-footer-bar-item">613-744-2744</span>
-			<span class="site-footer-bar-sep" aria-hidden="true"></span>
-			<span class="site-footer-bar-item">info@youngcarpets.com</span>
-			<span class="site-footer-bar-sep" aria-hidden="true"></span>
-			<span class="site-footer-bar-item">Mon–Fri 8–4</span>
+			<div class="site-footer-bar-panel">
+				<span class="site-footer-bar-brand">YOUNG</span>
+				<span class="site-footer-bar-sub">Commercial Flooring</span>
+			</div>
+			<div class="site-footer-bar-panel">
+				<span class="site-footer-bar-line">Unit 316 — 1228 Old Innes Rd</span>
+				<span class="site-footer-bar-line">Ottawa, ON K1B 3V3</span>
+			</div>
+			<div class="site-footer-bar-panel">
+				<span class="site-footer-bar-line">613-744-2744</span>
+				<span class="site-footer-bar-line">info@youngcarpets.com</span>
+			</div>
+			<div class="site-footer-bar-panel">
+				<span class="site-footer-bar-line">Mon–Fri 8 AM – 4 PM</span>
+				<span class="site-footer-bar-line">Installation 24/7</span>
+			</div>
 			<svg
 				class="site-footer-bar-chevron"
 				class:open={footerOpen}
@@ -560,12 +567,14 @@
 	}
 
 	.site-footer-bar {
-		display: flex;
+		display: grid;
+		grid-template-columns: auto 1fr 1fr 1fr auto;
 		align-items: center;
+		gap: 0 1.5rem;
 		width: 100%;
 		min-height: 44px;
-		padding: 0.6rem 0;
-		padding-bottom: calc(0.6rem + env(safe-area-inset-bottom, 0px));
+		padding: 0.75rem 0;
+		padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
 		background: transparent;
 		border: none;
 		cursor: pointer;
@@ -573,6 +582,7 @@
 		font-size: 0.78rem;
 		font-family: 'Inter Variable', system-ui, sans-serif;
 		letter-spacing: -0.005em;
+		text-align: left;
 		-webkit-tap-highlight-color: transparent;
 		-webkit-font-smoothing: antialiased;
 	}
@@ -583,34 +593,36 @@
 		border-radius: 8px;
 	}
 
+	.site-footer-bar-panel {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+		line-height: 1.4;
+	}
+
 	.site-footer-bar-brand {
 		font-family: 'Square721Nav', ui-serif, Georgia, serif;
-		font-size: 0.95rem;
-		letter-spacing: 0.12em;
+		font-size: 1.1rem;
+		letter-spacing: 0.18em;
 		color: #e6e6e8;
-		flex-shrink: 0;
 	}
 
-	.site-footer-bar-sep {
-		width: 3px;
-		height: 3px;
-		border-radius: 50%;
-		background: #6b6b73;
-		margin: 0 0.65rem;
-		flex-shrink: 0;
-	}
-
-	.site-footer-bar-item {
-		white-space: nowrap;
+	.site-footer-bar-sub {
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.55rem;
+		font-weight: 300;
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
 		color: #9a9aa1;
-		flex-shrink: 1;
-		min-width: 0;
-		overflow: hidden;
-		text-overflow: ellipsis;
+	}
+
+	.site-footer-bar-line {
+		font-size: 0.75rem;
+		color: #9a9aa1;
+		white-space: nowrap;
 	}
 
 	.site-footer-bar-chevron {
-		margin-left: auto;
 		flex-shrink: 0;
 		color: #6b6b73;
 		transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -814,19 +826,28 @@
 		}
 	}
 
-	@media (max-width: 520px) {
+	@media (max-width: 880px) {
 		.site-footer-bar {
-			flex-wrap: wrap;
-			gap: 0.15rem 0;
+			grid-template-columns: auto 1fr auto;
+			gap: 0.5rem 1rem;
 		}
 
-		.site-footer-bar-sep {
+		.site-footer-bar-panel:nth-child(3),
+		.site-footer-bar-panel:nth-child(4) {
 			display: none;
 		}
+	}
 
-		.site-footer-bar-item {
-			padding: 0 0.4rem;
-			font-size: 0.72rem;
+	@media (max-width: 520px) {
+		.site-footer-bar {
+			grid-template-columns: auto 1fr auto;
+			gap: 0.4rem 0.75rem;
+		}
+
+		.site-footer-bar-panel:nth-child(2),
+		.site-footer-bar-panel:nth-child(3),
+		.site-footer-bar-panel:nth-child(4) {
+			display: none;
 		}
 
 		.site-footer-grid {
