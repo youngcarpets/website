@@ -126,32 +126,6 @@
 
 <footer class="site-footer">
 	<div class="site-footer-inner">
-		<button
-			class="site-footer-toggle"
-			onclick={() => (footerOpen = !footerOpen)}
-			aria-expanded={footerOpen}
-		>
-			<div class="site-footer-brand">
-				<span class="site-footer-brand-name">YOUNG</span>
-				<span class="site-footer-brand-sub">Commercial Flooring</span>
-			</div>
-			<svg
-				class="site-footer-chevron"
-				class:open={footerOpen}
-				viewBox="0 0 24 24"
-				width="16"
-				height="16"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-				stroke-linecap="round"
-				stroke-linejoin="round"
-				aria-hidden="true"
-			>
-				<path d="M6 9l6 6 6-6" />
-			</svg>
-		</button>
-
 		<div class="site-footer-panel" class:open={footerOpen}>
 			<div class="site-footer-grid">
 				<div class="site-footer-col">
@@ -200,6 +174,32 @@
 				<p class="site-footer-copy">&copy; 2026 Young Carpets Inc.</p>
 			</div>
 		</div>
+
+		<button
+			class="site-footer-toggle"
+			onclick={() => (footerOpen = !footerOpen)}
+			aria-expanded={footerOpen}
+		>
+			<svg
+				class="site-footer-chevron"
+				class:open={footerOpen}
+				viewBox="0 0 24 24"
+				width="16"
+				height="16"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true"
+			>
+				<path d="M18 15l-6-6-6 6" />
+			</svg>
+			<div class="site-footer-brand">
+				<span class="site-footer-brand-name">YOUNG</span>
+				<span class="site-footer-brand-sub">Commercial Flooring</span>
+			</div>
+		</button>
 	</div>
 </footer>
 
@@ -534,9 +534,10 @@
 
 	.site-footer-toggle {
 		display: flex;
+		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: 1rem;
+		gap: 0.5rem;
 		width: 100%;
 		padding: 0.75rem 0;
 		background: transparent;
