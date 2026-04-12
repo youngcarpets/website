@@ -480,13 +480,6 @@
 			-webkit-backdrop-filter: none;
 			border-color: rgba(255, 255, 255, 0.2);
 		}
-
-		.site-footer-col-title {
-			backdrop-filter: none;
-			-webkit-backdrop-filter: none;
-			background: rgba(194, 179, 154, 0.15);
-			border-color: rgba(194, 179, 154, 0.3);
-		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -570,11 +563,8 @@
 		letter-spacing: 0.18em;
 		color: #9a9aa1;
 		border-radius: 8px;
-		background: rgba(194, 179, 154, 0.06);
-		border: 1px solid rgba(194, 179, 154, 0.18);
-		backdrop-filter: blur(10px) saturate(1.5);
-		-webkit-backdrop-filter: blur(10px) saturate(1.5);
-		box-shadow: inset 0 1px 0 rgba(255, 248, 235, 0.1);
+		background: transparent;
+		border: 1px solid rgba(255, 255, 255, 0.1);
 	}
 
 	.site-footer-address {
