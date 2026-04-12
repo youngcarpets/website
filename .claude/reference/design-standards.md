@@ -6,6 +6,15 @@
 
 ---
 
+## Badges
+
+| Context | Style | Reason |
+|---------|-------|--------|
+| Over opaque backgrounds (footer, solid panels) | **Flat** — outline only, transparent fill, no backdrop-filter | Nothing behind to blur; glass effect adds nothing |
+| Over translucent/image backgrounds (hero, sections) | **Glass** — backdrop-filter, translucent fill, inset highlight, shadow | Creates floating depth over the bg image |
+
+---
+
 ## Border Radius
 
 | Element | Value | Notes |
