@@ -525,10 +525,11 @@
 	}
 
 	.site-footer-brand {
-		display: flex;
+		display: inline-flex;
 		flex-direction: column;
 		gap: 0.35rem;
 		line-height: 1;
+		width: fit-content;
 	}
 
 	.site-footer-brand-name {
