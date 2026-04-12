@@ -11,6 +11,7 @@
 |-------|--------|-------|-------------|
 | [ay3-expert](agents/ay3-expert.md) | Original YC website analysis, porting, comparison | [index](agents/indexes/ay3-expert.index.md) | Replicate ay3 features, compare old vs new, port effects |
 | [design](agents/design.md) | Apple Liquid Glass UI, colors, typography, effects, a11y | [index](agents/indexes/design.index.md) | Styling, glass effects, color, dark mode, animations |
+| [motion-expert](agents/motion-expert.md) | High-quality web transitions + animation with perf awareness | [index](agents/indexes/motion-expert.index.md) | Smooth transitions, scroll effects, GPU compositing, animation review |
 | [visual-diagnose](agents/visual-diagnose.md) | Screenshot-based visual bug diagnosis | [index](agents/indexes/visual-diagnose.index.md) | User drops screenshot, visual bug resists code-only debug |
 | [mobile](agents/mobile.md) | Phone/tablet, touch, Safari quirks | [index](agents/indexes/mobile.index.md) | iPhone rendering, touch events, viewport units, safe areas |
 | [svelte-reviewer](agents/svelte-reviewer.md) | Svelte 5 + TS code review | — | Runes, props, events, anti-patterns |
