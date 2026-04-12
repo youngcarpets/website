@@ -40,7 +40,7 @@
 
 <style>
 	.hero {
-		min-height: 70vh;
+		min-height: 52vh;
 		display: grid;
 		place-items: center;
 		padding: 6rem 1rem 2rem;
