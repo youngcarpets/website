@@ -9,6 +9,7 @@
 
 | Agent | Domain | Index | When to use |
 |-------|--------|-------|-------------|
+| [ay3-expert](agents/ay3-expert.md) | Original YC website analysis, porting, comparison | [index](agents/indexes/ay3-expert.index.md) | Replicate ay3 features, compare old vs new, port effects |
 | [design](agents/design.md) | Apple Liquid Glass UI, colors, typography, effects, a11y | [index](agents/indexes/design.index.md) | Styling, glass effects, color, dark mode, animations |
 | [visual-diagnose](agents/visual-diagnose.md) | Screenshot-based visual bug diagnosis | [index](agents/indexes/visual-diagnose.index.md) | User drops screenshot, visual bug resists code-only debug |
 | [mobile](agents/mobile.md) | Phone/tablet, touch, Safari quirks | [index](agents/indexes/mobile.index.md) | iPhone rendering, touch events, viewport units, safe areas |
@@ -88,7 +89,8 @@
 |------|----------|
 | [architecture-decisions.md](reference/architecture-decisions.md) | ADR-005: Apple Liquid Glass UI (CSS-only approach) |
 | [component-patterns.md](reference/component-patterns.md) | Svelte component patterns and conventions |
-| [standards.md](reference/standards.md) | Code standards and conventions |
+| [design-standards.md](reference/design-standards.md) | New website design decisions that override ay3 patterns |
+| [standards.md](reference/standards.md) | Code standards and conventions (ay3-era) |
 | [review-checklist.md](reference/review-checklist.md) | Pre-commit review checklist |
 
 ### Domain

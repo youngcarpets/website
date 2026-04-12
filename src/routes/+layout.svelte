@@ -577,7 +577,7 @@
 		border: 1px solid rgba(194, 179, 154, 0.18);
 		backdrop-filter: blur(10px) saturate(1.5);
 		-webkit-backdrop-filter: blur(10px) saturate(1.5);
-		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+		box-shadow: inset 0 1px 0 rgba(255, 248, 235, 0.1);
 	}
 
 	.site-footer-address {
@@ -667,6 +667,10 @@
 		.site-footer-grid {
 			grid-template-columns: 1fr;
 			gap: 1.75rem;
+		}
+		.site-footer-brand-block {
+			align-items: center;
+			text-align: center;
 		}
 	}
 </style>
