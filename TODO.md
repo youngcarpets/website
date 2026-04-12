@@ -1,6 +1,6 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-12 (hero layout with label + tagline, Inter font, version badge, design tokens).
+Last updated: 2026-04-12 (footer complete, agents ported, design standards established).
 
 This file is the durable cross-session to-do list. Both Claude and you read it at session start.
 
@@ -12,52 +12,51 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 
 ## Where we landed (2026-04-12)
 
-- **Dark mode is the working mode.** Body `#0b0b0d`, text `#e6e6e8`. Light mode toggle works but light-mode colors are not tuned — deferred.
-- **Site-wide bg image.** Fixed full-viewport `object-fit: cover`, dark-mode filter, radial mask. Original 2400x1850 bg.jpg.
-- **Glass nav bar.** Floating pill (12px inset, 16px radius), YOUNG brand on left, sun/moon theme toggle + hamburger on right. Menu links: Services, Gallery, About, Quote (anchors, no sections yet).
-- **Square721 font** for YOUNG brand/wordmark only. Preloaded in `app.html`.
-- **Inter Variable font** (`@fontsource-variable/inter`) for all body/UI text. Imported in `+layout.svelte`. Consistent across all platforms.
-- **Hero layout:**
-  - "COMMERCIAL FLOORING" label above wordmark (Inter weight 200, fades down, 200ms delay)
-  - YOUNG wordmark with per-letter bounce (Square721, 1000ms duration, 120ms stagger)
-  - Tagline below: "Young Carpets Inc. — commercial flooring in Ottawa since 1991..." (Inter weight 200, fades up, 1500ms delay)
-- **Version badge.** Purple pill, top center, reads from `package.json` via `$app/environment`. Bump patch on every deploy.
-- **Cache-busting `_headers`** at project root — `no-cache` on all routes. **Remove before production launch.**
-- **Design tokens in CLAUDE.md:** border radius (16px large / 8px small), glass effect, hover glow, body font.
-- **Deploy flow:** `pnpm run deploy` after every visual change. Version bump before each deploy.
-- **Global `~/.claude/CLAUDE.md`** created with interaction preferences. Project CLAUDE.md has output formatting rules.
-- **Memory cleaned up.** Feedback memories moved to global CLAUDE.md. 8 project-specific memories remain.
+- **Dark mode is the working mode.** Body `#0b0b0d`, text `#e6e6e8`. Grayscale only — no color accents until color phase at the end.
+- **Site-wide bg image.** Fixed full-viewport `object-fit: cover`, dark-mode filter, radial mask. The charcoal warmth of the background shows through transparent elements.
+- **Glass nav bar.** Floating pill with safe-area-inset support (Dynamic Island, landscape). Hover styles gated behind `@media (hover: hover)` to prevent sticky hover on iOS.
+- **Footer.** Static 4-column grid: YOUNG brand | address | contact (phone, email, AP) | hours (office only). No headings/badges, no clickable links, plain selectable text. Responsive: 2-col at 960px, 1-col at 520px with centered brand.
+- **Favicon.** SVG with traced "YCI" glyph paths (1.2KB), PNG fallback, apple-touch-icon.
+- **Fonts.** Inter Variable (body), Square721 (brand/wordmark only).
+- **Safari.** `format-detection` meta prevents auto-linking phone/email/address. `viewport-fit=cover` enables safe-area env vars.
+- **Accessibility.** `prefers-reduced-transparency` fallback on glass nav. `prefers-reduced-motion` on all animations. Focus indicators on all interactive elements. Footer text passes WCAG 4.5:1 contrast.
+- **Agent library.** 20 agents ported from ay3 + 2 new (ay3-expert, motion-expert). Master INDEX.md. Design standards at `.claude/reference/design-standards.md`.
+- **Design standards.** Grayscale only, no color porting from ay3, 8px/16px radii (no 9999px pills), shared base classes for similar components, dev components exempt from design review.
 - **0 errors, 0 warnings** on `pnpm check` + `pnpm lint`.
 
 ## Resume here next session
 
-1. **Continue adding components one at a time.** Dark mode first, light mode at the end. Primary test device: iPhone portrait.
-2. **Next component TBD.** User decides at session start.
-3. **"Young Carpets Inc." branding decision:** legal name goes in the hero tagline and footer/contact/billing. Not in nav or logo. Watermark-on-bg-image approach was tried and abandoned — positioning didn't work across viewport sizes.
-4. **bg-original.jpg** is backed up in `src/lib/assets/hero/` — can restore if needed.
+1. **Footer is done for now.** May revisit collapsible behavior later when more sections exist on the page.
+2. **Next component TBD.** User decides at session start. Candidates: services, gallery, about, quote form.
+3. **Grayscale rule.** Everything over the background is grayscale. Color phase is last.
+4. **Component philosophy.** Similar elements share a base class. Build the base first, variants on top.
+5. **Expert reviews.** Dispatch design/mobile/a11y/motion experts after each new component. Remaining warns from earlier reviews (view transitions CSS, `<svelte:head>` meta defaults, `font-display: swap`) can be addressed when relevant.
 
 ## Site content (building out)
 
 - [x] Site-wide bg image (dark-mode filtered floor plan)
-- [x] Glass nav bar (floating pill, hamburger menu)
+- [x] Glass nav bar (floating pill, hamburger menu, safe-area aware)
 - [x] Theme toggle (sun/moon, functional)
 - [x] Square721 font (embedded, preloaded) — brand/wordmark only
 - [x] Inter Variable font (embedded) — body/UI text
 - [x] YOUNG wordmark with bounce-in animation
 - [x] Hero label: "COMMERCIAL FLOORING" with fade-in
 - [x] Hero tagline with "Young Carpets Inc." and fade-in
-- [x] Version badge (purple pill, top center)
+- [x] Version badge (purple pill, top center — dev component)
 - [x] Cache-busting headers for dev
+- [x] Favicon (SVG traced paths + PNG + apple-touch-icon)
+- [x] Footer (static 4-col grid, grayscale, plain text, responsive)
 - [ ] Header nav links wired to real sections
-- [ ] Footer with real content (legal name, address, contact)
 - [ ] `(marketing)/services/+page.svelte` index
 - [ ] `(marketing)/services/[slug]/+page.svelte` (dynamic via `src/lib/content/services.ts`)
 - [ ] `(marketing)/gallery/+page.svelte` (before/after, informative alt text)
 - [ ] `(marketing)/about/+page.svelte`
 - [ ] `quote/+page.svelte` + `quote/+page.server.ts` (form action, Zod, honeypot, rate limit, Resend)
-- [x] Favicon (SVG, "YCI" in Square721)
+- [ ] `<svelte:head>` base meta defaults (title, description, og)
 - [ ] JSON-LD `LocalBusiness` on home page
-- [ ] Light mode color tuning (deferred to end)
+- [ ] View transition CSS (selectors exist in JS, no CSS yet)
+- [ ] Color phase — accents, glows, highlights (after all dark mode layout is done)
+- [ ] Light mode color tuning (after color phase)
 
 ## Phase 2 (deferred — not started)
 
@@ -91,6 +90,19 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] Deploy flow documented in CLAUDE.md
 - [x] Output formatting rules in project CLAUDE.md (syncs via git)
 - [x] Global `~/.claude/CLAUDE.md` with interaction preferences
+- [x] Favicon: SVG traced paths (1.2KB), PNG 32x32, apple-touch-icon 180x180
+- [x] Footer: static 4-col grid, plain text, grayscale, responsive breakpoints
+- [x] 20 agents ported from ay3 + ay3-expert + motion-expert created
+- [x] Master INDEX.md for all agents/resources/references
+- [x] Design standards: `.claude/reference/design-standards.md`
+- [x] Safe-area-inset support (Dynamic Island, landscape, footer)
+- [x] Hover styles gated behind `@media (hover: hover)`
+- [x] `prefers-reduced-transparency` fallback on glass nav
+- [x] `format-detection` meta prevents Safari auto-linking
+- [x] `viewport-fit=cover` for safe-area env vars
+- [x] All gold/yellow accents removed — grayscale only
+- [x] 5 expert reviews completed (svelte, a11y, design, mobile, performance)
+- [x] 7 expert-reported errors fixed
 
 ---
 
