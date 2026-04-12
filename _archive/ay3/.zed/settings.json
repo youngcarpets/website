@@ -1,0 +1,107 @@
+// AY3 Portal — project-level Zed settings
+// Overrides user settings only for this repo. Committed to git so laptop/desktop share config.
+{
+  "tab_size": 2,
+  "hard_tabs": false,
+  "format_on_save": "on",
+  "formatter": "prettier",
+  "ensure_final_newline_on_save": true,
+  "remove_trailing_whitespace_on_save": true,
+  "soft_wrap": "editor_width",
+  "wrap_guides": [100],
+
+  "file_types": {
+    "Svelte": ["svelte"],
+    "TypeScript": ["ts"],
+    "JSON": ["json", "jsonc"],
+    "CSS": ["css", "pcss"]
+  },
+
+  "languages": {
+    "Svelte": {
+      "tab_size": 2,
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": true
+      }
+    },
+    "TypeScript": {
+      "tab_size": 2,
+      "format_on_save": "on",
+      "prettier": {
+        "allowed": true
+      }
+    },
+    "JavaScript": {
+      "tab_size": 2,
+      "format_on_save": "on"
+    },
+    "CSS": {
+      "tab_size": 2,
+      "format_on_save": "on"
+    },
+    "JSON": {
+      "tab_size": 2,
+      "format_on_save": "on"
+    },
+    "Markdown": {
+      "format_on_save": "off",
+      "soft_wrap": "editor_width"
+    }
+  },
+
+  "lsp": {
+    "svelte-language-server": {
+      "settings": {
+        "svelte": {
+          "plugin": {
+            "svelte": {
+              "compilerWarnings": {
+                "a11y-no-static-element-interactions": "ignore",
+                "a11y-click-events-have-key-events": "ignore"
+              }
+            }
+          }
+        }
+      }
+    },
+    "tailwindcss-language-server": {
+      "settings": {
+        "tailwindCSS": {
+          "experimental": {
+            "classRegex": [
+              ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+              ["cn\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+            ]
+          },
+          "includeLanguages": {
+            "svelte": "html"
+          }
+        }
+      }
+    }
+  },
+
+  "file_scan_exclusions": [
+    "**/.git",
+    "**/node_modules",
+    "**/.svelte-kit",
+    "**/build",
+    "**/dist",
+    "**/.vercel",
+    "**/coverage",
+    "**/.turbo",
+    "**/.next"
+  ],
+
+  "project_panel": {
+    "auto_reveal_entries": true,
+    "folder_icons": true,
+    "indent_size": 16
+  },
+
+  "terminal": {
+    "working_directory": "current_project_directory",
+    "font_size": 13
+  }
+}

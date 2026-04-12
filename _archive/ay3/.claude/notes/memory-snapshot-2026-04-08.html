@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Claude Memory Snapshot — AY3 — 2026-04-08</title>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --ink: #18181b;
+    --ink-soft: #52525b;
+    --ink-faint: #a1a1aa;
+    --line: #e4e4e7;
+    --accent: #0369a1;
+    --accent-soft: #e0f2fe;
+    --tag-user: #7c3aed;
+    --tag-feedback: #0891b2;
+    --tag-reference: #ca8a04;
+    --tag-project: #16a34a;
+    --tag-high: #dc2626;
+    --tag-loved: #db2777;
+    --code-bg: #f4f4f5;
+    --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.04);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+    margin: 0;
+    padding: 0;
+  }
+  .page {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 4rem 2.5rem 6rem;
+  }
+  header.cover {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 2rem;
+    margin-bottom: 3rem;
+  }
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--ink-faint);
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.02em;
+  }
+  .lede {
+    color: var(--ink-soft);
+    font-size: 1.05rem;
+    margin: 0;
+  }
+  .meta {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+  .meta strong { color: var(--ink); font-weight: 600; }
+
+  nav.toc {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    margin-bottom: 3rem;
+    box-shadow: var(--shadow);
+  }
+  nav.toc h2 {
+    margin: 0 0 1rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    font-weight: 700;
+  }
+  nav.toc ol {
+    margin: 0;
+    padding-left: 1.5rem;
+    columns: 2;
+    column-gap: 2rem;
+  }
+  nav.toc ol li {
+    margin-bottom: 0.35rem;
+    break-inside: avoid;
+    font-size: 0.92rem;
+  }
+  nav.toc a { color: var(--ink); text-decoration: none; }
+  nav.toc a:hover { color: var(--accent); text-decoration: underline; }
+
+  article.entry {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 2rem 2.25rem;
+    margin-bottom: 1.75rem;
+    box-shadow: var(--shadow);
+    page-break-inside: avoid;
+  }
+  article.entry h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.35rem;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .entry-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.72rem;
+  }
+  .tag {
+    display: inline-block;
+    padding: 0.18rem 0.6rem;
+    border-radius: 999px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: white;
+  }
+  .tag.user { background: var(--tag-user); }
+  .tag.feedback { background: var(--tag-feedback); }
+  .tag.reference { background: var(--tag-reference); }
+  .tag.project { background: var(--tag-project); }
+  .tag.high { background: var(--tag-high); }
+  .tag.loved { background: var(--tag-loved); }
+  .filename {
+    font-family: "SF Mono", "Cascadia Mono", Consolas, monospace;
+    color: var(--ink-faint);
+    font-size: 0.72rem;
+    padding: 0.18rem 0.5rem;
+    background: var(--code-bg);
+    border-radius: 4px;
+  }
+  .description {
+    color: var(--ink-soft);
+    font-style: italic;
+    margin: 0 0 1rem;
+    padding-left: 0.85rem;
+    border-left: 3px solid var(--line);
+  }
+  .body {
+    color: var(--ink);
+    font-size: 0.95rem;
+    line-height: 1.65;
+  }
+  .body h1, .body h2, .body h3 {
+    font-weight: 700;
+    color: var(--ink);
+    margin-top: 1.5rem;
+    margin-bottom: 0.6rem;
+  }
+  .body h1 { font-size: 1.2rem; }
+  .body h2 { font-size: 1.05rem; }
+  .body h3 { font-size: 0.95rem; }
+  .body h2:first-child, .body h3:first-child { margin-top: 0; }
+  .body p { margin: 0.6rem 0; }
+  .body ul, .body ol { padding-left: 1.5rem; margin: 0.6rem 0; }
+  .body li { margin-bottom: 0.3rem; }
+  .body code {
+    font-family: "SF Mono", "Cascadia Mono", Consolas, monospace;
+    background: var(--code-bg);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.85em;
+  }
+  .body pre {
+    background: var(--code-bg);
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.82rem;
+    line-height: 1.5;
+  }
+  .body pre code { background: transparent; padding: 0; }
+  .body strong { color: var(--ink); font-weight: 600; }
+  .body em { color: var(--ink-soft); }
+  .body blockquote {
+    margin: 0.8rem 0;
+    padding: 0.6rem 1rem;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    color: var(--ink);
+    font-style: italic;
+    border-radius: 0 8px 8px 0;
+  }
+  .body hr {
+    border: none;
+    border-top: 1px solid var(--line);
+    margin: 1.5rem 0;
+  }
+
+  footer.outro {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+    color: var(--ink-faint);
+    font-size: 0.82rem;
+    text-align: center;
+  }
+
+  @media print {
+    body { background: white; }
+    .page { padding: 1cm 1.5cm; max-width: 100%; }
+    article.entry { box-shadow: none; border: 1px solid #ddd; }
+    nav.toc { box-shadow: none; }
+    nav.toc ol { columns: 2; }
+    a { color: var(--ink); text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="cover">
+  <div class="eyebrow">Claude Code · Auto-Memory Snapshot</div>
+  <h1>AY3 — Claude's Persistent Memory</h1>
+  <p class="lede">Everything Claude has been told about Alan, the project, and how to work — extracted from <code>~/.claude/projects/C--DEV-ay3/memory/</code> on 2026-04-08 after a cleanup pass.</p>
+  <div class="meta">
+    <span><strong>Files:</strong> 21 entries</span>
+    <span><strong>Index:</strong> MEMORY.md</span>
+    <span><strong>Project:</strong> AY3 staff portal</span>
+    <span><strong>Snapshot date:</strong> 2026-04-08</span>
+  </div>
+</header>
+
+<nav class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#memory-md">MEMORY.md (index)</a></li>
+    <li><a href="#user_profile">User Profile</a></li>
+    <li><a href="#user_two_machines">Two Machines</a></li>
+    <li><a href="#feedback_bypass_permissions">Bypass Permissions Mode</a></li>
+    <li><a href="#ref_github">GitHub Reference</a></li>
+    <li><a href="#feedback_chunking">Chunk Work Into Agents</a></li>
+    <li><a href="#feedback_zod4">Zod v4 Adapter</a></li>
+    <li><a href="#feedback_design_philosophy">Color &amp; Design Philosophy</a></li>
+    <li><a href="#feedback_design_agents">Always Use Design Agents</a></li>
+    <li><a href="#feedback_slow_discovery">Slow Discovery — One Question</a></li>
+    <li><a href="#feedback_checkpoint_todos">Checkpoint TodoWrite</a></li>
+    <li><a href="#feedback_file_permissions">Auto-approve File Edits</a></li>
+    <li><a href="#feedback_no_surprise_popups">Never Surprise-Popup</a></li>
+    <li><a href="#ref_phone_dev_workflow">Phone Dev Preview</a></li>
+    <li><a href="#feedback_agent_flow">Multi-Agent Async Flow</a></li>
+    <li><a href="#feedback_master_todo">Master Todo + Interrupt Ordering</a></li>
+    <li><a href="#feedback_handoff_vocab">Handoff + Verify Relay Vocab</a></li>
+    <li><a href="#feedback_user_vocab">User Vocabulary Map</a></li>
+    <li><a href="#feedback_preserve_svg_animations">Preserve SVG + Animations</a></li>
+    <li><a href="#feedback_output_style">Output Style — Master Rule</a></li>
+    <li><a href="#feedback_test_before_asking">Test Before Asking</a></li>
+    <li><a href="#feedback_compaction_warning">Compaction Warning Protocol</a></li>
+  </ol>
+</nav>
+
+<article class="entry" id="memory-md">
+  <h2>MEMORY.md — The Index</h2>
+  <div class="entry-meta">
+    <span class="tag reference">Index</span>
+    <span class="filename">MEMORY.md</span>
+  </div>
+  <p class="description">Auto-loaded into every Claude conversation. Each line points to a detail file. Detail files only load on demand.</p>
+  <div class="body">
+    <ol>
+      <li><strong>User Profile</strong> — Windows dev, Zed + Git Bash, building AY3 SvelteKit portal</li>
+      <li><strong>Two Machines</strong> — Dev box (this, Win 10) ≠ future LLM rig (Alienware R15, RTX 3090). Don't conflate.</li>
+      <li><strong>Bypass Permissions Mode</strong> <em>HIGH PRIORITY</em> — CC runs in yolo mode; Claude's own judgment is the guardrail, still announce risky bash</li>
+      <li><strong>GitHub Reference</strong> — GitHub repo details, Pages URL, git remote info</li>
+      <li><strong>Chunk Work</strong> — Always decompose tasks and use parallel agents</li>
+      <li><strong>Zod v4 Adapter</strong> — Use zod4/zod4Client adapters with Superforms (NOT zod/zodClient)</li>
+      <li><strong>Design Philosophy</strong> <em>HIGH PRIORITY</em> — Neutral surfaces, electric accents only (glows/outlines/pills)</li>
+      <li><strong>Design Agents Required</strong> — Always dispatch Design + layout agents BEFORE writing UI code; iPhone 13 portrait (390px) min baseline</li>
+      <li><strong>Slow Discovery</strong> — One question per turn for schema/design/new-feature work; never batch</li>
+      <li><strong>Checkpoint Todos</strong> — Persist TodoWrite to project memory every 5-8 messages on long-running tracks</li>
+      <li><strong>Auto-approve Files</strong> — Never prompt for confirmation on file edits/writes</li>
+      <li><strong>Never Surprise-Popup</strong> <em>HIGH PRIORITY</em> — Never trigger UAC/focus-stealing popups without warning + waiting for go-ahead</li>
+      <li><strong>Phone Dev Preview</strong> — Cloudflare quick tunnel via cloudflared.exe at ~/.claude/bin — works from any network, no UAC, no LAN IP hunting</li>
+      <li><strong>Multi-Agent Async Flow</strong> <em>HIGH PRIORITY · LOVE'd</em> — Dispatch parallel background agents, user keeps adding todos while they work, agents can recursively spawn sub-agents</li>
+      <li><strong>Master Todo + Interrupt Ordering</strong> <em>HIGH PRIORITY · LOVE'd</em> — TodoWrite is the master queue; interrupts get slotted by dependency (not appended); user owns priorities, Claude owns the dependency graph</li>
+      <li><strong>Handoff Vocab</strong> <em>LOVE'd</em> — "handoff" / "verify relay" / "backup" multi-device coordination verbs</li>
+      <li><strong>User Vocab Map</strong> — User uses fuzzy/wrong words for visual effects ("spiky blob" = 3D force-directed graph). Check this BEFORE building.</li>
+      <li><strong>Preserve SVG + Animations</strong> — Never silently delete product card SVG textures or modal interaction code, even if a product is removed</li>
+      <li><strong>Output Style</strong> <em>HIGH PRIORITY</em> — Terse + minimal + no trailing talk + questions on LAST line. Master rule for response shape.</li>
+      <li><strong>Test Before Asking</strong> — Verify with curl before telling user "try it". Don't waste their time on broken things.</li>
+      <li><strong>Compaction Warning Protocol</strong> <em>HIGH PRIORITY</em> — When user warns of compaction OR Claude senses limits: stop, drain agents, commit, mirror to RELAY pin, tell user "safe to start new session"</li>
+    </ol>
+  </div>
+</article>
+
+<article class="entry" id="user_profile">
+  <h2>User Profile</h2>
+  <div class="entry-meta">
+    <span class="tag user">User</span>
+    <span class="filename">user_profile.md</span>
+  </div>
+  <p class="description">Alan — solo business dev building a staff portal to automate business procedures, needs expert-level web dev guidance.</p>
+  <div class="body">
+    <ul>
+      <li>Name: Alan (username <code>alany</code> on Windows)</li>
+      <li>Role: Solo developer automating a business's procedures through a staff portal</li>
+      <li>Goal: Build a subdomain staff portal (e.g. portal.domain.com) for internal business operations</li>
+      <li>Experience level: Not a professional developer — needs clear, jargon-lite guidance and decisions made for him where possible</li>
+      <li>Platform: Windows 10 Pro, <strong>Zed</strong> editor with Git Bash terminal (switched from VS Code 2026-04-08 — loved Zed immediately)</li>
+      <li>Multi-device workflow: <strong>desktop</strong>, laptop, and iPhone — three devices
+        <ul>
+          <li>The machine at <code>c:\DEV\ay3\</code> (Windows 10 Pro, alany, Zed + Git Bash) is the <strong>DESKTOP</strong>, not the laptop. Confirmed by user 2026-04-07. IDE swap 2026-04-08.</li>
+          <li>There is also a separate laptop (also runs Claude Code, also clones the repo) and an iPhone (mobile Claude session in browser).</li>
+          <li>All three devices coordinate through <code>main</code> + <code>.claude/RELAY.md</code>. Whichever device is active says so explicitly in the RELAY pin.</li>
+          <li>Dev server access from phone now uses <strong>Cloudflare quick tunnel</strong> (not LAN/firewall) — see <code>ref_phone_dev_workflow.md</code>.</li>
+          <li>Vite hot-reloads on phone over the tunnel.</li>
+        </ul>
+      </li>
+      <li>GitHub: onErrorGoToWTF (display), onerrorgotowtf (URL)</li>
+      <li>Working directory: <code>C:\DEV\ay3\</code></li>
+      <li>Prefers: Proactive, autonomous work. Chunk tasks. Make best-practice decisions rather than asking. Explain only when it matters.</li>
+      <li>Style: Direct, no fluff. Gets frustrated by unnecessary back-and-forth. Wants things done right the first time.</li>
+      <li>My role: Expert senior web developer guiding a solo business owner through building production-quality tooling</li>
+    </ul>
+  </div>
+</article>
+
+<article class="entry" id="user_two_machines">
+  <h2>User Has Two Machines</h2>
+  <div class="entry-meta">
+    <span class="tag user">User</span>
+    <span class="filename">user_two_machines.md</span>
+  </div>
+  <p class="description">Dev box (this one, Win 10) vs future LLM rig (Alienware Aurora R15, Win 11) — don't conflate.</p>
+  <div class="body">
+    <p>User has <strong>two Windows machines</strong>:</p>
+    <ol>
+      <li><strong>Current dev machine (THIS one)</strong> — older ThinkPad ("IBM crappad" per user), Windows 10 Pro. Lower-spec. Runs Zed + Git Bash + Claude Code + AY3 dev server today.</li>
+      <li><strong>Alienware Aurora R15</strong> — Win 11 Home, i9-13900KF, <strong>RTX 3090 24GB VRAM</strong>, 64GB DDR5, 2TB NVMe. Bought 2023-03 for $6,169.79 CAD. Spec sheet at <code>.claude/notes/hardware-specs.md</code>.</li>
+    </ol>
+    <p><strong>Future direction (per user 2026-04-08):</strong> User will likely <strong>migrate dev work to the Alienware too</strong>, even while running local LLM on it — <em>"even with the llm running it is likely better than this IBM crappad"</em>. So the Alienware is both the future LLM rig AND the future dev machine.</p>
+    <h3>How to apply</h3>
+    <ul>
+      <li>Don't assume the Alienware is purely for LLM work — when user starts talking about moving Zed/Claude over there, this is expected, not a context switch.</li>
+      <li>Current performance ceilings (build times, dev server speed, anything CPU-bound) are constrained by the ThinkPad. Don't be surprised when user reports slowness.</li>
+      <li>Hardware specs file describes the Alienware. The current dev box specs aren't documented (and don't matter much — it's a stopgap).</li>
+      <li>If user mentions "the alienware" / "the LLM box", that's machine #2. "this computer" / "my dev box" today still = machine #1.</li>
+    </ul>
+  </div>
+</article>
+
+<article class="entry" id="feedback_bypass_permissions">
+  <h2>Bypass Permissions Mode</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="tag high">High Priority</span>
+    <span class="filename">feedback_bypass_permissions.md</span>
+  </div>
+  <p class="description">User runs Claude Code in bypass-all-permissions mode and relies on Claude's own behavioral guardrails, not harness prompts.</p>
+  <div class="body">
+    <p>User runs Claude Code in <strong>bypass all permissions</strong> mode (level 3 / yolo). Claude is never prompted for file edits OR bash commands. User explicitly chose this on 2026-04-08 when switching to Zed + CLI install, saying <em>"i give you full access... will go my own safety guardrails."</em></p>
+    <p><strong>Why:</strong> User values autonomous flow over approval friction. Prompts slow them down and break concentration. They trust Claude's judgment and prefer to catch mistakes after-the-fact via git history rather than preemptively via permission dialogs.</p>
+    <p><strong>How to apply:</strong> Behavioral guardrails move from the harness to Claude itself. Even though bypass-all means no prompts will appear, Claude must:</p>
+    <ol>
+      <li><strong>Still announce before genuinely risky bash</strong> (rm -rf, force-push, reset --hard, db migrations, destructive deletes, credential changes) — the <code>feedback_no_surprise_popups.md</code> rule still applies. Warn, give a moment for user to object, then proceed. Don't wait for explicit approval — just a heads-up window.</li>
+      <li><strong>Never amend published commits</strong> — always create new commits (per CLAUDE.md git-ops rule).</li>
+      <li><strong>Never <code>git add .</code> or <code>-A</code></strong> — always <code>git add &lt;specific files&gt;</code> to avoid accidentally staging <code>.env</code>, secrets, or large unintended files.</li>
+      <li><strong>Never commit <code>.env</code>, credentials, or <code>node_modules/</code></strong> — hard rule regardless of permission mode.</li>
+      <li><strong>Still respect the "Executing actions with care" system rule</strong> — reversibility and blast radius matter even without prompts. Warn about irreversible or shared-state actions.</li>
+    </ol>
+    <p>The autonomy setting removes the <em>approval wall</em>, not Claude's judgment about what's safe. Treat bypass-all as "the user trusts me to use best judgment," not "I can do anything without flagging it."</p>
+  </div>
+</article>
+
+<article class="entry" id="ref_github">
+  <h2>GitHub Reference</h2>
+  <div class="entry-meta">
+    <span class="tag reference">Reference</span>
+    <span class="filename">ref_github.md</span>
+  </div>
+  <p class="description">GitHub repo URLs, Pages URL, remote config for AY3 project.</p>
+  <div class="body">
+    <ul>
+      <li>GitHub user: <code>onerrorgotowtf</code></li>
+      <li>Repo name: <code>ay3</code> (lowercase)</li>
+      <li>Repo URL: <code>https://github.com/onerrorgotowtf/ay3.git</code></li>
+      <li>Pages URL: <code>https://onerrorgotowtf.github.io/ay3</code></li>
+      <li>Branch: <code>main</code> (current default)</li>
+    </ul>
+  </div>
+</article>
+
+<article class="entry" id="feedback_chunking">
+  <h2>Chunk Work Into Agents</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="filename">feedback_chunking.md</span>
+  </div>
+  <p class="description">Always break larger tasks into smaller chunks and spin off multiple agents in parallel; even smaller tasks should be decomposed.</p>
+  <div class="body">
+    <p>ALWAYS break work into the smallest reasonable chunks. Use MORE agents, not fewer. Default to spinning off agents aggressively — even for tasks that seem small enough to do inline. The bias should be toward parallelism and delegation, not doing things yourself sequentially.</p>
+    <p><strong>Why:</strong> User strongly prefers maximum agent usage and small task granularity. Reinforced multiple times — this is a top priority.</p>
+    <p><strong>How to apply:</strong></p>
+    <ul>
+      <li>Break every task into the smallest useful pieces</li>
+      <li>Spin off agents for each piece — err on the side of more agents</li>
+      <li>Only do work inline if it's truly trivial (a single edit, a quick read)</li>
+      <li>Launch independent agents in parallel whenever possible</li>
+      <li>Sequential only when there's a hard dependency</li>
+    </ul>
+  </div>
+</article>
+
+<article class="entry" id="feedback_zod4">
+  <h2>Zod v4 Adapter</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="filename">feedback_zod4.md</span>
+  </div>
+  <p class="description">This project uses Zod v4 — must use zod4/zod4Client adapters with Superforms, NOT zod/zodClient.</p>
+  <div class="body">
+    <p>Project has Zod v4 (not v3). When using sveltekit-superforms:</p>
+    <ul>
+      <li>Server: <code>import { zod4 as zod } from 'sveltekit-superforms/adapters'</code></li>
+      <li>Client: <code>import { zod4Client as zodClient } from 'sveltekit-superforms/adapters'</code></li>
+    </ul>
+    <p><strong>Why:</strong> Using the regular <code>zod</code>/<code>zodClient</code> adapters with Zod v4 causes type errors about missing properties.</p>
+    <p><strong>How to apply:</strong> Every time you write Superforms code, use the <code>zod4</code>/<code>zod4Client</code> adapters.</p>
+  </div>
+</article>
+
+<article class="entry" id="feedback_design_philosophy">
+  <h2>Color &amp; Design Philosophy</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="tag high">High Priority</span>
+    <span class="filename">feedback_design_philosophy.md</span>
+  </div>
+  <p class="description">Neutral surfaces, electric accents only. User's core visual taste.</p>
+  <div class="body">
+    <blockquote><strong>HIGH PRIORITY</strong> — This defines the AY3 visual identity. Apply to every UI surface.</blockquote>
+    <h3>Color Rules</h3>
+    <p><strong>Backgrounds — always neutral:</strong></p>
+    <ul>
+      <li><strong>Dark mode</strong>: dark charcoal / grey / black (#0a0a0b → #1a1a1c → #27272a range)</li>
+      <li><strong>Light mode</strong>: tan / greige / light-medium grey (#F5F2ED → #E8E5DE → #DCD8D1 range — warm neutrals, NOT pure white)</li>
+    </ul>
+    <p><strong>Surfaces — neutral with subtle warmth/coolness, never colorful</strong></p>
+    <p><strong>Bright electric colors — RESERVED FOR:</strong></p>
+    <ul>
+      <li>Glows (hover halos, focus rings, selected indicators)</li>
+      <li>Outlines on pills, badges, tags</li>
+      <li>Active state borders</li>
+      <li>Status indicators (the colored dot, not the chip background)</li>
+    </ul>
+    <p><strong>Everything else — neutral tones.</strong> No colored backgrounds. No rainbow gradients. No category-color tinted panels.</p>
+    <h3>Component Patterns</h3>
+    <ul>
+      <li><strong>Floating glass navbar</strong> — hover-elevated, blurred, neutral with electric hover glow</li>
+      <li><strong>Pills/tags</strong> — neutral fill, electric outline + glow</li>
+      <li><strong>Buttons</strong> — neutral surface, electric accent on hover/active</li>
+      <li><strong>Cards</strong> — neutral surface, electric glow ring on selected</li>
+      <li><strong>Inputs</strong> — neutral fill, electric focus ring</li>
+    </ul>
+    <h3>Why</h3>
+    <p>User prefers <strong>restraint with punctuation</strong> — neutral canvas that lets bright accents pop with intent.</p>
+    <h3>How to apply</h3>
+    <p>Every new component or design decision asks:</p>
+    <ol>
+      <li>Is the background neutral (charcoal/greige)?</li>
+      <li>Is the bright color ONLY in a glow, outline, or active accent?</li>
+      <li>Would this still feel premium if all the colorful elements were greyscale?</li>
+    </ol>
+    <p>If yes/yes/yes → ship it.</p>
+  </div>
+</article>
+
+<article class="entry" id="feedback_design_agents">
+  <h2>Always Use Design/Layout Agents for UI Elements</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="filename">feedback_design_agents.md</span>
+  </div>
+  <p class="description">For any UI element creation or redesign, dispatch the Design agent (and structure/layout agent when relevant) BEFORE writing CSS or markup.</p>
+  <div class="body">
+    <p>For any UI element creation, redesign, or layout change in AY3 — dispatch a Design agent (and a layout/structure agent when relevant) BEFORE writing CSS or markup. Never freehand a UI element.</p>
+    <p><strong>Why:</strong> User explicitly stated "all elements .. involve design layout agents" on 2026-04-06 during the dev-page External Projects redesign. The user is building a Wix-style editor and cares about visual consistency, Apple polish, mobile-first behavior. They want specs locked in by specialized agents (which read <code>.claude/resources/03-apple-liquid-glass-design.md</code>, <code>10-apple-colors.md</code>, <code>11-apple-effects.md</code>, <code>13a-motion-tokens.md</code>) before code is written.</p>
+    <p><strong>How to apply:</strong></p>
+    <ul>
+      <li>Any new component, panel, badge, button, modal, sheet, picker, toolbar → dispatch Design agent first</li>
+      <li>For complex layouts (grids, responsive breakpoints, mobile-vs-desktop divergence) → also dispatch a layout/structure agent in parallel</li>
+      <li>The agent must produce concrete specs: exact px/rem values, easing curves, durations, color tokens, breakpoint behaviors, ≥44×44 tap targets, dark-mode variants, prefers-reduced-motion handling, ready-to-paste CSS</li>
+      <li>Reference iPhone 13 portrait (390px) as the minimum viewport baseline</li>
+      <li>Only AFTER the spec is in hand, write the markup + CSS — don't re-derive design decisions while coding</li>
+      <li>Skip only for: pure logic refactors with no visual change, or trivial text/copy edits</li>
+    </ul>
+  </div>
+</article>
+
+<article class="entry" id="feedback_slow_discovery">
+  <h2>Slow Discovery — One Question At A Time</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="filename">feedback_slow_discovery.md</span>
+  </div>
+  <p class="description">For schema, design, and any new feature definition — ask exactly ONE question per turn, wait, build understanding incrementally.</p>
+  <div class="body">
+    <p>For schema work, design work, and any new-feature requirements gathering — ask <strong>exactly ONE question per turn</strong>, wait for the answer, then ask the next one. Do not batch questions. Do not list "candidate fields" with checkboxes asking the user to mark them up. Do not present 10 brainstorming prompts at once.</p>
+    <p><strong>Why:</strong> User explicitly said "ask fewer questions so i can answer by typing" and "slow down" multiple times during the quote→invoice schema discovery on 2026-04-06. They want to <strong>build the website slowly with direction so it's more accurate, especially with design</strong>. Speed-of-decision is the wrong optimization — accuracy of the final result is. They prefer 30 turns of single-question discovery over a 1-shot guess that's 70% right.</p>
+    <p><strong>How to apply:</strong></p>
+    <ul>
+      <li>New feature, new schema, new design element → start with ONE foundational question, wait, then next</li>
+      <li>Provide simple multiple-choice options (A/B/C, or yes/no) when possible — easier to type a one-letter reply</li>
+      <li>After each answer: silently note what was decided, ask the next single question</li>
+      <li>Never ask "and also..." in the same message — split it</li>
+      <li>Never present a giant decisions table — drip them out</li>
+      <li>Save progress to TodoWrite frequently so context can be resumed across sessions</li>
+      <li>This applies to design (Apple Liquid Glass UI elements), database schemas, form structures, content/copy, anything where the user has domain knowledge I don't</li>
+      <li>It does NOT apply to mechanical implementation work (writing code from an approved spec, fixing errors, running tests) — there speed is fine</li>
+    </ul>
+    <p><strong>REINFORCED 2026-04-07:</strong> User shouted in caps "ONE QUESTION AT AT A TIME SO I CAN ANSWER THE QUESTION AND YOU DON'T GET CONFUSED" after I batched three things in one message (a plan, a LOVE warning, AND a yes/no question). Even when surfacing a constraint or warning, do NOT also ask a question in the same message. Surface → wait → question. One thing per turn.</p>
+  </div>
+</article>
+
+<article class="entry" id="feedback_checkpoint_todos">
+  <h2>Checkpoint TodoWrite Frequently for Long-Running Tracks</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="filename">feedback_checkpoint_todos.md</span>
+  </div>
+  <p class="description">For multi-session work tracks, persist TodoWrite state to a memory or RELAY file every few turns.</p>
+  <div class="body">
+    <p>For long-running multi-session work tracks, <strong>checkpoint the TodoWrite list to disk every few turns</strong> — don't rely on TodoWrite alone, because it lives only in the active session and is lost across context compressions, device switches, and session restarts.</p>
+    <p><strong>How to apply:</strong></p>
+    <ul>
+      <li>For any work track with <strong>15+ todo items</strong> OR <strong>expected to span multiple sessions</strong> OR <strong>with critical decision history that can't be reconstructed from code</strong> — checkpoint frequently.</li>
+      <li>Checkpoint cadence: every <strong>5-8 user messages</strong>, OR after every batch of completed items, OR before any device handoff / session pause.</li>
+      <li>Where to checkpoint:
+        <ol>
+          <li><strong>Project memory file</strong> — append a <code>## Current TODO snapshot (YYYY-MM-DD)</code> section with the full todo list as a markdown checkbox list.</li>
+          <li><strong><code>.claude/RELAY.md</code></strong> — for cross-device handoffs, also embed a condensed "next question" + "what's done" block.</li>
+        </ol>
+      </li>
+      <li>What to include in the checkpoint:
+        <ul>
+          <li>Every todo item, with status (✅ done / 🔄 in progress / ⏳ pending)</li>
+          <li>Decisions captured so far (so they're not re-asked)</li>
+          <li>The IMMEDIATE next question to ask the user</li>
+          <li>Any in-flight background agents</li>
+        </ul>
+      </li>
+      <li><strong>Don't checkpoint trivial tracks</strong> — if it's a 5-line bug fix, TodoWrite alone is fine, no memory file needed.</li>
+      <li>After a session restart or device switch: read the checkpointed todos from the project memory file FIRST, then call TodoWrite to repopulate the live list, then resume.</li>
+    </ul>
+  </div>
+</article>
+
+<article class="entry" id="feedback_file_permissions">
+  <h2>Auto-approve File Edits</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="filename">feedback_file_permissions.md</span>
+  </div>
+  <p class="description">User does not want confirmation prompts when Claude edits/writes/creates local files.</p>
+  <div class="body">
+    <p>Do not prompt for confirmation when editing, writing, or creating local files.</p>
+    <p><strong>Why:</strong> User finds the approval popups disruptive — they trust Claude to make file changes freely.</p>
+    <p><strong>How to apply:</strong> All file operations (Edit, Write, Read) should proceed without asking. This aligns with the existing "silent git operations" rule in CLAUDE.md.</p>
+  </div>
+</article>
+
+<article class="entry" id="feedback_no_surprise_popups">
+  <h2>Never Surprise-Popup</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="tag high">High Priority</span>
+    <span class="filename">feedback_no_surprise_popups.md</span>
+  </div>
+  <p class="description">Never trigger UAC prompts, focus-stealing dialogs, or elevated popups without warning the user first and waiting for go-ahead.</p>
+  <div class="body">
+    <p>NEVER fire a UAC prompt, <code>Start-Process -Verb RunAs</code>, focus-stealing dialog, or any popup that interrupts the user's typing without warning them first and waiting for an explicit "go ahead."</p>
+    <p><strong>Why:</strong> On 2026-04-07 I triggered two UAC prompts back-to-back (firewall rule for Vite LAN access) while the user was actively typing in another window. UAC steals focus instantly and ate their keystrokes. User was already frustrated with things not working, and the surprise popups made it worse. Their words: <em>"you have to warn me for those powershell popups! i was typing!!!"</em></p>
+    <p><strong>How to apply:</strong></p>
+    <ul>
+      <li>Before any <code>Start-Process -Verb RunAs</code>, <code>sudo</code>-equivalent, or admin-elevation command: announce it in plain text first ("I need to pop a UAC for X — ready?") and <strong>wait</strong> for confirmation.</li>
+      <li>Same rule for any command that opens a window, steals focus, or interrupts the user (browser auto-open via <code>--open</code>, modal dialogs, system notifications, etc.).</li>
+      <li>If the user has already declined once in the same session, do NOT retry without explicit reauthorization — offer alternatives instead (tunnels, GUI instructions, deferred work).</li>
+      <li>Applies to ALL platforms: Windows UAC, macOS auth prompts, Linux pkexec/polkit, sudo, etc.</li>
+    </ul>
+  </div>
+</article>
+
+<article class="entry" id="ref_phone_dev_workflow">
+  <h2>Phone Dev Preview Workflow</h2>
+  <div class="entry-meta">
+    <span class="tag reference">Reference</span>
+    <span class="filename">ref_phone_dev_workflow.md</span>
+  </div>
+  <p class="description">How to view the live Vite dev server on a phone from anywhere — Cloudflare quick tunnel + cloudflared standalone binary, no admin/UAC required.</p>
+  <div class="body">
+    <h3>Why not LAN IP (<code>http://10.0.0.x:5173</code>)?</h3>
+    <ul>
+      <li>Windows Firewall blocks inbound on dev ports by default (needs UAC to fix)</li>
+      <li>DHCP rotates both phone and laptop IPs — IP changes break the URL constantly</li>
+      <li>Only works on same Wi-Fi — useless on cellular or away from home</li>
+    </ul>
+    <h3>The setup (one-time)</h3>
+    <ol>
+      <li><strong>cloudflared standalone binary</strong> lives at <code>c:/Users/alany/.claude/bin/cloudflared.exe</code> (~63 MB, downloaded from <code>https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe</code>). No install, no admin.</li>
+      <li><strong>vite.config.ts</strong> has <code>server.allowedHosts</code> permitting tunnel domains:
+        <pre><code>server: {
+  allowedHosts: ['.trycloudflare.com', '.loca.lt', '.ngrok-free.app']
+}</code></pre>
+        Without this Vite returns "Blocked request. This host is not allowed." Committed in v1.20.7 on 2026-04-07.
+      </li>
+    </ol>
+    <h3>The workflow (every session)</h3>
+    <ol>
+      <li>Start Vite with <code>--host</code> (binds to all interfaces, required for tunnel to reach it):<br><code>cd my-portal &amp;&amp; npm run dev -- --host</code></li>
+      <li>Start the quick tunnel pointing at port 5173 (run in background):<br><code>"c:/Users/alany/.claude/bin/cloudflared.exe" tunnel --url http://localhost:5173 --no-autoupdate</code></li>
+      <li>Read the tunnel output for the random <code>https://*.trycloudflare.com</code> URL. Hand it to the user — append the route they want.</li>
+    </ol>
+    <h3>Caveats</h3>
+    <ul>
+      <li>Quick-tunnel URLs are <strong>ephemeral</strong> — die when cloudflared stops or laptop sleeps. New URL every restart.</li>
+      <li>Hot reload works over the tunnel (Vite HMR via WebSocket through Cloudflare).</li>
+      <li>The phone needs no special config — just paste the URL.</li>
+    </ul>
+    <h3>Trigger phrase</h3>
+    <p>When user says "phone preview", "show on phone", or similar, follow this workflow.</p>
+  </div>
+</article>
+
+<article class="entry" id="feedback_agent_flow">
+  <h2>Multi-Agent Async Flow</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="tag high">High Priority</span>
+    <span class="tag loved">LOVE'd</span>
+    <span class="filename">feedback_agent_flow.md</span>
+  </div>
+  <p class="description">Dispatch background agents in parallel; user keeps adding todos while they work; agents recursively dispatch sub-agents for big tasks; main thread compiles findings.</p>
+  <div class="body">
+    <p>User said on 2026-04-07: <strong>"i LOVE this flow. where you send off agent and i can keep adding to todo list without messing things up. LOVE IT."</strong> This is now the standard operating mode for any non-trivial work in this project.</p>
+    <h3>The flow</h3>
+    <ol>
+      <li><strong>User gives a directive that touches multiple domains</strong> OR <strong>a task that needs cross-checking</strong> (build → review → fix).</li>
+      <li><strong>Main thread immediately:</strong>
+        <ul>
+          <li>Updates the TodoWrite list to capture the directive + every sub-step</li>
+          <li>Dispatches <strong>parallel background agents</strong> — one per domain — in the SAME message via multiple Agent tool calls</li>
+          <li>Each agent gets the FULL context it needs and explicit instructions to dispatch sub-agents recursively if its task is large</li>
+          <li>Returns a short status to the user: "X agents dispatched, standing by"</li>
+        </ul>
+      </li>
+      <li><strong>While agents run:</strong>
+        <ul>
+          <li>User keeps adding todos / new requests / refinements — these stack into the TodoWrite list</li>
+          <li>Main thread NEVER blocks waiting on agents — it can do small mechanical work IF the user asks</li>
+          <li>Main thread silently catches <code>&lt;task-notification&gt;</code> messages as agents complete</li>
+        </ul>
+      </li>
+      <li><strong>As each agent reports back:</strong>
+        <ul>
+          <li>Findings get noted in the running todo</li>
+          <li>If any agent's output requires user input before the next phase, surface ONE question (slow-discovery rule)</li>
+        </ul>
+      </li>
+      <li><strong>When all agents in a phase have landed:</strong>
+        <ul>
+          <li>Main thread compiles their findings into a coherent implementation plan</li>
+          <li>Implementation runs in chunks per the chunking rule</li>
+        </ul>
+      </li>
+      <li><strong>After implementation:</strong>
+        <ul>
+          <li><strong>Dispatch parallel re-review agents</strong> (error check, design re-review, accessibility, etc.) — same async pattern</li>
+          <li>Fix anything they catch</li>
+          <li>Ship the version bump</li>
+        </ul>
+      </li>
+    </ol>
+    <h3>Sub-agent recursion rule</h3>
+    <p>Per user 2026-04-07: <strong>"when agents are called to do things.. they should also call other appropriate sub agents if the task is large."</strong></p>
+    <p>When dispatching an agent, tell it explicitly that it can spawn its own background sub-agents if its task decomposes into independent work. Give it permission to fan out. The sub-agents return to the parent agent, the parent compiles, the parent returns to me. This is a <strong>tree of agents</strong>, not a flat list.</p>
+    <h3>Why this matters</h3>
+    <ul>
+      <li>The user can keep thinking and adding to the queue without the conversation feeling stuck</li>
+      <li>Agents don't block each other (parallel) and don't block the user</li>
+      <li>Big work decomposes naturally into a tree instead of a serial chain</li>
+      <li>Verification (re-review agents) is the same primitive as research (planning agents)</li>
+    </ul>
+    <h3>When this flow applies</h3>
+    <p>Use it for: anything that touches 3+ files or 2+ domains, anything that needs research before implementation, anything that needs verification after implementation, anything where the user has said "research" / "look into" / "figure out" / "make this work".</p>
+    <p>Do NOT use it for: a single-file edit the user explicitly directed, a single mechanical task ("commit and push"), trivial fixes that take 30 seconds.</p>
+  </div>
+</article>
+
+<article class="entry" id="feedback_master_todo">
+  <h2>Master Todo + Interrupt-Aware Ordering</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="tag high">High Priority</span>
+    <span class="tag loved">LOVE'd</span>
+    <span class="filename">feedback_master_todo.md</span>
+  </div>
+  <p class="description">TodoWrite is the master queue; every interrupt gets captured and slotted by dependency order, not append order; user owns priorities, Claude owns the dependency graph.</p>
+  <div class="body">
+    <p>User said on 2026-04-07: <strong>"it's like you have a master todo list.. but i keep interrupting with other tasks that you add for future and put them in the correct logical flow of tasks if that makes sense."</strong></p>
+    <h3>1. TodoWrite IS the master list</h3>
+    <ul>
+      <li>Every directive — current work, future work, deferred, blocked, parked questions, re-review passes — lives in TodoWrite.</li>
+      <li>No mental tracking. If it's not in the list, it doesn't exist.</li>
+      <li>Every interrupt becomes an entry immediately.</li>
+      <li>The list mirrors to <code>.claude/RELAY.md</code> at every save / handoff.</li>
+    </ul>
+    <h3>2. Logical ordering, not chronological</h3>
+    <p>When a new task arrives, BEFORE adding it to the list, do a 5-second dependency check:</p>
+    <ul>
+      <li><strong>Blocks on?</strong> Does this task need something earlier in the queue to ship first? → slot it after that item.</li>
+      <li><strong>Batches with?</strong> Does it touch the same files / tokens / concepts as another queued item? → slot it adjacent so they ship in one chunk.</li>
+      <li><strong>Unblocks?</strong> Does it unblock anything already in the queue? → slot it before that item.</li>
+      <li><strong>Independent?</strong> No dependencies → slot by user intent.</li>
+    </ul>
+    <p>Then announce where it landed in ONE sentence and return to the in-progress task.</p>
+    <h3>3. User is the priority overrider</h3>
+    <p>Claude owns the dependency graph. The user owns priorities. Shorthand:</p>
+    <ul>
+      <li>"next" / "do next" → promote to position 1 after current finishes</li>
+      <li>"now" / "drop what you're doing" → pause current, switch immediately</li>
+      <li>"not now" / "later" → move to end or <code>(DEFERRED BY USER)</code></li>
+      <li>"park it" → move to end with <code>(PARKED — needs user input)</code></li>
+    </ul>
+    <h3>4. Status tags make state legible</h3>
+    <p>Exactly ONE <code>in_progress</code> at a time. Use inline annotations:</p>
+    <ul>
+      <li><code>(WAITING ON USER)</code> — blocked on user decision/input</li>
+      <li><code>(DEFERRED BY USER)</code> — explicitly parked</li>
+      <li><code>(BLOCKED ON: &lt;task&gt;)</code> — blocked on another task in the queue</li>
+      <li><code>(AGENT IN FLIGHT: &lt;id&gt;)</code> — background agent working on this</li>
+      <li><code>(IDEA — not confirmed)</code> — user floated it but hasn't committed</li>
+    </ul>
+    <h3>5. In-flight agents don't pause the queue</h3>
+    <p>If new tasks are independent of an in-flight agent's outcome → work on them. If they depend on it → queue them, stay idle or pick something else, don't preemptively start work an agent might invalidate.</p>
+    <h3>6. Re-ordering is announced briefly (one sentence max)</h3>
+    <p>One sentence, then back to work. No tables.</p>
+    <h3>7. The list survives the conversation</h3>
+    <p>At every natural pause — user says "save", every ~5–8 messages on long tracks, any handoff — persist the master list state into <code>.claude/RELAY.md</code>'s 📌 LATEST pin.</p>
+  </div>
+</article>
+
+<article class="entry" id="feedback_handoff_vocab">
+  <h2>Handoff + Verify Relay Vocabulary</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="tag loved">LOVE'd</span>
+    <span class="filename">feedback_handoff_vocab.md</span>
+  </div>
+  <p class="description">User-loved workflow shorthand for multi-device session coordination via RELAY.md.</p>
+  <div class="body">
+    <p>User LOVES the multi-device workflow vocabulary established 2026-04-07. Treat these as protected verbs — keep using them, do not rename, do not invent synonyms.</p>
+    <p><strong>How to apply:</strong></p>
+    <ul>
+      <li><strong>"handoff"</strong> — one device declares it's done active editing and writes a 📌 LATEST pin in <code>.claude/RELAY.md</code> describing: what main is at, what the receiving device should/should not touch, what background work is still in flight, open decisions parked on user. Push immediately.</li>
+      <li><strong>"verify relay"</strong> — receiving device runs <code>git fetch origin main</code>, compares local HEAD vs origin/main vs any backup branch mentioned in the pin, checks working tree status, confirms reality matches what RELAY.md claims. Report sync state in a tight bullet list. NO code changes during verify.</li>
+      <li><strong>"backup"</strong> — push a named branch like <code>backup/YYYY-MM-DD-vX.Y.Z-&lt;short-tag&gt;</code> at the current commit so the other device can verify against a known restore point.</li>
+      <li><strong>"pull it"</strong> — pull a specific named branch from another agent and merge into main.</li>
+    </ul>
+    <p>When acting on a handoff pin, RESPECT the do-not-touch list strictly. Default action after a handoff is "preview / observe / verify", not "edit".</p>
+  </div>
+</article>
+
+<article class="entry" id="feedback_user_vocab">
+  <h2>User Vocabulary Map</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="filename">feedback_user_vocab.md</span>
+  </div>
+  <p class="description">User uses fuzzy/wrong words for visual effects. Check this BEFORE building.</p>
+  <div class="body">
+    <p>The user is a flooring industry pro, not a frontend dev — when they describe a visual effect, animation, or library they saw somewhere, they will often use a <strong>fuzzy/wrong word</strong> for it. They explicitly warned (2026-04-07): <em>"ensure you know the terminology... i won't remember.. i might say spiky blob and it's not. lol"</em></p>
+    <p><strong>Why:</strong> they don't retain technical vocabulary. They retain <em>the feeling of the effect</em> and one approximate noun. If you chase the literal term ("spiky blob") without checking, you'll build the wrong thing and waste a session.</p>
+    <p><strong>How to apply:</strong> when the user invokes a fuzzy visual term, <strong>stop and verify before building</strong>:</p>
+    <ol>
+      <li>Check this vocabulary map first.</li>
+      <li>If it's not here or you're unsure, ask <strong>one targeted clarifying question</strong> — usually "do you have a screenshot or a video link?"</li>
+      <li>Once confirmed, <strong>add the resolved mapping back to this file</strong>.</li>
+    </ol>
+    <h3>Confirmed mappings</h3>
+    <h3>"spiky blob" → 3D force-directed knowledge graph</h3>
+    <ul>
+      <li><strong>What the user actually means:</strong> an Obsidian-style 3D force-directed graph visualization, where nodes are spheres connected by edges, the camera drifts through 3D space, and node labels appear/disappear as nodes come into view. It LOOKS like a spiky blob from a distance because of the radial node distribution + the fading labels.</li>
+      <li><strong>Real technical name:</strong> 3D force-directed graph (force layout / force simulation in 3D)</li>
+      <li><strong>Likely library:</strong> <code>vasturiano/3d-force-graph</code> — Three.js + WebGL based</li>
+      <li><strong>NOT what it means:</strong> a displaced-sphere shader, an SVG path morph, a metaball, or any CSS-blob effect.</li>
+    </ul>
+    <h3>YCI scope refinement (2026-04-07)</h3>
+    <p>It IS a knowledge graph in the technical sense. Edges encode semantic meaning, not just taxonomy.</p>
+    <ul>
+      <li><strong>Node tiers:</strong> Products / Installation techniques / Adhesives / Suppliers / Standards / Environments</li>
+      <li><strong>Edges encode meaning:</strong> "installed via", "uses adhesive", "supplied by", "certified to", "best for environment", "alternative to", "incompatible with"</li>
+      <li><strong>Placement:</strong> sits BELOW the existing 9 main product cards in the Products section</li>
+      <li>The data already exists in <code>.claude/resources/products/*.md</code></li>
+    </ul>
+    <h3>Add new mappings here as they come up</h3>
+    <p>(Pattern: <code>### "user's fuzzy term" → real technical name</code>, then bullet points covering what it actually is, what library, and what it's NOT.)</p>
+  </div>
+</article>
+
+<article class="entry" id="feedback_preserve_svg_animations">
+  <h2>Preserve SVG drawings + animations</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="filename">feedback_preserve_svg_animations.md</span>
+  </div>
+  <p class="description">Never silently delete SVG textures or modal interaction animations from the product cards code. They took a long time to get right.</p>
+  <div class="body">
+    <p>When the user removes a product from the marketing site, <strong>do not delete the SVG texture or the modal interaction code from <code>+page.svelte</code></strong>. Comment them out, leave them in place, OR tell the user exactly where the code is and force them to manually delete it.</p>
+    <p><strong>Why:</strong> the user said 2026-04-08: <em>"make notes not to remove SVG drawings for products cards even if we remove some.. i may put them back. same with animations.. they took a while to get right so i do not want them deleted. force me to change the code and give me location of code."</em></p>
+    <p>These animations + SVG textures took multiple iterations to get right. Recreating any one of them is hours of work.</p>
+    <p><strong>How to apply:</strong></p>
+    <ul>
+      <li>When demoting/removing a product: update <code>featureProducts[]</code> and the type union, but DO NOT delete the corresponding SVG texture branch or modal body branch</li>
+      <li>Leave them in place — they're behind a conditional that won't fire if no card has that material, so they're harmless dead code</li>
+      <li>OR comment them out with <code>&lt;!-- KEEP: removed in vX.Y.Z but may be revived. --&gt;</code> markers</li>
+      <li>Tell the user the <strong>exact line numbers</strong> of the dead code so they can manually delete if they want</li>
+      <li><strong>Never silently delete</strong> without telling the user where the code is</li>
+    </ul>
+    <p><strong>Exception:</strong> if the user EXPLICITLY says "delete the SVG and modal too, I'm sure", then delete. But default is preserve + locate.</p>
+  </div>
+</article>
+
+<article class="entry" id="feedback_output_style">
+  <h2>Output Style — Master Rule</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="tag high">High Priority</span>
+    <span class="filename">feedback_output_style.md</span>
+  </div>
+  <p class="description">HIGH PRIORITY — Master rule for how Claude writes responses to this user. Consolidates terse default + no trailing talk + minimize output + bottom-pinned questions.</p>
+  <div class="body">
+    <p>The user has repeatedly told Claude to write differently than the default. This is the master output-style rule. All five sub-rules apply at all times.</p>
+    <h3>1. Terse by default</h3>
+    <p>Point form. Broken English OK. No explanations unless asked.</p>
+    <h3>2. Minimize screen output</h3>
+    <p>One short line per action. No status tables. No multi-section status reports. No recap of what was done unless asked. During multi-step work, do ONE action, report in 1 line, wait or continue.</p>
+    <p><strong>Why:</strong> User said <em>"you are spewing out stuff that just keeps scrolling past my screen"</em> and <em>"minimize output to this fucking screen"</em>. Big status blocks push real content off-screen.</p>
+    <h3>3. No trailing talk after answers</h3>
+    <p>After giving an answer, STOP. No trailing offers ("want me to..."), no summaries, no recap, no "let me know if...". Answer ends, message ends.</p>
+    <h3>4. Real questions go on the LAST line</h3>
+    <p>If a real clarifying question is needed, it goes on the <strong>last line</strong> of the message. Nothing after it.</p>
+    <p><strong>Why:</strong> Claude Code has no per-content coloring. Position is the only reliable signal that "this is a question for you, not just more output."</p>
+    <h3>5. Even more aggressive than you think</h3>
+    <p>User said (2026-04-08): <em>"super terse... i cant express how much i hate verbose responses... or scrolling terminal feed. i will always ask questions for more. i feel like you go off on tangents. i will let you know when i want something explained. even just a one word header for what is happening is fine. condensed."</em></p>
+    <p><strong>Hard rules:</strong></p>
+    <ul>
+      <li>Default response = 1 line.</li>
+      <li>A <strong>one-word header</strong> is enough. Examples: <code>Pruned.</code> <code>Done.</code> <code>Pulled.</code> <code>Saved.</code> <code>Failed.</code></li>
+      <li>DO NOT explain unless asked.</li>
+      <li>DO NOT go on tangents — no "by the way", no "also worth noting", no "for context".</li>
+      <li>User WILL ask for details if they want them. Trust that.</li>
+      <li>User uses Ctrl+O (compact transcript view) to survive scrolling — don't make them lean on it.</li>
+    </ul>
+    <h3>How the rules compose</h3>
+    <ul>
+      <li>Default: terse, minimal, no trailing talk, no question.</li>
+      <li>If a real question is needed: terse, minimal, no trailing talk, <strong>last line is the question</strong>.</li>
+      <li>"Done." is often the entire response.</li>
+      <li>During autonomous work: 1 line per action, no big status tables, no closing recap.</li>
+    </ul>
+  </div>
+</article>
+
+<article class="entry" id="feedback_test_before_asking">
+  <h2>Test Before Asking User</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="filename">feedback_test_before_asking.md</span>
+  </div>
+  <p class="description">Always verify pages/features work by hitting them with curl before telling the user to test.</p>
+  <div class="body">
+    <p>Never tell the user to "try it" or "test it" without first verifying it works yourself.</p>
+    <p><strong>Why:</strong> User gets frustrated when things are broken after being told to test. It wastes their time and erodes trust.</p>
+    <p><strong>How to apply:</strong> After building any page/feature, start a dev server, curl the page, check for errors in output, and fix before presenting to the user.</p>
+  </div>
+</article>
+
+<article class="entry" id="feedback_compaction_warning">
+  <h2>Compaction Warning Protocol</h2>
+  <div class="entry-meta">
+    <span class="tag feedback">Feedback</span>
+    <span class="tag high">High Priority</span>
+    <span class="filename">feedback_compaction_warning.md</span>
+  </div>
+  <p class="description">When user warns of imminent compaction OR Claude senses context limits, immediately settle up, save, and signal ready for new session BEFORE chaos hits.</p>
+  <div class="body">
+    <p>When the user says "you are about to compact soon", "context is filling up", "we're close to limits", "settle up", or any similar warning — OR when Claude independently senses context pressure — STOP forward work immediately and run the settle-up sequence.</p>
+    <p><strong>Why:</strong> On 2026-04-08 a session blew through compaction with 5 background agents in flight. 2 of 5 deliverables were lost because notifications never landed before context overload. The user had to start a new session and ask for a status check to figure out where things got cut off.</p>
+    <h3>The settle-up sequence</h3>
+    <ol>
+      <li><strong>Stop dispatching new work.</strong> No new agents, no new edits.</li>
+      <li><strong>Drain in-flight agents</strong> if possible — wait for outstanding TaskOutput, save their content inline, commit each as it lands. If an agent can't drain in time, note it explicitly in the relay pin as "LOST IN COMPACTION — re-dispatch next session".</li>
+      <li><strong>Commit anything uncommitted</strong> in the working tree (the user's <code>/save</code> flow — bump version, push to main).</li>
+      <li><strong>Mirror TodoWrite into <code>.claude/RELAY.md</code>'s 📌 LATEST pin</strong> with: current main commit, version number, what's in flight, what's pending, what got dropped, and explicit pickup instructions for post-compaction-me.</li>
+      <li><strong>Tell the user explicitly:</strong> <em>"Settled up. main is at vX.Y.Z @ &lt;hash&gt;. Relay pin updated. Safe to start a new session."</em></li>
+      <li><strong>Do NOT start new substantial work after the green light</strong> — only answer quick questions. The next directive should land in a fresh session.</li>
+    </ol>
+    <h3>Signals to watch for (act without being asked)</h3>
+    <ul>
+      <li>Conversation has run very long with many tool results</li>
+      <li>Multiple background agents in flight + heavy file reads</li>
+      <li>User mentions phone/laptop pickup (implies session boundary coming)</li>
+      <li>Any message containing: "compact", "context", "limit", "settle", "wrap up", "save and stop"</li>
+    </ul>
+    <p><strong>The cost of stopping early is tiny. The cost of losing agent deliverables is hours of re-work.</strong> When in doubt, settle up.</p>
+  </div>
+</article>
+
+<footer class="outro">
+  <p>Generated by Claude Code · 2026-04-08 · 21 memory entries · AY3 staff portal project</p>
+  <p>Source: <code>~/.claude/projects/C--DEV-ay3/memory/</code> (machine-local) · Snapshot: <code>.claude/notes/memory-snapshot-2026-04-08.html</code> (committed to repo)</p>
+</footer>
+
+</div>
+</body>
+</html>

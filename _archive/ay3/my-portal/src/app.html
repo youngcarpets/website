@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="text-scale" content="scale" />
+		<script>
+			// Pre-hydration theme bootstrap — runs before first paint.
+			// Mirrors src/lib/stores/theme.svelte.ts logic so the initial DOM
+			// matches whatever the runtime store will compute.
+			//
+			// v1.23.15: DEFAULT IS DARK. The user is actively iterating on the
+			// dark-mode design and does not want first-time visitors (or his
+			// own dev session, which has no localStorage) to ever land on
+			// light. Only an explicit 'light' value in localStorage shows
+			// light mode. 'system' falls back to dark instead of matchMedia.
+			(function () {
+				try {
+					var pref = localStorage.getItem('ay3:theme');
+					var mode = pref === 'light' ? 'light' : 'dark';
+					document.documentElement.setAttribute('data-theme', mode);
+				} catch (e) {
+					document.documentElement.setAttribute('data-theme', 'dark');
+				}
+			})();
+		</script>
+		%sveltekit.head%
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>

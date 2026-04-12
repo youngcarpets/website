@@ -1,0 +1,19 @@
+# Local source assets (fonts, reference images, design files)
+# Belongs to the user, not the repo. Files committed under static/ or
+# my-portal/static/ are the production-deployed copies.
+forClaude/
+!forClaude/*.md
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

@@ -1,0 +1,77 @@
+/* ═══════════════════════════════════════════
+   AY3 Playground Theme — Neutral surfaces,
+   electric accents only.
+   Wrap content in .playground-page to apply.
+   ═══════════════════════════════════════════ */
+
+.playground-page {
+	/* ── LIGHT MODE — tan/greige neutrals ── */
+	--surface: #EDEAE3;             /* warm greige base */
+	--surface-warm: #F5F2EC;        /* lighter card surface */
+	--surface-card: rgba(245, 242, 236, 0.78);
+	--surface-card-hover: rgba(245, 242, 236, 0.92);
+	--border-subtle: rgba(60, 50, 40, 0.08);
+	--border-medium: rgba(60, 50, 40, 0.14);
+	--text-primary: #1D1A16;        /* near-black warm */
+	--text-secondary: #5C5650;
+	--text-tertiary: #8C857D;
+
+	--radius-sm: 10px;
+	--radius-md: 14px;
+	--radius-lg: 20px;
+	--radius-xl: 24px;
+	--ease-apple: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+	--shadow-sm:
+		0 1px 2px rgba(0, 0, 0, 0.05),
+		0 1px 3px rgba(0, 0, 0, 0.03);
+	--shadow-md:
+		0 2px 8px rgba(0, 0, 0, 0.08),
+		0 4px 16px rgba(0, 0, 0, 0.05);
+	--shadow-lg:
+		0 4px 12px rgba(0, 0, 0, 0.08),
+		0 8px 32px rgba(0, 0, 0, 0.10),
+		0 0 0 1px rgba(0, 0, 0, 0.03);
+
+	/* ── ELECTRIC ACCENTS — for glows/outlines/active states only ── */
+	--blue:   #00C2FF;   /* electric cyan-blue */
+	--green:  #00FF94;   /* electric mint */
+	--orange: #FFB020;   /* electric amber */
+	--purple: #C77DFF;   /* electric violet */
+	--teal:   #00E5D5;   /* electric teal */
+	--indigo: #7B7FFF;   /* electric indigo */
+	--pink:   #FF3D9A;   /* electric magenta */
+	--red:    #FF4060;   /* electric red */
+
+	/* Default electric accent (used for focus rings, glows) */
+	--accent: var(--blue);
+	--accent-glow: 0 0 20px color-mix(in srgb, var(--accent) 35%, transparent);
+
+	color: var(--text-primary);
+	font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* ── DARK MODE — charcoal/black neutrals ── */
+.playground-page--dark {
+	--surface: #0a0a0b;             /* near-black */
+	--surface-warm: #141416;        /* slightly lifted */
+	--surface-card: rgba(28, 28, 32, 0.72);
+	--surface-card-hover: rgba(38, 38, 42, 0.85);
+	--border-subtle: rgba(255, 255, 255, 0.06);
+	--border-medium: rgba(255, 255, 255, 0.12);
+	--text-primary: #F5F5F7;
+	--text-secondary: #A1A1A6;
+	--text-tertiary: #6E6E73;
+
+	--shadow-sm:
+		0 1px 2px rgba(0, 0, 0, 0.5),
+		0 1px 3px rgba(0, 0, 0, 0.3);
+	--shadow-md:
+		0 4px 16px rgba(0, 0, 0, 0.5),
+		0 8px 24px rgba(0, 0, 0, 0.35);
+	--shadow-lg:
+		0 8px 32px rgba(0, 0, 0, 0.6),
+		0 16px 64px rgba(0, 0, 0, 0.4),
+		0 0 0 1px rgba(255, 255, 255, 0.04);
+}

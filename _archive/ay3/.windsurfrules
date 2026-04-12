@@ -1,0 +1,152 @@
+# Windsurf Rules — AY3 Portal
+
+These rules mirror the Claude Code rules in `CLAUDE.md` and `.claude/` so every
+AI tool working on this repo behaves the same way. The user has ONE mental
+model and it must be honored consistently no matter which tool is driving.
+
+---
+
+## The One Rule That Matters
+
+**Main is the only branch. Always. On every device, from every tool.**
+
+- Every session starts on `main`.
+- Every session ends on `main`.
+- "Save" means: commit → pull latest main → merge any in-flight work into main → push main.
+- **NEVER ask the user about branches.** The user's explicit standing instruction: *"I just want all versions to just merge on main."*
+- Feature branches, autonomous-work branches, scratch branches — any of these are temporary. They get absorbed into `main` on save and deleted. The user never tracks branch names.
+
+---
+
+## Session Start — Auto-Sync to Main
+
+At the start of every Windsurf session, before doing anything else:
+
+1. `git fetch origin main`
+2. If current branch is not `main`:
+   - If working tree is dirty → `git stash push -u -m "windsurf-autostash-$(date +%s)"`
+   - `git checkout main`
+3. `git pull --rebase origin main`
+
+This matches `.claude/hooks/session-start.sh` which does the same thing for Claude Code.
+
+---
+
+## Save Workflow
+
+When the user says **"save"** (or any equivalent — "commit and push", "ship it", "sync"), run this exact sequence:
+
+### 1. Get onto main — silently, no questions
+
+- If already on `main` → continue to step 2.
+- If on any other branch → do ALL of this without asking:
+  1. `git add -A && git commit -m "wip: pre-save snapshot on <branch>"` (only if dirty)
+  2. `git push -u origin <branch>`
+  3. `git checkout main`
+  4. `git fetch origin main && git pull --rebase origin main`
+  5. `git merge --no-ff <branch> -m "merge <branch> into main via save"`
+  6. Resolve trivial conflicts automatically:
+     - `.claude/RELAY.md` → union merge (keep all session entries from both sides)
+     - `my-portal/package.json` version line → take `max(local, remote)` and bump once more
+     - Any other conflict → abort cleanly and report
+  7. `git branch -d <branch>` (cleanup)
+
+### 2. Sensitivity check
+
+Before staging, confirm nothing sensitive is in the diff:
+- `.env`, `.env.*`
+- `*.key`, `*.pem`
+- `credentials*.json`
+- Anything under `node_modules/`
+
+If anything suspicious appears, STOP and ask.
+
+### 3. Version bump
+
+Read `my-portal/package.json` → `"version"` field:
+- **Patch** (`x.y.Z+1`) by default
+- **Minor** (`x.Y+1.0`) only for a real new feature this save
+- **Major** (`X+1.0.0`) only on explicit breaking-change request
+
+Write the bumped version back. If this fails, STOP and report loudly.
+
+### 4. Stage + commit
+
+- `git add -A` (after the sensitivity check)
+- Commit message format:
+  ```
+  v<VERSION>: <one-line summary of what this save did>
+
+  - <bullet>
+  - <bullet>
+  ```
+
+### 5. Pull + push
+
+- `git fetch origin main && git pull --rebase origin main`
+- Auto-resolve the two trivial conflict cases (RELAY union, version max).
+- Anything else → `git rebase --abort` and warn the user.
+- `git push origin main`
+- On non-fast-forward rejection, re-run pull-rebase-push up to 3 times.
+
+### 6. Report — version number FIRST
+
+```
+Saved. v<VERSION>
+- commit:    <short-hash> on main
+- changes:   <one-line summary>
+- pulled in: <incoming commits from other devices, or "nothing new">
+- main now:  <main-short-hash>
+```
+
+**Version number is mandatory in every save report. No exceptions.**
+
+---
+
+## Constraints
+
+- **NEVER force-push main.**
+- **NEVER commit** `.env`, `.env.*`, `*.key`, `*.pem`, `credentials*.json`, `node_modules/`.
+- **NEVER ask about branches.** Always silently merge to main. This is the user's explicit standing preference.
+- **NEVER leave the working tree in a half-rebased state.** Finish cleanly or abort cleanly.
+- **NEVER edit `CLAUDE.md`** — it requires explicit user approval. The user owns that file.
+
+---
+
+## Tech Stack (shared with Claude Code)
+
+- **SvelteKit** + Svelte 5 runes + TypeScript strict
+- **Tailwind CSS v4** (plugin order in `vite.config.ts`: `tailwindcss()` before `sveltekit()`)
+- **Supabase** (PostgreSQL) — env vars in `my-portal/.env`: `PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`
+- **Superforms v2** + **Zod v4** — always use `zod4 as zod` adapter, never `zod` or `zodClient`
+- **Bits UI** for headless primitives
+- **Module pattern:** `src/lib/modules/{name}/` with types, schemas, services, components, barrel export
+
+## Svelte 5 Rules
+
+- Always use runes: `$props()`, `$state()`, `$derived()`, `$effect()`, `{@render}`
+- Never use legacy patterns: `export let`, `<slot/>`, `createEventDispatcher`
+- Component props via `let { prop1, prop2 } = $props<Type>()`
+- Children via `{@render children()}`, not `<slot/>`
+
+## Versioning
+
+- Single source of truth: `my-portal/package.json` → `"version"` field
+- Bump version on every commit, no exceptions
+- Semver: patch for fixes, minor for features, major for breaking changes
+
+## Dev Commands
+
+- Dev server: `cd my-portal && npm run dev` (localhost:5173)
+- Install: `cd my-portal && npm install`
+- Type check: `cd my-portal && npx svelte-check --tsconfig ./tsconfig.json`
+
+---
+
+## Why this file exists
+
+The user works across multiple devices and multiple AI tools (Claude Code on
+desktop/laptop/phone, Windsurf on the work machine). They don't want to track
+branches or remember tool-specific quirks. **Main = the user's computer.**
+Every tool behaves identically: pull main at start, merge to main on save,
+never ask about branches. This file guarantees Windsurf matches Claude Code.

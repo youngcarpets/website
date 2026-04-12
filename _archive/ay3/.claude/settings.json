@@ -1,0 +1,61 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(git :*)",
+      "Bash(timeout 15 npm run dev)",
+      "Bash(npx svelte-check:*)",
+      "Bash(npx svelte-kit:*)",
+      "Bash(curl -s http://localhost:5173/)",
+      "WebFetch(domain:dev.to)",
+      "WebFetch(domain:tanstack.com)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:makerkit.dev)",
+      "WebFetch(domain:dropanote.de)",
+      "WebFetch(domain:supabase.com)",
+      "WebFetch(domain:svelte.dev)",
+      "WebFetch(domain:kit.svelte.dev)",
+      "WebFetch(domain:tailwindcss.com)",
+      "WebFetch(domain:zod.dev)",
+      "WebFetch(domain:superforms.rocks)",
+      "WebFetch(domain:developer.apple.com)",
+      "WebSearch(*)",
+      "Bash(curl -s \"https://supabase.com/docs/guides/api/rest/generating-types\")",
+      "Bash(curl -s \"https://api.github.com/repos/huntabyte/bits-ui/releases/latest\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(d.get\\('tag_name','?'\\), d.get\\('published_at','?'\\), d.get\\('body',''\\)[:500]\\)\")",
+      "Bash(curl -s \"https://supabase.com/docs/guides/auth/server-side/sveltekit\")",
+      "Bash(curl -s \"https://api.github.com/repos/melt-ui/melt-ui/releases/latest\")",
+      "Bash(curl -s \"https://supabase.com/docs/guides/realtime\")",
+      "Bash(curl -s \"https://api.github.com/repos/huntabyte/shadcn-svelte/releases/latest\")",
+      "Bash(curl -s \"https://registry.npmjs.org/bits-ui\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); dist=d.get\\('dist-tags',{}\\); print\\('Latest:', dist.get\\('latest','?'\\), 'Next:', dist.get\\('next','?'\\)\\); times=d.get\\('time',{}\\); vers=sorted\\(times.items\\(\\), key=lambda x:x[1], reverse=True\\)[:5]; [print\\(v,t\\) for v,t in vers]\")"
+    ],
+    "deny": [
+      "Write(**/.env)",
+      "Write(**/.env.*)",
+      "Write(**/*.pem)",
+      "Write(**/*.key)",
+      "Write(**/credentials*.json)",
+      "Write(**/node_modules/**)",
+      "Edit(**/.env)",
+      "Edit(**/.env.*)",
+      "Edit(**/*.pem)",
+      "Edit(**/*.key)",
+      "Edit(**/credentials*.json)",
+      "Edit(**/node_modules/**)",
+      "MultiEdit(**/.env)",
+      "MultiEdit(**/.env.*)",
+      "MultiEdit(**/node_modules/**)"
+    ],
+    "ask": [
+      "Edit(/home/user/ay3/CLAUDE.md)",
+      "Write(/home/user/ay3/CLAUDE.md)",
+      "MultiEdit(/home/user/ay3/CLAUDE.md)"
+    ]
+  },
+  "hooks": {},
+  "enabledPlugins": {
+    "frontend-design@claude-plugins-official": true,
+    "superpowers@claude-plugins-official": true
+  }
+}

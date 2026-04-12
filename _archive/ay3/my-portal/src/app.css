@@ -1,0 +1,230 @@
+@import 'tailwindcss';
+
+/* ── Apple Liquid Glass Theme ──
+   Single source of truth for the portal-side design system.
+   Tokens grouped: surface · ink · accent · semantic · glass · radius · motion · alpha rungs.
+   Tailwind v4 picks --color-* up as utilities (e.g. bg-glass, text-text-primary). */
+@theme {
+  /* ── Surfaces ── */
+  --color-surface: #09090b;
+  --color-surface-raised: rgba(39, 39, 42, 0.50);
+  --color-surface-input: rgba(39, 39, 42, 0.40);
+  --color-glass: rgba(24, 24, 27, 0.60);
+  --color-glass-hover: rgba(24, 24, 27, 0.75);
+  --color-glass-strong: rgba(63, 63, 70, 0.50);
+  --color-glass-navbar: rgba(9, 9, 11, 0.70);
+
+  /* ── Borders ── */
+  --color-glass-border: rgba(161, 161, 170, 0.15);
+  --color-glass-border-strong: rgba(161, 161, 170, 0.30);
+  --color-glass-border-faint: rgba(161, 161, 170, 0.08);
+
+  /* ── Ink ── */
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #a1a1aa;
+  --color-text-muted: #71717a;
+
+  /* ── Accent (cyan family) ── */
+  --color-cyan-accent: #06b6d4;
+  --color-cyan-hot: #22d3ee;
+  --color-cyan-glow: rgba(6, 182, 212, 0.25);
+  --color-cyan-row-hover: rgba(6, 182, 212, 0.03);
+
+  /* ── Semantic — danger ── */
+  --color-danger: #ef4444;
+  --color-danger-hover: #dc2626;
+  --color-danger-soft: rgba(239, 68, 68, 0.10);
+  --color-danger-mid: rgba(239, 68, 68, 0.15);
+  --color-danger-strong: rgba(239, 68, 68, 0.30);
+
+  /* ── Semantic — success ── */
+  --color-success: #22c55e;
+  --color-success-soft: rgba(34, 197, 94, 0.15);
+  --color-success-mid: rgba(34, 197, 94, 0.30);
+
+  /* ── Glass material ── */
+  --glass-blur: 20px;
+  --glass-blur-nav: 24px;
+  --glass-sat: 1.4;
+  --glass-sat-nav: 1.5;
+
+  /* ── Radii ── */
+  --radius-md: 0.625rem;   /* buttons, inputs */
+  --radius-lg: 0.75rem;    /* toast */
+  --radius-xl: 1rem;       /* glass panels */
+
+  /* ── Motion ── */
+  --motion-base: 300ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Base ── */
+html {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 20% 0%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(6, 182, 212, 0.05) 0%, transparent 50%),
+    var(--color-surface);
+}
+
+/* ── Glass Panel ── */
+.glass {
+  background: var(--color-glass);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-xl);
+  transition: all var(--motion-base) var(--ease-standard);
+}
+
+.glass:hover {
+  background: var(--color-glass-hover);
+}
+
+.glass-navbar {
+  background: var(--color-glass-navbar);
+  backdrop-filter: blur(var(--glass-blur-nav)) saturate(var(--glass-sat-nav));
+  -webkit-backdrop-filter: blur(var(--glass-blur-nav)) saturate(var(--glass-sat-nav));
+  border-bottom: 1px solid var(--color-glass-border);
+}
+
+/* ── Buttons ── */
+.btn-primary {
+  background: var(--color-cyan-accent);
+  color: #000;
+  font-weight: 600;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-md);
+  transition: all var(--motion-base) var(--ease-standard);
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: var(--color-cyan-hot);
+  box-shadow: 0 0 20px var(--color-cyan-glow);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: var(--color-surface-raised);
+  color: var(--color-text-primary);
+  font-weight: 500;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-glass-border);
+  transition: all var(--motion-base) var(--ease-standard);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background: var(--color-glass-strong);
+  border-color: var(--color-glass-border-strong);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--color-danger);
+  font-weight: 500;
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-danger-strong);
+  transition: all var(--motion-base) var(--ease-standard);
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background: var(--color-danger-soft);
+  border-color: var(--color-danger);
+}
+
+/* ── Inputs ── */
+.input-glass {
+  background: var(--color-surface-input);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-md);
+  padding: 0.625rem 0.875rem;
+  color: var(--color-text-primary);
+  transition: all var(--motion-base) var(--ease-standard);
+  width: 100%;
+  outline: none;
+}
+
+.input-glass::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input-glass:focus {
+  border-color: var(--color-cyan-accent);
+  box-shadow: 0 0 0 3px var(--color-cyan-glow);
+}
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  padding: 0.875rem 1.25rem;
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  font-size: 0.875rem;
+  z-index: 100;
+  animation: toast-in var(--motion-base) var(--ease-standard) forwards;
+}
+
+.toast-success {
+  background: var(--color-success-soft);
+  border: 1px solid var(--color-success-mid);
+  color: var(--color-success);
+}
+
+.toast-error {
+  background: var(--color-danger-mid);
+  border: 1px solid var(--color-danger-strong);
+  color: var(--color-danger);
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(1rem); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Table ── */
+.table-glass {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-glass th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-glass-border);
+}
+
+.table-glass td {
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-glass-border-faint);
+}
+
+.table-glass tr:hover td {
+  background: var(--color-cyan-row-hover);
+}

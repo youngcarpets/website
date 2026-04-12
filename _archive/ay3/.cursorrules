@@ -1,0 +1,8 @@
+# Cursor rules for AY3 Portal
+#
+# See AGENTS.md for the full rules. All AI tools on this repo follow the same
+# workflow: main is the only branch, "save" merges everything into main, no
+# branches to track, no questions asked.
+
+# Please read and follow the rules in AGENTS.md at the repo root.
+# They are the single source of truth for every AI tool working on this repo.

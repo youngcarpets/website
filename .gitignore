@@ -17,5 +17,7 @@ Desktop.ini
 !.vscode/extensions.json
 .idea/
 
-_archive/
+_archive/ay3/my-portal/node_modules/
+_archive/ay3/my-portal/.svelte-kit/
+_archive/ay3/.git/
 .claude/settings.local.json

@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Edit(*)",
+      "Write(*)",
+      "MultiEdit(*)",
+      "NotebookEdit(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "Bash(*)",
+      "WebFetch(*)",
+      "WebSearch(*)",
+      "Agent(*)",
+      "Bash(rmdir /c/DEV/ay3/.claude/hooks/)",
+      "Bash(echo \"hooks dir removed: $?\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\alany\\.claude"
+    ]
+  }
+}

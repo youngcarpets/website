@@ -1,0 +1,3469 @@
+	/* ── Young Carpets — self-contained dark info site ── */
+	/* All classes prefixed yc- to avoid colliding with portal CSS */
+
+	/* Skip-to-content link \u2014 off-screen until focused via keyboard Tab */
+	/* DEV-ONLY version badge — top-right floating pill, above everything.
+	   Removed before production launch. Tagged with `dev` import so it
+	   only renders in `npm run dev`, never in `npm run build`. */
+	.yc-dev-version-badge {
+		position: fixed;
+		top: calc(10px + env(safe-area-inset-top, 0px));
+		right: 10px;
+		z-index: 9999;
+		padding: 0.3rem 0.65rem;
+		border-radius: 9999px;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.65rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		color: var(--yc-maple-gold);
+		background: var(--yc-ink-78);
+		border: 1px solid var(--yc-maple-gold-35);
+		backdrop-filter: blur(var(--yc-blur-10)) saturate(var(--yc-sat-160));
+		-webkit-backdrop-filter: blur(var(--yc-blur-10)) saturate(var(--yc-sat-160));
+		box-shadow:
+			inset 0 var(--yc-edge-y) 0 var(--yc-shimmer),
+			0 4px 14px -4px var(--yc-shadow-60),
+			0 0 18px -4px var(--yc-maple-gold-35);
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.yc-skip-link {
+		position: fixed;
+		top: -100px;
+		left: 12px;
+		z-index: 300;
+		padding: 12px 16px;
+		background: #0b0b0d;
+		color: #fff;
+		font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui,
+			sans-serif;
+		font-size: 0.85rem;
+		font-weight: 500;
+		text-decoration: none;
+		border: 1px solid rgba(var(--accent-gold), 0.5);
+		border-radius: 8px;
+		box-shadow: 0 8px 24px var(--yc-shadow-50);
+		transition: top 220ms var(--e-out-expo);
+	}
+	.yc-skip-link:focus {
+		top: calc(12px + env(safe-area-inset-top, 0px));
+		outline: 2px solid rgba(var(--accent-gold-hot), 0.65);
+		outline-offset: 2px;
+	}
+
+	/* v1.20.4: additive device-tilt backdrop parallax.
+	   Uses the CSS `translate` property (separate from transform) so
+	   it composes with the locked .yc-bg-plan-layer-1/2/3 transforms
+	   WITHOUT modifying them. The locked LOVE'd 3-layer scroll parallax
+	   stays byte-identical \u2014 this just adds a cross-axis offset on top. */
+	.yc-bg-plan-layer-1 {
+		translate: calc(var(--yc-tilt-x, 0) * 6px) calc(var(--yc-tilt-y, 0) * 6px);
+	}
+	.yc-bg-plan-layer-2 {
+		translate: calc(var(--yc-tilt-x, 0) * 14px) calc(var(--yc-tilt-y, 0) * 14px);
+	}
+	.yc-bg-plan-layer-3 {
+		translate: calc(var(--yc-tilt-x, 0) * 26px) calc(var(--yc-tilt-y, 0) * 26px);
+	}
+	@media (hover: none), (pointer: coarse) {
+		/* Mobile: push the tilt harder per user "bg to move more, pumped up". */
+		.yc-bg-plan-layer-1 {
+			translate: calc(var(--yc-tilt-x, 0) * 18px) calc(var(--yc-tilt-y, 0) * 18px);
+		}
+		.yc-bg-plan-layer-2 {
+			translate: calc(var(--yc-tilt-x, 0) * 34px) calc(var(--yc-tilt-y, 0) * 34px);
+		}
+		.yc-bg-plan-layer-3 {
+			translate: calc(var(--yc-tilt-x, 0) * 58px) calc(var(--yc-tilt-y, 0) * 58px);
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.yc-bg-plan-layer-1,
+		.yc-bg-plan-layer-2,
+		.yc-bg-plan-layer-3 {
+			translate: none;
+		}
+	}
+
+	/* Maple badge becomes a button on mobile \u2014 tap to enable motion.
+	   Subtle gold pulse until motion permission is granted. */
+	button.yc-maple-badge {
+		font: inherit;
+		cursor: pointer;
+	}
+	button.yc-maple-badge--motion-pending {
+		/* v1.24.42: pulse killed entirely. User does not want any glow,
+		   shimmer, or pulse animation on the Proudly Canadian badge. The
+		   badge is still tappable to grant motion permission on iOS — it
+		   just no longer advertises itself visually. We still need the
+		   yc-hero-fade-up animation here so the badge fades in (the
+		   fade-up rule on .yc-maple-badge--hero would otherwise be
+		   overridden by this rule's specificity — see v1.24.38 fix). */
+		animation: yc-hero-fade-up 700ms var(--e-out-expo) 50ms forwards;
+	}
+
+	.yc-page {
+		font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+		-webkit-font-smoothing: antialiased;
+		color: var(--yc-text);
+		background: var(--yc-bg);
+		line-height: 1.6;
+		min-height: 100vh;
+		position: relative;
+		overflow-x: hidden;
+		/* 500ms black fade-in on first paint. Reduced-motion safe via media query below. */
+		animation: yc-page-in 500ms ease both;
+	}
+
+	@keyframes yc-page-in {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.yc-page {
+			animation: none;
+		}
+	}
+
+	.yc-container {
+		max-width: 1120px;
+		margin: 0 auto;
+		padding: 0 1.5rem;
+		position: relative;
+		z-index: 1;
+	}
+
+	/* ── 3-layer architectural plan parallax backdrop ──
+	   🔒 LOCKED by user (2026-04-07): this effect is the hero of the page
+	   and must not be modified. Only additive transforms (e.g. tilt via
+	   --yc-tilt-x/y) may compose with the existing translate3d values.
+	   See .claude/RELAY.md "LOCKED" section for full rules.
+
+	   Layer 1: bg.jpg "paper" (the main plan), 0.25x scroll
+	   Layer 2: bg.jpg ghost (scaled, rotated, lower opacity), 0.50x scroll
+	   Layer 3: drafting grid (CSS pattern), 0.75x scroll
+	   --yc-scroll is set in JS as a unitless number, multiplied by 1px in calc. */
+	.yc-bg-plan {
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+		z-index: 0;
+		overflow: hidden;
+	}
+
+	.yc-bg-plan-img,
+	.yc-bg-plan-grid {
+		position: absolute;
+		inset: -10vh -5vw;
+		width: 110%;
+		height: 120vh;
+		will-change: transform;
+	}
+
+	.yc-bg-plan-img {
+		object-fit: cover;
+		object-position: center;
+	}
+
+	/* Layer 1 — main paper (the existing dark-mode-filtered plan).
+	   v1.21.0: filter lifted to --yc-parallax-filter-1 token so light
+	   mode can swap. Dark token = EXACT same chain (LOVE-locked,
+	   byte-identical). Layer markup, opacity, mask, transform all
+	   unchanged per the LOVE rule. */
+	.yc-bg-plan-layer-1 {
+		filter: var(--yc-parallax-filter-1);
+		opacity: 0.55;
+		-webkit-mask-image: radial-gradient(
+			ellipse 65% 55% at 50% 45%,
+			#000 0%,
+			rgba(0, 0, 0, 0.92) 25%,
+			rgba(0, 0, 0, 0.65) 50%,
+			rgba(0, 0, 0, 0.3) 70%,
+			rgba(0, 0, 0, 0.08) 85%,
+			transparent 100%
+		);
+		mask-image: radial-gradient(
+			ellipse 65% 55% at 50% 45%,
+			#000 0%,
+			rgba(0, 0, 0, 0.92) 25%,
+			rgba(0, 0, 0, 0.65) 50%,
+			rgba(0, 0, 0, 0.3) 70%,
+			rgba(0, 0, 0, 0.08) 85%,
+			transparent 100%
+		);
+		transform: translate3d(0, calc(var(--yc-scroll, 0) * -0.25px), 0);
+	}
+
+	/* Layer 2 — ghost paper, slightly larger + rotated, lower opacity, faster parallax.
+	   v1.21.0: filter lifted to --yc-parallax-filter-2 token. Same LOVE-locked
+	   byte-identical guarantee as layer 1. */
+	.yc-bg-plan-layer-2 {
+		filter: var(--yc-parallax-filter-2);
+		opacity: 0.18;
+		-webkit-mask-image: radial-gradient(
+			ellipse 70% 60% at 50% 50%,
+			#000 0%,
+			rgba(0, 0, 0, 0.7) 30%,
+			rgba(0, 0, 0, 0.35) 55%,
+			rgba(0, 0, 0, 0.1) 78%,
+			transparent 100%
+		);
+		mask-image: radial-gradient(
+			ellipse 70% 60% at 50% 50%,
+			#000 0%,
+			rgba(0, 0, 0, 0.7) 30%,
+			rgba(0, 0, 0, 0.35) 55%,
+			rgba(0, 0, 0, 0.1) 78%,
+			transparent 100%
+		);
+		transform: translate3d(0, calc(var(--yc-scroll, 0) * -0.5px), 0)
+			scale(1.18) rotate(-1.5deg);
+	}
+
+	/* Layer 3 \u2014 faint drafting grid pattern, fastest parallax.
+	   v1.21.0: grid color lifted to --yc-parallax-grid-color token.
+	   Dark token = same rgba(255,255,255,0.025) literal. Light theme
+	   redefines to a darker warm-graphite tint for cream backgrounds. */
+	.yc-bg-plan-layer-3 {
+		background-image:
+			linear-gradient(to right, var(--yc-parallax-grid-color) 1px, transparent 1px),
+			linear-gradient(to bottom, var(--yc-parallax-grid-color) 1px, transparent 1px);
+		background-size: 80px 80px;
+		opacity: 0.6;
+		-webkit-mask-image: radial-gradient(
+			ellipse 70% 60% at 50% 50%,
+			#000 0%,
+			rgba(0, 0, 0, 0.75) 30%,
+			rgba(0, 0, 0, 0.4) 55%,
+			rgba(0, 0, 0, 0.12) 78%,
+			transparent 100%
+		);
+		mask-image: radial-gradient(
+			ellipse 70% 60% at 50% 50%,
+			#000 0%,
+			rgba(0, 0, 0, 0.75) 30%,
+			rgba(0, 0, 0, 0.4) 55%,
+			rgba(0, 0, 0, 0.12) 78%,
+			transparent 100%
+		);
+		transform: translate3d(0, calc(var(--yc-scroll, 0) * -0.75px), 0);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.yc-bg-plan-layer-1,
+		.yc-bg-plan-layer-2,
+		.yc-bg-plan-layer-3 {
+			transform: none;
+			will-change: auto;
+		}
+	}
+
+	/* ── Floating pill navbar ── */
+	.yc-nav {
+		position: fixed;
+		top: calc(18px + env(safe-area-inset-top, 0px));
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 100;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		padding: 8px;
+		border-radius: 9999px;
+		background: rgba(18, 18, 21, 0.55);
+		border: 1px solid var(--yc-sheen-10);
+		backdrop-filter: blur(var(--yc-blur-24)) saturate(var(--yc-sat-180));
+		-webkit-backdrop-filter: blur(var(--yc-blur-24)) saturate(var(--yc-sat-180));
+		box-shadow:
+			inset 0 1px 0 var(--yc-sheen-08),
+			0 8px 24px var(--yc-shadow-45),
+			0 24px 60px -16px var(--yc-shadow-55);
+	}
+
+	.yc-nav-brand {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 1px;
+		padding: 4px 14px 4px 6px;
+		text-decoration: none;
+		border-right: 1px solid var(--yc-sheen-08);
+		margin-right: 6px;
+		white-space: nowrap;
+		line-height: 1;
+	}
+
+	.yc-nav-brand-name {
+		/* placeholder font — Square721 retired from this component during
+		   v1.24.39 hero rebuild; restore from .claude/reference/young-hero-deleted-code.md */
+		font-family: ui-serif, Georgia, 'Times New Roman', serif;
+		font-size: 0.85rem;
+		font-weight: 400;
+		letter-spacing: 0.16em;
+		color: var(--yc-text);
+	}
+
+	.yc-nav-link {
+		position: relative;
+		padding: 10px 18px;
+		border-radius: 9999px;
+		font-size: 0.85rem;
+		font-weight: 500;
+		color: var(--yc-text-muted);
+		text-decoration: none;
+		border: 1px solid transparent;
+		background: transparent;
+		white-space: nowrap;
+		transition:
+			color var(--t-base) var(--e-standard),
+			border-color var(--t-base) var(--e-standard),
+			background var(--t-base) var(--e-standard),
+			box-shadow var(--t-lift) var(--e-out-expo),
+			transform var(--t-lift) var(--e-out-expo);
+	}
+
+	.yc-nav-link:hover {
+		color: var(--yc-text);
+		transform: scale(1.04);
+		/* v1.20.0: GOLD outline + stronger glow, per user direction.
+		   Replaces the previous neutral white. */
+		border-color: rgba(var(--accent-gold-hot), 0.55);
+		background-color: rgba(var(--accent-gold), 0.06);
+		box-shadow:
+			inset 0 1px 0 rgba(var(--accent-gold-hot), 0.18),
+			0 0 0 1px rgba(var(--accent-gold), 0.45),
+			0 0 24px -4px rgba(var(--accent-gold), 0.55),
+			0 0 52px -14px rgba(var(--accent-gold), 0.5);
+	}
+
+	/* ── Product card hover glow palette (v1.22.3 refactor) ──
+	   Was: 6 .yc-product-card:nth-child(N):hover rules pinned to DOM order
+	        (which silently shuffled the palette every time featureProducts
+	        was reordered, AND left cards 7+ with no glow at all after the
+	        v1.22.0 expansion to 9 cards).
+	   Now: each material owns its glow colour via [data-material="X"],
+	        and the unified .yc-product-card:hover (further down) consumes
+	        --yc-card-glow. Reordering featureProducts keeps the palette
+	        stable; adding a new material is one extra one-line rule below. */
+	.yc-product-card { --yc-card-glow: var(--accent-gold); }
+	.yc-product-card[data-material='carpet-tile'] { --yc-card-glow: var(--accent-gold); }
+	.yc-product-card[data-material='carpet']      { --yc-card-glow: var(--accent-teal); }
+	.yc-product-card[data-material='lvt']         { --yc-card-glow: var(--accent-ocean); }
+	.yc-product-card[data-material='ceramic']     { --yc-card-glow: var(--accent-orange); }
+	.yc-product-card[data-material='rubber']      { --yc-card-glow: var(--accent-green); }
+	.yc-product-card[data-material='matting']     { --yc-card-glow: var(--accent-red); }
+	.yc-product-card[data-material='hardwood']    { --yc-card-glow: var(--accent-gold-hot); }
+	.yc-product-card[data-material='sheet']       { --yc-card-glow: var(--accent-teal); }
+	.yc-product-card[data-material='more']        { --yc-card-glow: var(--accent-gold); }
+
+	/* ── Hero ── */
+	.yc-hero {
+		padding: 11rem 0 6rem;
+		text-align: center;
+		position: relative;
+		z-index: 1;
+	}
+
+	/* Cascaded entrance: eyebrow first, then title (per-letter), then sub. */
+	.yc-hero-tag {
+		font-size: 0.8rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.18em;
+		color: var(--section-eyebrow);
+		margin-bottom: 1.25rem;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		opacity: 0;
+		transform: translateY(20px);
+		animation: yc-hero-fade-up 700ms var(--e-out-expo) 100ms forwards;
+	}
+
+	.yc-hero-sub {
+		font-size: 1.1rem;
+		color: var(--yc-text-muted);
+		max-width: 580px;
+		margin: 0 auto;
+		line-height: 1.6;
+		opacity: 0;
+		transform: translateY(20px);
+		/* Sub appears after title is mostly settled (~1.5s) */
+		animation: yc-hero-fade-up 800ms var(--e-out-expo) 1500ms forwards;
+	}
+
+	@keyframes yc-hero-fade-up {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.yc-hero-tag,
+		.yc-hero-sub {
+			opacity: 1;
+			transform: none;
+			animation: none;
+		}
+	}
+
+	/* ── Sections ── */
+	.yc-section {
+		padding: 4.5rem 0;
+		position: relative;
+		z-index: 1;
+	}
+
+	.yc-section-title {
+		/* v1.20.2: editorial thin wordmark treatment. */
+		font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+			system-ui, sans-serif;
+		font-size: 2.25rem;
+		font-weight: 200;
+		color: var(--yc-text);
+		text-align: center;
+		margin: 0 0 2.5rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		position: relative;
+	}
+
+	/* Small gold underline accent below every section title \u2014
+	   matches the laptop site's signature styling. */
+	.yc-section-title::after {
+		content: '';
+		display: block;
+		width: 36px;
+		height: 2px;
+		background: rgba(var(--accent-gold-hot), 0.75);
+		border-radius: 2px;
+		margin: 0.7rem auto 0;
+		box-shadow: 0 0 12px -2px rgba(var(--accent-gold), 0.5);
+	}
+
+	/* Scroll-into-view section reveal \u2014 v1.19.3 hotfix:
+	   sections default to VISIBLE. The is-visible class is additive-only
+	   (no hidden initial state) so if IntersectionObserver fails on any
+	   device, content still renders. Cards inside still have their own
+	   staggered entrance animations. */
+	.yc-section,
+	.yc-map-section {
+		opacity: 1;
+		transform: translateY(0);
+		transition:
+			opacity 800ms var(--e-out-expo),
+			transform 800ms var(--e-out-expo);
+	}
+	/* ── Liquid glass cards ──
+	   The card is "art lifted off the drafting paper". Layers:
+	   - body: glass plate (transparent, heavy blur, rim highlight)
+	   - ::before: pointer-follow specular sheen (radial gradient at --ptr-x/y)
+	   - ::after: contact shadow blob on the bg plan beneath the card
+	   - .yc-card-shine child: periodic diagonal sheen sweep (~12s)
+	   On hover the card translates up + scales + tilts in 3D, the shadow
+	   blob intensifies + drifts with pointer + bg parallax. NO color glow on lift. */
+	.yc-card {
+		position: relative;
+		isolation: isolate;
+		border-radius: 20px;
+		padding: 1.75rem;
+		/* v1.20.0: much more transparent so the locked 3-layer parallax bg
+		   shows through clearly. Lighter blur too \u2014 was muddying the plan. */
+		background: linear-gradient(
+			135deg,
+			var(--yc-sheen-035) 0%,
+			rgba(255, 255, 255, 0.008) 45%,
+			var(--yc-shadow-14) 100%
+		);
+		border: 1px solid var(--yc-sheen-08);
+		backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160));
+		-webkit-backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160));
+		box-shadow:
+			/* glass rim highlights */
+			inset 0 1px 0 var(--yc-sheen-14),
+			inset 0 -1px 0 var(--yc-shadow-25),
+			/* drop shadows for depth */
+			0 2px 6px var(--yc-shadow-35),
+			0 20px 44px -14px var(--yc-shadow-55),
+			0 44px 90px -28px var(--yc-shadow-65);
+		perspective: 1200px;
+		transform-style: preserve-3d;
+		transform: translateY(0) scale(1)
+			rotateX(calc((var(--ptr-y) - 0.5) * 0deg))
+			rotateY(calc((var(--ptr-x) - 0.5) * 0deg));
+		transition:
+			transform var(--t-lift) var(--e-out-expo),
+			box-shadow var(--t-lift) var(--e-out-expo),
+			border-color var(--t-base) var(--e-standard),
+			background var(--t-base) var(--e-standard);
+	}
+
+	/* Pointer-follow specular sheen + permanent diagonal gradient layer.
+	   Two backgrounds: radial pointer hotspot on top, diagonal sheen behind. */
+	.yc-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background:
+			radial-gradient(
+				circle 260px at calc(var(--ptr-x) * 100%) calc(var(--ptr-y) * 100%),
+				var(--yc-sheen-16),
+				transparent 60%
+			),
+			linear-gradient(
+				135deg,
+				var(--yc-sheen-16) 0%,
+				var(--yc-sheen-03) 25%,
+				transparent 55%,
+				transparent 80%,
+				var(--yc-sheen-05) 100%
+			);
+		pointer-events: none;
+		z-index: 1;
+		mix-blend-mode: overlay;
+		transition: opacity var(--t-base) var(--e-standard);
+	}
+
+	/* Contact shadow blob — sits below the card on the bg plan.
+	   Visible at rest (subtle), strong on hover, drifts with pointer. */
+	.yc-card::after {
+		content: '';
+		position: absolute;
+		left: 50%;
+		top: 100%;
+		width: 92%;
+		height: 50px;
+		transform:
+			translate(-50%, -10px)
+			translateX(calc((var(--ptr-x) - 0.5) * 22px))
+			scale(0.92);
+		background: radial-gradient(
+			ellipse at center,
+			var(--yc-shadow-55) 0%,
+			var(--yc-shadow-28) 40%,
+			transparent 75%
+		);
+		filter: blur(22px);
+		opacity: 0.45;
+		pointer-events: none;
+		z-index: -1;
+		transition:
+			opacity var(--t-lift) var(--e-out-expo),
+			transform var(--t-lift) var(--e-out-expo),
+			filter var(--t-lift) var(--e-out-expo);
+	}
+
+	/* Periodic diagonal shine sweep \u2014 iOS 18 Liquid Glass icon behaviour.
+	   Sits idle for most of the cycle, then sweeps once. */
+	.yc-card-shine {
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background: linear-gradient(
+			115deg,
+			transparent 30%,
+			var(--yc-sheen-14) 50%,
+			transparent 70%
+		);
+		transform: translateX(-110%);
+		animation: yc-shine 12s ease-in-out infinite;
+		pointer-events: none;
+		z-index: 2;
+		mix-blend-mode: overlay;
+	}
+
+	@keyframes yc-shine {
+		0%,
+		88% {
+			transform: translateX(-110%);
+		}
+		94%,
+		100% {
+			transform: translateX(210%);
+		}
+	}
+
+	/* All card content sits above the sheen + shine layers. */
+	.yc-card > h3,
+	.yc-card > p,
+	.yc-card > * {
+		position: relative;
+		z-index: 3;
+	}
+
+	.yc-card:hover {
+		transform: translateY(-8px) scale(1.015)
+			rotateX(calc((var(--ptr-y) - 0.5) * -8deg))
+			rotateY(calc((var(--ptr-x) - 0.5) * 8deg));
+		border-color: var(--yc-sheen-22);
+		background: linear-gradient(
+			135deg,
+			var(--yc-sheen-10) 0%,
+			var(--yc-sheen-03) 45%,
+			var(--yc-shadow-15) 100%
+		);
+		box-shadow:
+			inset 0 1px 0 var(--yc-sheen-20),
+			inset 0 -1px 0 var(--yc-shadow-30),
+			0 6px 14px var(--yc-shadow-42),
+			0 36px 72px -20px var(--yc-shadow-70),
+			0 72px 140px -40px var(--yc-shadow-75);
+	}
+
+	.yc-card:hover::after {
+		opacity: 0.85;
+		filter: blur(28px);
+		transform:
+			translate(-50%, 4px)
+			translateX(calc((var(--ptr-x) - 0.5) * 36px))
+			scale(1.05);
+	}
+
+	.yc-card h3 {
+		/* v1.20.2: editorial thin wordmark treatment on card headings. */
+		font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+			system-ui, sans-serif;
+		font-size: 1.1rem;
+		font-weight: 300;
+		color: var(--yc-text);
+		margin: 0 0 0.75rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+	}
+
+	.yc-card p {
+		color: var(--yc-text-muted);
+		font-size: 0.92rem;
+		margin: 0;
+		line-height: 1.6;
+	}
+
+	@media (hover: none), (pointer: coarse) {
+		/* On touch: no 3D tilt, no pointer follow. Just lift + shadow. */
+		.yc-card:hover {
+			transform: translateY(-6px) scale(1.012);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.yc-card,
+		.yc-card:hover {
+			transform: none;
+			transition: none;
+		}
+		.yc-card-shine {
+			animation: none;
+			display: none;
+		}
+		.yc-card::after {
+			transition: none;
+		}
+	}
+
+	@media (prefers-reduced-transparency: reduce) {
+		.yc-card {
+			background: rgba(20, 20, 24, 0.95);
+			backdrop-filter: none;
+			-webkit-backdrop-filter: none;
+			border-color: var(--yc-sheen-20);
+		}
+	}
+
+	/* ── About ── */
+	.yc-about-wrap {
+		max-width: 720px;
+		margin: 0 auto;
+	}
+
+	.yc-about-text {
+		color: var(--yc-text-muted);
+		font-size: 1.05rem;
+		line-height: 1.8;
+		margin: 0;
+		text-align: center;
+	}
+
+	/* \u2500\u2500 Stats counters \u2500\u2500 */
+	.yc-stats {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+		gap: 2rem;
+		max-width: 760px;
+		margin: 4rem auto 0;
+	}
+
+	.yc-stat {
+		/* v1.20.27: Liquid Glass treatment per item-10 token spec */
+		text-align: center;
+		padding: 1.75rem 1.25rem;
+		border-radius: 22px;
+		background: linear-gradient(
+			135deg,
+			var(--yc-shimmer-08) 0%,
+			var(--yc-sheen-012) 50%,
+			var(--yc-ink-45) 100%
+		);
+		border: 1px solid var(--yc-griege-20);
+		backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160));
+		-webkit-backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160));
+		box-shadow:
+			inset 0 var(--yc-edge-y) 0 var(--yc-shimmer),
+			0 18px 40px -16px var(--yc-shadow-50);
+	}
+
+	.yc-stat-number {
+		/* v1.20.4: match the editorial thin tracked uppercase treatment
+		   used on all other headings. Text stays white; a subtle gold
+		   text-shadow glow is allowed because it's a GLOW not a text fill. */
+		font-size: clamp(2.75rem, 7vw, 4.25rem);
+		font-weight: 200;
+		font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+			system-ui, sans-serif;
+		letter-spacing: 0.02em;
+		line-height: 1;
+		color: var(--yc-text);
+		font-variant-numeric: tabular-nums;
+		margin-bottom: 0.75rem;
+		text-shadow:
+			0 0 24px rgba(var(--accent-gold), 0.18),
+			0 0 56px rgba(var(--accent-gold), 0.1);
+	}
+
+	.yc-stat-label {
+		font-size: 0.92rem;
+		color: var(--yc-text-muted);
+		line-height: 1.5;
+		max-width: 280px;
+		margin: 0 auto;
+	}
+
+	@media (max-width: 640px) {
+		.yc-stats {
+			grid-template-columns: 1fr;
+			gap: 1rem;
+			margin-top: 2.5rem;
+		}
+		.yc-stat {
+			padding: 1.25rem 1rem;
+		}
+	}
+
+	/* \u2500\u2500 Map / Find Us \u2500\u2500 */
+	.yc-map-section {
+		padding: 4.5rem 0 0;
+		position: relative;
+		z-index: 1;
+	}
+
+	.yc-map-address {
+		text-align: center;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.85rem;
+		color: var(--yc-text-muted);
+		margin: 0.75rem 0 0;
+		letter-spacing: 0.02em;
+	}
+
+	/* Square map preview button — sits inside .yc-container so it respects
+	   page padding. Aspect-ratio 1:1, max-width capped so desktop doesn't
+	   stretch it to absurd. Mobile = full content width minus padding. */
+	.yc-map-preview {
+		display: block;
+		width: 100%;
+		max-width: 460px;
+		aspect-ratio: 1 / 1;
+		margin: 2.25rem auto 0;
+		position: relative;
+		padding: 0;
+		border: 1px solid var(--yc-sheen-12);
+		border-radius: 24px;
+		overflow: hidden;
+		background: var(--yc-sheen-03);
+		backdrop-filter: blur(var(--yc-blur-12)) saturate(var(--yc-sat-150));
+		-webkit-backdrop-filter: blur(var(--yc-blur-12)) saturate(var(--yc-sat-150));
+		cursor: pointer;
+		box-shadow:
+			inset 0 1px 0 var(--yc-sheen-10),
+			0 18px 48px -16px var(--yc-shadow-55);
+		transition:
+			transform 220ms var(--e-out-expo),
+			border-color 220ms var(--e-standard),
+			box-shadow 220ms var(--e-out-expo);
+	}
+
+	.yc-map-preview:hover,
+	.yc-map-preview:focus-visible {
+		transform: translateY(-2px);
+		border-color: var(--yc-sheen-22);
+		outline: none;
+	}
+
+	.yc-map-preview:focus-visible {
+		box-shadow:
+			inset 0 1px 0 var(--yc-sheen-12),
+			0 0 0 3px rgba(var(--accent-gold-hot), 0.55),
+			0 18px 48px -16px var(--yc-shadow-55);
+	}
+
+	.yc-map-preview-iframe {
+		display: block;
+		width: 100%;
+		height: 100%;
+		border: 0;
+		filter: grayscale(0.55) brightness(0.78) contrast(1.08) saturate(0.85);
+		pointer-events: none;
+	}
+
+	.yc-map-preview-overlay {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		padding: 0 0 1.25rem;
+		background: linear-gradient(
+			180deg,
+			rgba(0, 0, 0, 0) 55%,
+			var(--yc-shadow-55) 100%
+		);
+		pointer-events: none;
+	}
+
+	.yc-map-preview-pill {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.55rem 1rem;
+		border-radius: 9999px;
+		background: rgba(18, 18, 21, 0.7);
+		border: 1px solid var(--yc-sheen-18);
+		backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160));
+		-webkit-backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160));
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.7rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--yc-text);
+		box-shadow:
+			inset 0 1px 0 var(--yc-sheen-12),
+			0 8px 22px -8px var(--yc-shadow-55);
+	}
+
+	@media (max-width: 520px) {
+		.yc-map-preview {
+			margin-top: 1.75rem;
+			border-radius: 20px;
+		}
+	}
+
+	/* ── Map modal — reuses .yc-modal backdrop, adds bottom address panel ── */
+	.yc-map-modal-body {
+		max-width: 720px;
+		padding: 1.75rem 1.5rem 1.5rem;
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	/* v1.22.2: was .yc-map-modal-title — promoted to a .yc-modal-title--map
+	   modifier so the base typography lives in one place and only the
+	   map-specific overrides (smaller, centered, no margin) sit here. */
+	.yc-modal-title--map {
+		font-size: 1.45rem;
+		margin: 0;
+		text-align: center;
+	}
+
+	.yc-map-modal-frame {
+		position: relative;
+		border-radius: 18px;
+		overflow: hidden;
+		border: 1px solid var(--yc-sheen-10);
+		aspect-ratio: 4 / 3;
+		max-height: 60vh;
+	}
+
+	.yc-map-modal-frame iframe {
+		display: block;
+		width: 100%;
+		height: 100%;
+		border: 0;
+		filter: grayscale(0.35) brightness(0.85) contrast(1.06) saturate(0.9);
+	}
+
+	.yc-map-modal-panel {
+		display: flex;
+		flex-direction: column;
+		gap: 0.85rem;
+		padding: 1rem 1.1rem;
+		border-radius: 18px;
+		background: var(--yc-sheen-04);
+		border: 1px solid var(--yc-sheen-10);
+		backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160));
+		-webkit-backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160));
+	}
+
+	.yc-map-modal-address {
+		margin: 0;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.85rem;
+		line-height: 1.55;
+		color: var(--yc-text);
+		text-align: center;
+	}
+
+	@media (max-width: 520px) {
+		.yc-map-modal-body {
+			padding: 1.5rem 1rem 1.25rem;
+			gap: 1rem;
+		}
+		.yc-map-modal-frame {
+			aspect-ratio: 1 / 1;
+			max-height: 55vh;
+		}
+		.yc-modal-title--map {
+			font-size: 1.2rem;
+		}
+	}
+
+	/* \u2500\u2500 Footer \u2500\u2500
+	   Typography reference: Claude Code TUI \u2014 SF Pro Text at small UI
+	   sizes, neutral hierarchy (muted grey for keys, crisp white for
+	   values), generous padding, comfortable line-height. The whole
+	   info block uses the system Apple SF Pro Text variant which is
+	   designed for sub-19pt readability. */
+	.yc-footer {
+		background: #07070a;
+		color: var(--yc-text-muted);
+		padding: 4rem 0 calc(2.5rem + env(safe-area-inset-bottom, 0px));
+		position: relative;
+		z-index: 1;
+		border-top: 1px solid var(--yc-border);
+		font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui,
+			sans-serif;
+		font-size: 14px;
+		line-height: 1.55;
+		-webkit-font-smoothing: antialiased;
+		letter-spacing: -0.005em;
+	}
+
+	.yc-dev-versions {
+		display: flex;
+		gap: 0.5rem;
+		padding-bottom: 1.5rem;
+		margin-bottom: 1.5rem;
+		border-bottom: 1px solid var(--yc-sheen-06);
+	}
+
+	.yc-footer-grid {
+		display: grid;
+		grid-template-columns: 1.4fr 1fr 1.2fr 1fr;
+		gap: 2.5rem 2rem;
+		padding-bottom: 2.5rem;
+		border-bottom: 1px solid var(--yc-border);
+	}
+
+	.yc-footer-brand-block {
+		display: flex;
+		flex-direction: column;
+		gap: 0.85rem;
+	}
+
+	.yc-footer-brand {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		line-height: 1;
+	}
+
+	.yc-footer-brand-name {
+		/* placeholder font — Square721 retired from this component during
+		   v1.24.39 hero rebuild; restore from .claude/reference/young-hero-deleted-code.md */
+		font-family: ui-serif, Georgia, 'Times New Roman', serif;
+		font-size: 1.5rem;
+		font-weight: 400;
+		letter-spacing: 0.18em;
+		color: var(--yc-text);
+	}
+
+	.yc-footer-brand-sub {
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.65rem;
+		font-weight: 500;
+		text-transform: uppercase;
+		letter-spacing: 0.22em;
+		color: var(--yc-text-muted);
+	}
+
+	.yc-footer-tagline {
+		margin: 0;
+		font-size: 0.78rem;
+		color: var(--yc-text-faint);
+		max-width: 260px;
+		line-height: 1.5;
+	}
+
+	.yc-footer-col-title {
+		/* v1.20.27: glass pill treatment per item-10 token spec */
+		display: inline-block;
+		margin: 0 0 0.85rem;
+		padding: 0.3rem 0.7rem;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.6rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.18em;
+		color: var(--yc-text-muted);
+		border-radius: 9999px;
+		background: var(--yc-griege-06);
+		border: 1px solid var(--yc-griege-18);
+		backdrop-filter: blur(var(--yc-blur-10)) saturate(var(--yc-sat-150));
+		-webkit-backdrop-filter: blur(var(--yc-blur-10)) saturate(var(--yc-sat-150));
+		box-shadow: inset 0 var(--yc-edge-y) 0 var(--yc-shimmer-10);
+	}
+
+	.yc-footer-address {
+		font-style: normal;
+		margin: 0;
+		color: var(--yc-text);
+		font-size: 0.82rem;
+		line-height: 1.6;
+	}
+
+	.yc-footer-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.yc-footer-list li {
+		display: grid;
+		grid-template-columns: 48px 1fr;
+		align-items: baseline;
+		gap: 0.5rem;
+		position: relative;
+		padding-left: 18px;
+	}
+
+	/* Checkbox-style list bullet \u2014 inspired by the Claude Code TUI todos.
+	   Rounded square, thin border, soft inner glow. */
+	.yc-footer-list li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.45em;
+		width: 11px;
+		height: 11px;
+		border-radius: 3px;
+		border: 1px solid var(--yc-sheen-18);
+		background: var(--yc-sheen-02);
+		box-shadow: inset 0 0 0 1px var(--yc-sheen-04);
+	}
+
+	.yc-footer-list-key {
+		font-size: 0.74rem;
+		font-weight: 500;
+		color: var(--yc-text-faint);
+		text-transform: lowercase;
+	}
+
+	.yc-footer-list-val {
+		font-size: 0.82rem;
+		color: var(--yc-text);
+		text-decoration: none;
+		font-feature-settings: 'tnum';
+		transition: color 180ms;
+	}
+
+	a.yc-footer-list-val:hover {
+		color: #fff;
+	}
+
+	.yc-footer-bottom {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 1rem;
+		padding-top: 1.5rem;
+	}
+
+	.yc-footer-copy {
+		margin: 0;
+		font-size: 0.75rem;
+		color: var(--yc-text-faint);
+	}
+
+	.yc-back-link {
+		color: var(--yc-text-faint);
+		text-decoration: none;
+		font-size: 0.75rem;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		letter-spacing: 0.06em;
+		transition: color 200ms;
+	}
+
+	.yc-back-link:hover {
+		color: var(--yc-text);
+	}
+
+	@media (max-width: 880px) {
+		.yc-footer-grid {
+			grid-template-columns: 1fr 1fr;
+			gap: 2.25rem 1.5rem;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.yc-footer {
+			padding: 2.75rem 0 calc(1.5rem + env(safe-area-inset-bottom, 0px));
+		}
+		.yc-footer-grid {
+			grid-template-columns: 1fr;
+			gap: 1.75rem;
+		}
+	}
+
+	/* ── Responsive ── */
+	@media (max-width: 768px) {
+		.yc-hero {
+			padding: 7rem 0 3.5rem;
+		}
+
+		.yc-section {
+			padding: 3rem 0;
+		}
+
+		.yc-section-title {
+			font-size: 1.65rem;
+			letter-spacing: 0.12em;
+			margin-bottom: 1.75rem;
+		}
+	}
+
+	/* ── Team rows (Contact / Our Team) ── */
+	.yc-team-group {
+		max-width: 760px;
+		margin: 0 auto 2.5rem;
+	}
+	.yc-team-group:last-child {
+		margin-bottom: 0;
+	}
+
+	.yc-team-group-title {
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.7rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.18em;
+		color: var(--section-eyebrow);
+		margin: 0 0 1rem 0.25rem;
+	}
+
+	.yc-team-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.yc-team-row {
+		position: relative;
+		isolation: isolate;
+		display: grid;
+		grid-template-columns: minmax(140px, 1.2fr) minmax(120px, 1fr) minmax(160px, 1.6fr);
+		align-items: center;
+		gap: 0.75rem 1.5rem;
+		padding: 0.95rem 1.25rem;
+		border-radius: 14px;
+		background: linear-gradient(
+			135deg,
+			var(--yc-sheen-06) 0%,
+			var(--yc-sheen-02) 45%,
+			var(--yc-shadow-18) 100%
+		);
+		border: 1px solid var(--card-accent);
+		backdrop-filter: blur(var(--yc-blur-20)) saturate(var(--yc-sat-170));
+		-webkit-backdrop-filter: blur(var(--yc-blur-20)) saturate(var(--yc-sat-170));
+		box-shadow:
+			inset 0 1px 0 var(--yc-sheen-10),
+			0 2px 6px var(--yc-shadow-30),
+			0 14px 30px -10px var(--yc-shadow-45);
+		opacity: 0;
+		animation: yc-card-in 600ms var(--e-out-expo) forwards;
+		animation-delay: calc(var(--i, 0) * 50ms + 100ms);
+		transition:
+			background 220ms var(--e-standard),
+			border-color 220ms var(--e-standard),
+			transform var(--t-base) var(--e-out-expo);
+	}
+
+	.yc-team-row::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background:
+			radial-gradient(
+				circle 200px at calc(var(--ptr-x) * 100%) calc(var(--ptr-y) * 100%),
+				var(--yc-sheen-10),
+				transparent 60%
+			),
+			linear-gradient(
+				135deg,
+				var(--yc-sheen-10) 0%,
+				transparent 50%
+			);
+		pointer-events: none;
+		z-index: 1;
+		mix-blend-mode: overlay;
+	}
+
+	.yc-team-row > * {
+		position: relative;
+		z-index: 3;
+	}
+
+	.yc-team-row:hover {
+		background: linear-gradient(
+			135deg,
+			var(--yc-sheen-09) 0%,
+			var(--yc-sheen-025) 45%,
+			var(--yc-shadow-15) 100%
+		);
+		border-color: var(--yc-sheen-18);
+		transform: translateY(-2px);
+	}
+
+	.yc-team-name {
+		font-size: 0.95rem;
+		font-weight: 600;
+		color: var(--yc-text);
+		letter-spacing: -0.01em;
+	}
+
+	.yc-team-name-note {
+		display: block;
+		font-size: 0.72rem;
+		font-weight: 500;
+		color: var(--yc-text-faint);
+		margin-bottom: 2px;
+		letter-spacing: 0;
+	}
+
+	.yc-team-phone,
+	.yc-team-email {
+		display: inline-block;
+		padding: 11px 0;
+		min-height: 44px;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.82rem;
+		color: var(--yc-text-muted);
+		text-decoration: none;
+		transition: color 200ms;
+		word-break: break-all;
+	}
+
+	.yc-team-phone {
+		font-weight: 500;
+	}
+
+	.yc-team-phone:hover,
+	.yc-team-email:hover {
+		color: #fff;
+	}
+
+	.yc-team-phone--empty,
+	.yc-team-email--empty {
+		display: block;
+	}
+
+	@media (max-width: 640px) {
+		.yc-team-row {
+			grid-template-columns: 1fr;
+			gap: 0.4rem;
+			padding: 1rem 1.1rem;
+		}
+		.yc-team-name {
+			font-size: 1rem;
+		}
+		.yc-team-phone--empty,
+		.yc-team-email--empty {
+			display: none;
+		}
+	}
+
+	/* \u2500\u2500 Services grid \u2500\u2500 */
+	.yc-grid-services {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+		gap: 1.25rem;
+		max-width: 920px;
+		margin: 0 auto 2.25rem;
+	}
+
+	.yc-services-tagline {
+		text-align: center;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.85rem;
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		color: var(--yc-text-muted);
+		margin: 1.5rem 0 0;
+		font-style: italic;
+	}
+
+	/* \u2500\u2500 Section eyebrow \u2500\u2500 */
+	.yc-section-eyebrow {
+		/* v1.20.27: glass pill treatment per item-10 token spec */
+		display: inline-block;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.7rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.18em;
+		color: var(--section-eyebrow);
+		text-align: center;
+		margin: 0 auto 0.85rem;
+		padding: 0.35rem 0.85rem;
+		border-radius: 9999px;
+		background: var(--yc-griege-08);
+		border: 1px solid var(--yc-griege-20);
+		backdrop-filter: blur(var(--yc-blur-10)) saturate(var(--yc-sat-150));
+		-webkit-backdrop-filter: blur(var(--yc-blur-10)) saturate(var(--yc-sat-150));
+		box-shadow: inset 0 var(--yc-edge-y) 0 var(--yc-shimmer-12);
+	}
+
+	/* The eyebrow is wrapped in a centered container so it pills correctly */
+	.yc-section :where(.yc-section-eyebrow) {
+		display: inline-block;
+	}
+
+	.yc-container > .yc-section-eyebrow,
+	.yc-section .yc-container > .yc-section-eyebrow,
+	.yc-map-section .yc-container > .yc-section-eyebrow,
+	.yc-section--products .yc-container > .yc-section-eyebrow {
+		display: block;
+		width: max-content;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	/* ── Products section ── */
+	.yc-products-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+		grid-auto-rows: 1fr;
+		gap: 1.5rem;
+		margin-bottom: 4rem;
+		align-items: stretch;
+	}
+
+	/* Product cards \u2014 square-ish (5:6 aspect) with continuous Apple corners. */
+	.yc-product-card {
+		position: relative;
+		isolation: isolate;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		box-sizing: border-box;
+		overflow: hidden;
+		width: 100%;
+		aspect-ratio: 5 / 6;
+		border-radius: 28px;
+		padding: 1.5rem;
+		/* v1.20.0: more transparent, lighter blur \u2014 same direction as .yc-card.
+		   Slightly deeper bottom gradient so the product text still reads. */
+		background: linear-gradient(
+			135deg,
+			var(--yc-sheen-035) 0%,
+			rgba(255, 255, 255, 0.008) 45%,
+			var(--yc-shadow-18) 100%
+		);
+		border: 1px solid var(--yc-sheen-08);
+		backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160));
+		-webkit-backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160));
+		box-shadow:
+			inset 0 1px 0 var(--yc-sheen-14),
+			inset 0 -1px 0 var(--yc-shadow-25),
+			0 2px 6px var(--yc-shadow-35),
+			0 24px 50px -16px var(--yc-shadow-55),
+			0 50px 100px -32px var(--yc-shadow-65);
+		font: inherit;
+		color: inherit;
+		text-align: left;
+		cursor: pointer;
+		perspective: 1200px;
+		transform-style: preserve-3d;
+		transform: translateY(0) scale(1);
+		transition:
+			transform var(--t-lift) var(--e-out-expo),
+			box-shadow var(--t-lift) var(--e-out-expo),
+			border-color var(--t-base) var(--e-standard),
+			background var(--t-base) var(--e-standard);
+		opacity: 0;
+		animation: yc-card-in 700ms var(--e-out-expo) forwards;
+		animation-delay: calc(var(--i, 0) * 90ms + 200ms);
+	}
+
+	@keyframes yc-card-in {
+		from {
+			opacity: 0;
+			transform: translateY(28px) scale(0.96);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
+	}
+
+	/* v1.20.3: material backdrop layer \u2014 inline SVG placeholder or photo.
+	   When p.image is null: .yc-product-card-texture renders the inline
+	   symbolic SVG sitting behind everything else inside the card.
+	   When p.image is set: .yc-product-card--has-image adds a
+	   background-image to the card itself with desaturated multiply blend
+	   (Pattern D from design research). Both paths work with the existing
+	   glass aesthetic. */
+	.yc-product-card-texture {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		pointer-events: none;
+		z-index: 0;
+		color: var(--yc-sheen-85);
+		opacity: 0.22;
+		mix-blend-mode: screen;
+		transition:
+			opacity 500ms var(--e-out-expo),
+			transform 600ms var(--e-out-expo);
+	}
+
+	.yc-product-card-texture svg {
+		width: 88%;
+		height: 88%;
+		max-height: 88%;
+		display: block;
+	}
+
+	.yc-product-card:hover .yc-product-card-texture {
+		opacity: 0.42;
+		transform: scale(1.04);
+	}
+
+	/* Photo backdrop variant \u2014 activates when data field `image` is set. */
+	.yc-product-card--has-image {
+		background-image:
+			linear-gradient(
+				135deg,
+				var(--yc-sheen-035) 0%,
+				rgba(255, 255, 255, 0.008) 45%,
+				var(--yc-shadow-45) 100%
+			),
+			var(--yc-product-image);
+		background-size: cover, 120%;
+		background-position: center, center;
+		background-blend-mode: normal, multiply;
+	}
+
+	.yc-product-card--has-image::before {
+		/* When photo is present, also darken slightly */
+		backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160)) brightness(0.88);
+		-webkit-backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160)) brightness(0.88);
+	}
+
+	/* Reuse the card sheen + shine + shadow language from .yc-card */
+	.yc-product-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background:
+			radial-gradient(
+				circle 280px at calc(var(--ptr-x) * 100%) calc(var(--ptr-y) * 100%),
+				var(--yc-sheen-18),
+				transparent 60%
+			),
+			linear-gradient(
+				135deg,
+				var(--yc-sheen-18) 0%,
+				var(--yc-sheen-03) 25%,
+				transparent 55%,
+				transparent 80%,
+				var(--yc-sheen-05) 100%
+			);
+		pointer-events: none;
+		z-index: 1;
+		mix-blend-mode: overlay;
+	}
+
+	.yc-product-card::after {
+		content: '';
+		position: absolute;
+		left: 50%;
+		top: 100%;
+		width: 92%;
+		height: 60px;
+		transform:
+			translate(-50%, -8px)
+			translateX(calc((var(--ptr-x) - 0.5) * 22px))
+			scale(0.92);
+		background: radial-gradient(
+			ellipse at center,
+			var(--yc-shadow-55) 0%,
+			var(--yc-shadow-28) 40%,
+			transparent 75%
+		);
+		filter: blur(24px);
+		opacity: 0.45;
+		pointer-events: none;
+		z-index: -1;
+		transition:
+			opacity var(--t-lift) var(--e-out-expo),
+			transform var(--t-lift) var(--e-out-expo),
+			filter var(--t-lift) var(--e-out-expo);
+	}
+
+	.yc-product-card > * {
+		position: relative;
+		z-index: 3;
+	}
+
+	/* v1.22.3: unified hover. Was a fallback rule with raw rgba shadows
+	   that only fired for cards 7+ (after the nth-child stack ran out).
+	   Now all cards run through this rule and pick up their per-material
+	   --yc-card-glow value. Cushion tokens are theme-aware.
+	   v1.23.8: gated behind (hover: hover) so iOS sticky-hover doesn't
+	   fire the heavy 3D transforms during pinch-zoom — that combo (with
+	   the backdrop-filter blur + perspective + isolation × 9 cards) was
+	   exhausting the iOS Safari compositor and breaking the page. */
+	@media (hover: hover) {
+		.yc-product-card:hover {
+			transform: translateY(-10px) scale(1.018)
+				rotateX(calc((var(--ptr-y) - 0.5) * -8deg))
+				rotateY(calc((var(--ptr-x) - 0.5) * 8deg));
+			border-color: var(--yc-sheen-22);
+			box-shadow:
+				inset 0 var(--yc-edge-y) 0 var(--yc-card-cushion-inset-top),
+				inset 0 calc(-1 * var(--yc-edge-y)) 0 var(--yc-card-cushion-inset-bot),
+				0 6px 14px var(--yc-card-cushion-near),
+				0 40px 80px -22px var(--yc-card-cushion-mid),
+				0 80px 150px -42px var(--yc-card-cushion-far),
+				0 0 0 1px rgba(var(--yc-card-glow), 0.4),
+				0 0 38px -6px rgba(var(--yc-card-glow), 0.55);
+		}
+
+		.yc-product-card:hover::after {
+			opacity: 0.85;
+			filter: blur(30px);
+			transform:
+				translate(-50%, 6px)
+				translateX(calc((var(--ptr-x) - 0.5) * 36px))
+				scale(1.08);
+		}
+	}
+
+	/* v1.23.8: pinch-zoom defense for iOS Safari.
+	   On touch devices, drop the GPU-heavy 3D context (perspective +
+	   preserve-3d) since hover tilt never runs on touch anyway, and
+	   dial the backdrop-filter blur from 14px down to 8px so the
+	   compositor allocates lighter layers. touch-action: manipulation
+	   tells iOS not to interpret card taps as the start of a double-
+	   tap zoom, which removes the gesture ambiguity that was leaving
+	   #products in a broken state during pinch-zoom. */
+	.yc-product-card {
+		touch-action: manipulation;
+	}
+	@media (hover: none) {
+		.yc-product-card {
+			perspective: none;
+			transform-style: flat;
+			backdrop-filter: blur(var(--yc-blur-08)) saturate(var(--yc-sat-150));
+			-webkit-backdrop-filter: blur(var(--yc-blur-08)) saturate(var(--yc-sat-150));
+		}
+	}
+
+	.yc-product-card:focus-visible {
+		outline: 2px solid rgba(var(--accent-gold-hot), 0.65);
+		outline-offset: 4px;
+	}
+
+	.yc-product-badges {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+		position: relative;
+		z-index: 1;
+	}
+
+	.yc-product-card-body {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		position: relative;
+		z-index: 1;
+		min-width: 0;
+	}
+
+	.yc-product-code {
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.7rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		color: var(--yc-text-faint);
+		margin: 0;
+		text-transform: uppercase;
+	}
+
+	.yc-product-name {
+		/* v1.20.2: editorial thin wordmark treatment. */
+		font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+			system-ui, sans-serif;
+		font-size: 1.35rem;
+		font-weight: 200;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--yc-text);
+		margin: 0;
+	}
+
+	/* Wood⁺ — superscript plus in the same font, raised */
+	.yc-name-plus {
+		font-size: 0.7em;
+		vertical-align: super;
+		font-weight: inherit;
+		letter-spacing: 0;
+	}
+
+	.yc-product-blurb {
+		font-size: 0.85rem;
+		color: var(--yc-text-muted);
+		line-height: 1.5;
+		margin: 0;
+	}
+
+	/* ── Glass badges ── */
+	.yc-badge {
+		display: inline-block;
+		padding: 0.3rem 0.65rem;
+		border-radius: 9999px;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.62rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		white-space: nowrap;
+		color: var(--yc-text);
+		background: var(--yc-sheen-04);
+		border: 1px solid var(--yc-sheen-10);
+		backdrop-filter: blur(var(--yc-blur-12)) saturate(var(--yc-sat-160));
+		-webkit-backdrop-filter: blur(var(--yc-blur-12)) saturate(var(--yc-sat-160));
+		box-shadow:
+			inset 0 1px 0 var(--yc-sheen-12),
+			0 0 14px -4px var(--badge-glow);
+	}
+
+	.yc-product-badges--lg .yc-badge {
+		padding: 0.4rem 0.85rem;
+		font-size: 0.7rem;
+	}
+
+	/* ── Secondary product chips ── */
+	.yc-products-other {
+		text-align: center;
+	}
+
+	.yc-products-other-label {
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.7rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.18em;
+		color: var(--yc-text-faint);
+		margin: 0 0 1.25rem;
+	}
+
+	.yc-products-other-list {
+		list-style: none;
+		padding: 0;
+		margin: 0 0 1.5rem;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.55rem;
+		justify-content: center;
+	}
+
+	.yc-chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.55rem 0.95rem;
+		border-radius: 9999px;
+		background: var(--yc-sheen-025);
+		border: 1px solid var(--yc-sheen-08);
+		backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160));
+		-webkit-backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160));
+		box-shadow: inset 0 1px 0 var(--yc-sheen-08);
+		transition: background 220ms var(--e-standard), border-color 220ms var(--e-standard);
+	}
+
+	.yc-chip:hover {
+		background: var(--yc-sheen-05);
+		border-color: var(--yc-sheen-15);
+	}
+
+	.yc-chip-code {
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.62rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--yc-text-faint);
+	}
+
+	.yc-chip-name {
+		font-size: 0.82rem;
+		color: var(--yc-text);
+	}
+
+	.yc-products-disclaimer {
+		font-size: 0.85rem;
+		color: var(--yc-text-faint);
+		font-style: italic;
+		margin: 0;
+		max-width: 540px;
+		margin: 0 auto;
+	}
+
+	/* ── Product modal ── */
+	.yc-modal {
+		position: fixed;
+		inset: 0;
+		z-index: 200;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 1.5rem;
+		background: rgba(8, 8, 10, 0.7);
+		backdrop-filter: blur(var(--yc-blur-20)) saturate(var(--yc-sat-140));
+		-webkit-backdrop-filter: blur(var(--yc-blur-20)) saturate(var(--yc-sat-140));
+		animation: yc-modal-bg 350ms var(--e-out-expo) both;
+	}
+
+	.yc-modal-body {
+		position: relative;
+		max-width: 540px;
+		width: 100%;
+		max-height: 90vh;
+		overflow-y: auto;
+		padding: 2.5rem 2rem;
+		border-radius: 28px;
+		background: linear-gradient(
+			135deg,
+			var(--yc-sheen-08) 0%,
+			var(--yc-sheen-025) 45%,
+			var(--yc-shadow-22) 100%
+		);
+		border: 1px solid var(--yc-sheen-16);
+		backdrop-filter: blur(var(--yc-blur-32)) saturate(var(--yc-sat-180));
+		-webkit-backdrop-filter: blur(var(--yc-blur-32)) saturate(var(--yc-sat-180));
+		box-shadow:
+			inset 0 1px 0 var(--yc-sheen-18),
+			0 30px 80px -20px var(--yc-shadow-70),
+			0 60px 140px -36px var(--yc-shadow-80);
+		animation: yc-modal-in 500ms var(--e-out-expo) both;
+	}
+
+	@keyframes yc-modal-bg {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	@keyframes yc-modal-in {
+		from {
+			opacity: 0;
+			transform: translateY(20px) scale(0.97);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
+	}
+
+	.yc-modal-close {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		width: 44px;
+		height: 44px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: 1px solid var(--yc-sheen-12);
+		background: var(--yc-sheen-04);
+		color: var(--yc-text);
+		border-radius: 9999px;
+		font-size: 1.5rem;
+		line-height: 1;
+		cursor: pointer;
+		transition: background 200ms, border-color 200ms;
+	}
+
+	.yc-modal-close:hover {
+		background: var(--yc-sheen-10);
+		border-color: var(--yc-sheen-25);
+	}
+
+	.yc-modal-title {
+		/* v1.20.2: editorial thin wordmark treatment. */
+		font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+			system-ui, sans-serif;
+		font-size: 1.85rem;
+		font-weight: 200;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		margin: 0.4rem 0 1rem;
+		color: var(--yc-text);
+	}
+
+	.yc-modal-blurb {
+		font-size: 1rem;
+		color: var(--yc-text);
+		margin: 1.25rem 0 0.75rem;
+		line-height: 1.55;
+	}
+
+	.yc-modal-details {
+		font-size: 0.92rem;
+		color: var(--yc-text-muted);
+		margin: 0 0 1.5rem;
+		line-height: 1.65;
+	}
+
+	.yc-modal-cta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem;
+		margin-top: 1rem;
+	}
+
+	.yc-modal-cta-btn {
+		flex: 1 1 auto;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.95rem 1.25rem;
+		border-radius: 9999px;
+		font-size: 0.88rem;
+		font-weight: 600;
+		text-decoration: none;
+		color: var(--yc-text);
+		background: var(--yc-sheen-08);
+		border: 1px solid var(--yc-sheen-15);
+		backdrop-filter: blur(var(--yc-blur-12)) saturate(var(--yc-sat-160));
+		transition: background 200ms, border-color 200ms, transform 200ms;
+	}
+
+	.yc-modal-cta-btn:hover {
+		background: var(--yc-sheen-13);
+		border-color: var(--yc-sheen-25);
+		transform: translateY(-2px);
+	}
+
+	.yc-modal-cta-btn--ghost {
+		background: var(--yc-sheen-03);
+	}
+
+	/* ── Shared 3-tab bar (Product / Installation / Maintenance) ── */
+	.yc-modal-tabs {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.35rem;
+		margin: 0.75rem 0 1rem;
+	}
+	.yc-modal-tab {
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.7rem;
+		font-weight: 700;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--yc-text-muted);
+		background: transparent;
+		border: 1px solid var(--yc-griege-15);
+		border-radius: 9999px;
+		padding: 0.5rem 0.25rem;
+		cursor: pointer;
+		transition: color 200ms, background 200ms, border-color 200ms;
+	}
+	.yc-modal-tab:hover {
+		color: var(--yc-text);
+		background: var(--yc-griege-08);
+		border-color: var(--yc-griege-30);
+	}
+	.yc-modal-tab--active {
+		color: var(--yc-maple-gold);
+		background: var(--yc-maple-gold-10);
+		border-color: var(--yc-maple-gold-45);
+	}
+	.yc-modal-tab-panel {
+		min-height: 120px;
+	}
+
+	/* ── Shared tab content primitives ── */
+	.yc-tab-section {
+		margin-bottom: 1rem;
+	}
+	.yc-tab-section:last-child {
+		margin-bottom: 0;
+	}
+	.yc-tab-heading {
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.7rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--yc-maple-gold);
+		margin: 0 0 0.4rem;
+	}
+	.yc-tab-text {
+		font-size: 0.88rem;
+		color: var(--yc-text-muted);
+		line-height: 1.6;
+		margin: 0;
+	}
+	.yc-tab-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+	.yc-tab-list li {
+		font-size: 0.85rem;
+		color: var(--yc-text-muted);
+		line-height: 1.5;
+		padding-left: 1rem;
+		position: relative;
+	}
+	.yc-tab-list li::before {
+		content: '·';
+		position: absolute;
+		left: 0.25rem;
+		color: var(--yc-maple-gold);
+		font-weight: 700;
+	}
+
+	/* ── Carpet-tile pattern morph (modal body, headliner interaction) ── */
+	/* v1.22.4 refactor: shared "framed visual demo" stage used by the
+	   tile-morph, carpet gallery, slip-rating, and cove animation modal
+	   bodies. Was duplicated 4× across .yc-tile-morph / .yc-noise /
+	   .yc-cove / .yc-slip — now lives in one place. Each individual
+	   class only carries its UNIQUE properties (max-width, text-align,
+	   padding override) below. */
+	.yc-modal-stage {
+		margin: 1.25rem 0 0.85rem;
+		padding: 1rem;
+		border-radius: 18px;
+		background: var(--yc-ink-45);
+		border: 1px solid var(--yc-griege-20);
+		box-shadow:
+			inset 0 var(--yc-edge-y) 0 var(--yc-shimmer-12),
+			0 8px 28px -10px var(--yc-shadow-55);
+	}
+
+	.yc-tile-morph {
+		margin-left: auto;
+		margin-right: auto;
+		max-width: 280px;
+	}
+
+	.yc-tile-morph svg {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.yc-tile-morph-tile {
+		transition: transform 460ms cubic-bezier(0.2, 0.9, 0.25, 1.05);
+		transform-box: fill-box;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.yc-tile-morph-tile {
+			transition: none;
+		}
+	}
+
+	.yc-tile-morph-pills {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.45rem;
+		margin: 0 auto 1.25rem;
+		max-width: 320px;
+	}
+
+	/* ── v1.23.0 refactor: unified pill family base ──
+	   3 pill button systems (.yc-tile-morph-pill,
+	   .yc-slip-pill, .yc-rubber-segment) share an almost identical
+	   base + hover + active treatment.
+	   The carpet modal now uses standard .yc-tile-morph-pill buttons
+	   (2-column grid in .yc-noise-pills), so no separate dot class needed.
+	   Group selectors below absorb the shared properties; individual
+	   rules keep ONLY their unique sizing, padding, font-size, and
+	   border-radius. Markup is unchanged — no LOVE'd interaction
+	   touched, only CSS chrome unified. */
+	.yc-tile-morph-pill,
+	.yc-slip-pill,
+	.yc-rubber-segment {
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-weight: 700;
+		color: var(--yc-text-muted);
+		background: var(--yc-sheen-03);
+		border: 1px solid var(--yc-sheen-10);
+		cursor: pointer;
+		transition:
+			background 220ms,
+			border-color 220ms,
+			color 220ms,
+			box-shadow 220ms;
+	}
+	.yc-tile-morph-pill:hover,
+	.yc-slip-pill:hover,
+	.yc-rubber-segment:hover {
+		color: var(--yc-text);
+		background: var(--yc-griege-08);
+		border-color: var(--yc-griege-30);
+	}
+	.yc-tile-morph-pill--active,
+	.yc-slip-pill--active,
+	.yc-rubber-segment--active {
+		color: var(--yc-maple-gold);
+		background: var(--yc-maple-gold-10);
+		border-color: var(--yc-maple-gold-45);
+		box-shadow:
+			inset 0 var(--yc-edge-y) 0 var(--yc-shimmer),
+			0 0 16px -4px var(--yc-maple-gold-42);
+	}
+
+	/* Per-pill UNIQUE styling — sizing, padding, font, radius. */
+	.yc-tile-morph-pill {
+		min-height: 36px;
+		padding: 0.45rem 0.5rem;
+		border-radius: 9999px;
+		font-size: 0.58rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		backdrop-filter: blur(var(--yc-blur-10)) saturate(var(--yc-sat-150));
+		-webkit-backdrop-filter: blur(var(--yc-blur-10)) saturate(var(--yc-sat-150));
+		white-space: nowrap;
+	}
+
+	.yc-vinyl-panel {
+		animation: yc-vinyl-fade 320ms cubic-bezier(0.2, 0.9, 0.25, 1.05);
+	}
+
+	@keyframes yc-vinyl-fade {
+		from {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.yc-vinyl-panel {
+			animation: none;
+		}
+	}
+
+	.yc-vinyl-tagline {
+		margin: 0 0 0.5rem;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.7rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.14em;
+		color: var(--yc-griege-text);
+		text-align: center;
+	}
+
+	.yc-vinyl-what {
+		margin: 0 0 1rem;
+		font-size: 0.92rem;
+		line-height: 1.55;
+		color: var(--yc-text);
+	}
+
+	.yc-vinyl-section {
+		margin: 0 0 1rem;
+	}
+
+	.yc-vinyl-heading {
+		margin: 0 0 0.4rem;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.62rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.16em;
+		color: var(--yc-text-faint);
+	}
+
+	.yc-vinyl-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+
+	.yc-vinyl-list li {
+		position: relative;
+		padding-left: 1rem;
+		font-size: 0.85rem;
+		line-height: 1.5;
+		color: var(--yc-text-muted);
+	}
+
+	.yc-vinyl-list li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.55em;
+		width: 6px;
+		height: 6px;
+		border-radius: 1px;
+		border: 1px solid var(--yc-griege-55);
+	}
+
+	.yc-vinyl-suppliers {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	/* ── Layer Exploded View (LVT/VCT/SCT modal) ── */
+	.yc-explode {
+		margin-left: auto;
+		margin-right: auto;
+		max-width: 340px;
+	}
+
+	.yc-explode svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		margin-bottom: 0.5rem;
+	}
+
+	.yc-explode-layer {
+		transition: transform 480ms cubic-bezier(0.2, 0.9, 0.25, 1.05);
+	}
+
+	.yc-explode-layer--open {
+		transform: translateY(var(--explode-y, 0));
+	}
+
+	.yc-explode-layer rect {
+		transition:
+			stroke 460ms cubic-bezier(0.2, 0.9, 0.25, 1.05),
+			stroke-width 460ms cubic-bezier(0.2, 0.9, 0.25, 1.05);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		/* Show exploded state immediately — no animation */
+		.yc-explode-layer {
+			transition: none !important;
+			transform: translateY(var(--explode-y, 0)) !important;
+		}
+
+		.yc-explode-layer rect {
+			transition: none !important;
+		}
+	}
+
+	/* ── Carpet noise-path cross-section (modal body) ── */
+	.yc-noise svg {
+		display: block;
+		width: 100%;
+		height: auto;
+	}
+
+	.yc-noise-pills {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.45rem;
+		margin: 0 auto 1rem;
+		max-width: 260px;
+	}
+
+	/* ── Sound-wave pulse keyframes ── */
+	@keyframes yc-wave-pulse {
+		0%, 100% { opacity: 0.85; }
+		50%      { opacity: 0.3; }
+	}
+
+	/* ── Footstep icon pulse ── */
+	@keyframes yc-footstep-pulse {
+		0%, 100% { opacity: 0.7; transform: scale(1); }
+		50%      { opacity: 1; transform: scale(1.08); }
+	}
+
+	.yc-footstep-pulse {
+		animation: yc-footstep-pulse 1.5s ease-in-out infinite;
+	}
+
+	/* ── Wave base + states ── */
+	.yc-wave {
+		opacity: 0.85;
+		animation: yc-wave-pulse 1.5s ease-in-out infinite;
+		transition: opacity 460ms cubic-bezier(0.2, 0.9, 0.25, 1.05);
+	}
+
+	.yc-wave--damped {
+		opacity: 0.06;
+		animation: none;
+	}
+
+	/* ── Carpet + pad layer ── */
+	.yc-noise-floor-layer {
+		opacity: 0;
+		transition: opacity 460ms cubic-bezier(0.2, 0.9, 0.25, 1.05);
+	}
+
+	.yc-noise-floor-layer--visible {
+		opacity: 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.yc-wave {
+			animation: none;
+		}
+		.yc-footstep-pulse {
+			animation: none;
+		}
+		.yc-noise-floor-layer {
+			transition: none;
+		}
+	}
+
+	/* ── More… sub-card accordion grid (modal body) ── */
+	.yc-more-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0.5rem;
+		margin: 1.25rem 0 1rem;
+	}
+
+	.yc-more-sub {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		min-height: 52px;
+		padding: 0.85rem 1rem;
+		border-radius: 14px;
+		background: var(--yc-ink-45);
+		border: 1px solid var(--yc-griege-20);
+		cursor: pointer;
+		font: inherit;
+		color: var(--yc-text);
+		text-align: left;
+		transition:
+			background 200ms,
+			border-color 200ms,
+			box-shadow 200ms;
+		box-shadow: inset 0 var(--yc-edge-y) 0 var(--yc-shimmer-10);
+	}
+
+	.yc-more-sub:hover {
+		background: var(--yc-griege-08);
+		border-color: var(--yc-griege-35);
+	}
+
+	.yc-more-sub--expanded {
+		background: var(--yc-maple-gold-08);
+		border-color: var(--yc-maple-gold-40);
+		box-shadow:
+			inset 0 var(--yc-edge-y) 0 var(--yc-shimmer-16),
+			0 0 14px -4px var(--yc-maple-gold-35);
+	}
+
+	.yc-more-sub-label {
+		font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+		font-size: 0.95rem;
+		font-weight: 500;
+		letter-spacing: 0.02em;
+	}
+
+	.yc-more-sub--expanded .yc-more-sub-label {
+		color: var(--yc-maple-gold);
+	}
+
+	.yc-more-sub-chevron {
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 1.1rem;
+		font-weight: 700;
+		color: var(--yc-text-faint);
+		transition: color 200ms;
+	}
+
+	.yc-more-sub--expanded .yc-more-sub-chevron {
+		color: var(--yc-maple-gold);
+	}
+
+	.yc-more-sub-desc {
+		margin: -0.15rem 0 0.25rem;
+		padding: 0.85rem 1rem 0.85rem 1rem;
+		font-size: 0.82rem;
+		line-height: 1.55;
+		color: var(--yc-text-muted);
+		border-left: 2px solid var(--yc-maple-gold-35);
+		margin-left: 0.5rem;
+		animation: yc-vinyl-fade 280ms cubic-bezier(0.2, 0.9, 0.25, 1.05);
+	}
+
+	.yc-more-tagline {
+		margin: 0.5rem 0 0;
+		text-align: center;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.78rem;
+		font-weight: 500;
+		font-style: italic;
+		line-height: 1.5;
+		color: var(--yc-griege-text);
+	}
+
+	/* ── Generic info-body modal layout (matting, sdt — no animated interaction yet) ── */
+	.yc-info-body {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		margin: 1.25rem 0 0.5rem;
+	}
+	.yc-info-lede {
+		margin: 0;
+		font-size: 0.95rem;
+		line-height: 1.55;
+		color: var(--yc-text);
+	}
+	.yc-info-list {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 0.55rem;
+	}
+	.yc-info-list li {
+		position: relative;
+		padding-left: 1.1rem;
+		font-size: 0.85rem;
+		line-height: 1.5;
+		color: var(--yc-text-muted);
+	}
+	.yc-info-list li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.55rem;
+		width: 0.45rem;
+		height: 0.45rem;
+		border-radius: 1px;
+		background: var(--yc-maple-gold-60);
+	}
+	.yc-info-list strong {
+		color: var(--yc-text);
+		font-weight: 600;
+	}
+	.yc-info-foot {
+		margin: 0;
+		padding-top: 0.5rem;
+		border-top: 1px solid var(--yc-shimmer-12);
+		font-size: 0.78rem;
+		line-height: 1.55;
+		color: var(--yc-text-faint);
+	}
+	.yc-info-foot strong {
+		color: var(--yc-text-muted);
+		font-weight: 600;
+	}
+
+	/* ── Sheet vinyl cove-build animation (modal body) ── */
+	.yc-cove {
+		text-align: center;
+	}
+
+	.yc-cove svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		margin-bottom: 0.85rem;
+	}
+
+	/* v1.23.1: replaced 4 separate cove element classes
+	   (.yc-cove-floor / -curve / -cap / -seam) with one shared
+	   .yc-cove-step that handles fade-in for any anatomy component
+	   in the new annotated cross-section. Each <g> in the SVG carries
+	   its label + leader + element together so they reveal as one. */
+	.yc-cove-step {
+		opacity: 0;
+		transform: translateY(-4px);
+		transform-box: fill-box;
+		transition: opacity 380ms ease, transform 420ms cubic-bezier(0.2, 0.9, 0.25, 1.05);
+	}
+	.yc-cove-step--in {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	/* v1.23.6: sheet vinyl stroke-draw animation. The path's stroke-dasharray
+	   and starting stroke-dashoffset come from the markup (SHEET_VINYL_LEN);
+	   here we just transition dashoffset to 0 when the parent step is --in,
+	   so the line draws on left-to-right (floor first) and then up the wall.
+	   100ms delay lets the parent's opacity fade-in begin first. */
+	.yc-cove-sheet-stroke {
+		transition: stroke-dashoffset 1100ms cubic-bezier(0.4, 0, 0.2, 1) 100ms;
+	}
+	.yc-cove-step--in .yc-cove-sheet-stroke {
+		stroke-dashoffset: 0 !important;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.yc-cove-step {
+			transition: none;
+			opacity: 1;
+			transform: none;
+		}
+		.yc-cove-sheet-stroke {
+			transition: none;
+		}
+	}
+
+	.yc-cove-caption {
+		margin: 0.25rem auto 0.85rem;
+		max-width: 320px;
+		font-size: 0.78rem;
+		line-height: 1.5;
+		color: var(--yc-text-muted);
+		font-style: italic;
+	}
+
+	/* ── Matting modal — foot-traffic heatmap (v1.24.x) ──
+	   Heatmap pulses via CSS @keyframes; zone overlay fades in via
+	   Svelte state toggle. prefers-reduced-motion kills all animation. */
+	.yc-mat svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		margin-bottom: 0.5rem;
+	}
+	.yc-mat-stat {
+		margin: 0;
+		text-align: center;
+		font-size: 0.85rem;
+		line-height: 1.5;
+		color: var(--yc-text-muted);
+	}
+	.yc-mat-stat strong {
+		color: var(--yc-maple-gold);
+		font-weight: 700;
+	}
+
+	/* Heatmap pulse — gentle breathe, staggered per layer */
+	@keyframes yc-hm-breathe {
+		0%, 100% { opacity: 0.55; }
+		50%      { opacity: 1; }
+	}
+	.yc-hm-pulse {
+		animation: yc-hm-breathe 3.5s ease-in-out infinite;
+	}
+	.yc-hm-pulse-2 {
+		animation-delay: -1.2s;
+	}
+	.yc-hm-pulse-3 {
+		animation-delay: -2.4s;
+	}
+
+	/* Zone overlay — hidden by default, fades in when class toggled */
+	.yc-hm-zones {
+		opacity: 0;
+		transition: opacity 480ms cubic-bezier(0.2, 0.9, 0.25, 1.05);
+	}
+	.yc-hm-zones-visible {
+		opacity: 1;
+	}
+
+	/* prefers-reduced-motion: kill all animation + show zones immediately */
+	@media (prefers-reduced-motion: reduce) {
+		.yc-hm-pulse {
+			animation: none;
+			opacity: 0.75;
+		}
+		.yc-hm-zones {
+			transition: none;
+			opacity: 1;
+		}
+	}
+
+	.yc-cove-replay {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 44px;
+		padding: 0.6rem 1.2rem;
+		border-radius: 9999px;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.7rem;
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--yc-maple-gold);
+		background: var(--yc-maple-gold-08);
+		border: 1px solid var(--yc-maple-gold-40);
+		cursor: pointer;
+		transition: background 200ms, border-color 200ms, transform 200ms;
+		box-shadow:
+			inset 0 var(--yc-edge-y) 0 var(--yc-shimmer),
+			0 0 14px -4px var(--yc-maple-gold-40);
+	}
+
+	.yc-cove-replay:hover {
+		background: var(--yc-maple-gold-14);
+		border-color: var(--yc-maple-gold-60);
+		transform: translateY(-1px);
+	}
+
+	/* ── Ceramic grout joint cross-section (modal body) ── */
+	.yc-grout {
+		margin-bottom: 0.5rem;
+		padding-bottom: 1.25rem;
+	}
+
+	.yc-grout svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		margin-bottom: 0.5rem;
+	}
+
+	.yc-grout-caption {
+		margin: 0.25rem auto 0.85rem;
+		max-width: 320px;
+		font-size: 0.78rem;
+		line-height: 1.5;
+		color: var(--yc-text-muted);
+		font-style: italic;
+	}
+
+	.yc-porcelain-note {
+		margin: 1rem 0;
+		padding: 0.75rem 0.85rem;
+		border-left: 3px solid var(--yc-maple-gold-40);
+		background: var(--yc-griege-06);
+		border-radius: 0 10px 10px 0;
+		font-size: 0.82rem;
+		line-height: 1.55;
+		color: var(--yc-text);
+	}
+
+	.yc-porcelain-note strong {
+		display: block;
+		margin-bottom: 0.4rem;
+		font-size: 0.74rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--yc-maple-gold);
+	}
+
+	.yc-porcelain-note p {
+		margin: 0.35rem 0 0;
+	}
+
+	/* ── Rubber 3-segment toggle (modal body) ── */
+	.yc-rubber-segments {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.5rem;
+		margin: 1.25rem auto 1rem;
+		max-width: 360px;
+	}
+
+	.yc-rubber-segment {
+		min-height: 56px;
+		padding: 0.7rem 0.5rem;
+		border-radius: 14px;
+		font-size: 0.62rem;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		/* rubber segments override base background to be slightly darker
+		   and add an inset highlight line for the cushion effect */
+		background: var(--yc-ink-50);
+		border-color: var(--yc-griege-18);
+		box-shadow: inset 0 var(--yc-edge-y) 0 var(--yc-shimmer-08);
+		/* one extra transition property for the hover lift */
+		transition:
+			background 220ms,
+			border-color 220ms,
+			color 220ms,
+			box-shadow 220ms,
+			transform 220ms;
+	}
+	.yc-rubber-segment:hover {
+		border-color: var(--yc-griege-32);
+		transform: translateY(-1px);
+	}
+
+	.yc-rubber-panel {
+		animation: yc-vinyl-fade 320ms cubic-bezier(0.2, 0.9, 0.25, 1.05);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.yc-rubber-panel {
+			animation: none;
+		}
+	}
+
+	/* ── Impact / Drop Absorption animation (rubber modal) ── */
+	.yc-impact {
+		margin-left: auto;
+		margin-right: auto;
+		max-width: 340px;
+		text-align: center;
+	}
+
+	.yc-impact svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		overflow: visible;
+	}
+
+	/* Weight drop — falls from y=20 to y=82/80/76 (rubber surface minus weight height).
+	   Each column has a different rest position based on rubber thickness. */
+	@keyframes yc-weight-drop-thin {
+		0%, 10%  { transform: translateY(20px); }
+		35%      { transform: translateY(82px); }
+		45%      { transform: translateY(78px); }
+		55%, 80% { transform: translateY(82px); }
+		90%, 100%{ transform: translateY(20px); }
+	}
+	@keyframes yc-weight-drop-mid {
+		0%, 10%  { transform: translateY(20px); }
+		35%      { transform: translateY(80px); }
+		45%      { transform: translateY(76px); }
+		55%, 80% { transform: translateY(80px); }
+		90%, 100%{ transform: translateY(20px); }
+	}
+	@keyframes yc-weight-drop-thick {
+		0%, 10%  { transform: translateY(20px); }
+		35%      { transform: translateY(74px); }
+		45%      { transform: translateY(71px); }
+		55%, 80% { transform: translateY(74px); }
+		90%, 100%{ transform: translateY(20px); }
+	}
+
+	.yc-weight {
+		will-change: transform;
+	}
+	.yc-weight--col1 {
+		animation: yc-weight-drop-thin 4s ease-in-out infinite;
+	}
+	.yc-weight--col2 {
+		animation: yc-weight-drop-mid 4s ease-in-out infinite;
+	}
+	.yc-weight--col3 {
+		animation: yc-weight-drop-thick 4s ease-in-out infinite;
+	}
+
+	/* Slab flash — impact ripple. Thin = bright fast, mid = faint, thick = near-invisible */
+	@keyframes yc-flash-thin {
+		0%, 34%  { opacity: 0; }
+		36%      { opacity: 0.75; }
+		50%      { opacity: 0.55; }
+		65%, 100%{ opacity: 0; }
+	}
+	@keyframes yc-flash-mid {
+		0%, 36%  { opacity: 0; }
+		40%      { opacity: 0.35; }
+		52%      { opacity: 0.15; }
+		65%, 100%{ opacity: 0; }
+	}
+	@keyframes yc-flash-thick {
+		0%, 38%  { opacity: 0; }
+		44%      { opacity: 0.1; }
+		52%      { opacity: 0; }
+		100%     { opacity: 0; }
+	}
+
+	.yc-impact-slab-flash--thin {
+		animation: yc-flash-thin 4s ease-in-out infinite;
+	}
+	.yc-impact-slab-flash--mid {
+		animation: yc-flash-mid 4s ease-in-out infinite;
+	}
+	.yc-impact-slab-flash--thick {
+		animation: yc-flash-thick 4s ease-in-out infinite;
+	}
+
+	/* Recycled tire origin callout — mirrors .yc-porcelain-note */
+	.yc-recycled-note {
+		margin: 1rem 0;
+		padding: 0.75rem 0.85rem;
+		border-left: 3px solid var(--yc-maple-gold-40);
+		background: var(--yc-griege-06);
+		border-radius: 0 10px 10px 0;
+		font-size: 0.82rem;
+		line-height: 1.55;
+		color: var(--yc-text);
+	}
+
+	.yc-recycled-note strong {
+		display: block;
+		margin-bottom: 0.4rem;
+		font-size: 0.74rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--yc-maple-gold);
+	}
+
+	.yc-recycled-note p {
+		margin: 0.35rem 0 0;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.yc-weight,
+		.yc-weight--col1,
+		.yc-weight--col2,
+		.yc-weight--col3 {
+			animation: none;
+			transform: translateY(20px);
+		}
+		.yc-impact-slab-flash--thin,
+		.yc-impact-slab-flash--mid,
+		.yc-impact-slab-flash--thick {
+			animation: none;
+			opacity: 0;
+		}
+	}
+
+	.yc-rubber-hero {
+		margin: 0 0 0.5rem;
+		font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+		font-size: 1rem;
+		font-weight: 500;
+		line-height: 1.4;
+		color: var(--yc-text);
+	}
+
+	.yc-rubber-why {
+		margin: 0 0 1rem;
+		font-size: 0.85rem;
+		line-height: 1.55;
+		color: var(--yc-text-muted);
+	}
+
+	/* ── Hardwood flip cards (modal body) ── */
+	.yc-hw-flips {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.65rem;
+		margin: 1.25rem 0 0.75rem;
+		perspective: 1200px;
+	}
+
+	.yc-hw-flip {
+		position: relative;
+		aspect-ratio: 3 / 4;
+		min-height: 160px;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		cursor: pointer;
+		font: inherit;
+		color: inherit;
+	}
+
+	.yc-hw-flip-inner {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		transition: transform 600ms cubic-bezier(0.2, 0.9, 0.25, 1.05);
+		transform-style: preserve-3d;
+	}
+
+	.yc-hw-flip--flipped .yc-hw-flip-inner {
+		transform: rotateY(180deg);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.yc-hw-flip-inner {
+			transition: none;
+		}
+	}
+
+	.yc-hw-flip-face {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		flex-direction: column;
+		padding: 0.65rem 0.55rem;
+		border-radius: 14px;
+		background: linear-gradient(
+			135deg,
+			var(--yc-sheen-05) 0%,
+			var(--yc-sheen-012) 50%,
+			var(--yc-shadow-18) 100%
+		);
+		border: 1px solid var(--yc-griege-25);
+		backdrop-filter: blur(var(--yc-blur-12)) saturate(var(--yc-sat-160));
+		-webkit-backdrop-filter: blur(var(--yc-blur-12)) saturate(var(--yc-sat-160));
+		box-shadow:
+			inset 0 var(--yc-edge-y) 0 var(--yc-shimmer-14),
+			0 8px 22px -8px var(--yc-shadow-55);
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+	}
+
+	.yc-hw-flip-front {
+		justify-content: space-between;
+		align-items: center;
+		text-align: center;
+	}
+
+	.yc-hw-flip-label {
+		/* placeholder font — Square721 retired from this component during
+		   v1.24.39 hero rebuild; restore from .claude/reference/young-hero-deleted-code.md */
+		font-family: ui-serif, Georgia, 'Times New Roman', serif;
+		font-size: 0.9rem;
+		font-weight: 400;
+		letter-spacing: 0.12em;
+		color: var(--yc-text);
+	}
+
+	.yc-hw-flip-front-text {
+		font-size: 0.65rem;
+		line-height: 1.4;
+		color: var(--yc-text-muted);
+	}
+
+	.yc-hw-flip-back {
+		transform: rotateY(180deg);
+		justify-content: flex-start;
+		gap: 0.15rem;
+		overflow: hidden;
+	}
+
+	.yc-hw-flip-back-heading {
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.5rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: var(--yc-griege-text);
+		margin-top: 0.3rem;
+	}
+
+	.yc-hw-flip-back-heading:first-child {
+		margin-top: 0;
+	}
+
+	.yc-hw-flip-back-text {
+		font-size: 0.58rem;
+		line-height: 1.35;
+		color: var(--yc-text);
+	}
+
+	.yc-hw-tap-hint {
+		margin: 0 0 1rem;
+		text-align: center;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.62rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--yc-text-faint);
+	}
+
+	.yc-vinyl-supplier-chip--link {
+		text-decoration: none;
+		cursor: pointer;
+		min-height: 32px;
+		transition:
+			background 200ms,
+			border-color 200ms,
+			color 200ms,
+			transform 200ms,
+			box-shadow 200ms;
+	}
+
+	.yc-vinyl-supplier-chip--link:hover {
+		color: var(--yc-maple-gold);
+		background: var(--yc-maple-gold-10);
+		border-color: var(--yc-maple-gold-45);
+		transform: translateY(-1px);
+		box-shadow:
+			inset 0 var(--yc-edge-y) 0 var(--yc-shimmer),
+			0 0 16px -4px var(--yc-maple-gold-40);
+	}
+
+	.yc-vinyl-supplier-chip--link:focus-visible {
+		outline: 2px solid var(--yc-maple-gold-70);
+		outline-offset: 2px;
+	}
+
+	.yc-vinyl-supplier-chip {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.32rem 0.7rem;
+		border-radius: 9999px;
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.62rem;
+		font-weight: 600;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--yc-text);
+		background: var(--yc-griege-08);
+		border: 1px solid var(--yc-griege-25);
+		white-space: nowrap;
+	}
+
+	@media (max-width: 520px) {
+		.yc-products-grid {
+			grid-template-columns: repeat(2, 1fr);
+			grid-auto-rows: 1fr;
+			gap: 0.75rem;
+		}
+		.yc-product-card {
+			padding: 0.85rem;
+			border-radius: 22px;
+			/* v1.21.0+: more square per user request. iPhone 13 Pro Max
+			   428px viewport: card width ~184px, aspect-ratio 1/1 yields
+			   ~184px height. min-height floor catches narrow viewports. */
+			aspect-ratio: 1 / 1;
+			height: auto;
+			min-height: 11rem;
+		}
+		.yc-product-badges {
+			/* Reduced from 3.6rem since most cards have empty badges[]
+			   after the v1.20.x rework — only shows when content present. */
+			min-height: 0;
+		}
+		.yc-product-code {
+			font-size: 0.62rem;
+		}
+		.yc-product-name {
+			font-size: 0.95rem;
+			letter-spacing: 0.08em;
+			line-height: 1.3;
+		}
+		/* v1.24.44: pull the card body OUT of flex flow on mobile and pin
+		   it absolutely inside the card box. The card's `aspect-ratio: 1/1`
+		   + `overflow: hidden` was clipping flex-flow content at the
+		   bottom; removing the body from the flex calc lets us position it
+		   at an explicit coordinate inside the card with no flex math.
+		   Badges (the lone remaining flex child on mobile, almost always
+		   empty thanks to `min-height: 0`) collapses harmlessly. iOS
+		   Safari `perspective + backdrop-filter` compositor risk is
+		   mitigated because perspective is already stripped on touch
+		   devices via `@media (hover: hover)` lower in the file. */
+		.yc-product-card-body {
+			position: absolute;
+			bottom: 0.85rem;
+			left: 0.85rem;
+			right: 0.85rem;
+		}
+		.yc-product-blurb {
+			/* v1.24.44: hide blurb on mobile. The card body (code + name +
+			   3-line blurb + gaps) was overflowing the card's
+			   `aspect-ratio: 1/1` + `overflow: hidden` box, clipping the
+			   product name labels at the bottom. Modal still shows the full
+			   blurb when the card is tapped. May rebuild card faces later. */
+			display: none;
+		}
+		.yc-modal {
+			padding: 1rem;
+		}
+		.yc-modal-body {
+			padding: 1.75rem 1.25rem;
+		}
+		.yc-chip {
+			padding: 0.4rem 0.7rem;
+		}
+		.yc-chip-name {
+			font-size: 0.74rem;
+		}
+	}
+
+	/* \u2500\u2500 Maple leaf "Proudly Canadian" badge \u2500\u2500
+	   Custom-drawn 7-tip leaf in viewBox 24, mirror-symmetric, central
+	   notch above the stem. White by default; the surrounding glass pill
+	   gives it the Apple-y badge feel. */
+	.yc-maple-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		padding: 0.85rem 1rem 0.85rem 0.85rem;
+		min-height: 44px;
+		border-radius: 9999px;
+		background: var(--yc-sheen-04);
+		border: 1px solid var(--yc-sheen-14);
+		backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160));
+		-webkit-backdrop-filter: blur(var(--yc-blur-14)) saturate(var(--yc-sat-160));
+		box-shadow:
+			inset 0 1px 0 var(--yc-sheen-12),
+			0 6px 18px -8px var(--yc-shadow-55);
+		color: var(--yc-text);
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.62rem;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.yc-maple-leaf {
+		width: 18px;
+		height: 18px;
+		flex-shrink: 0;
+		color: var(--yc-text);
+	}
+
+	.yc-maple-badge--hero {
+		margin: 0 auto 1.5rem;
+		opacity: 0;
+		transform: translateY(20px);
+		animation: yc-hero-fade-up 700ms var(--e-out-expo) 50ms forwards;
+	}
+
+	.yc-maple-badge--footer {
+		margin-top: 0.85rem;
+		align-self: flex-start;
+	}
+
+	@media (max-width: 520px) {
+		.yc-footer-brand-block {
+			align-items: center;
+			text-align: center;
+		}
+		.yc-footer-brand {
+			align-items: center;
+		}
+		.yc-footer-tagline {
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.yc-maple-badge--footer {
+			align-self: center;
+		}
+	}
+
+	/* \u2500\u2500 Suppliers marquee \u2500\u2500
+	   Pure CSS @keyframes translateX with two-copy DOM, hover-pause,
+	   mask-image edge fade. ~40s leisurely cycle. */
+	.yc-section--suppliers {
+		padding: 4rem 0;
+	}
+
+	.yc-marquee {
+		position: relative;
+		overflow: hidden;
+		margin: 2.25rem 0 1.25rem;
+		-webkit-mask-image: linear-gradient(
+			to right,
+			transparent 0%,
+			#000 8%,
+			#000 92%,
+			transparent 100%
+		);
+		mask-image: linear-gradient(
+			to right,
+			transparent 0%,
+			#000 8%,
+			#000 92%,
+			transparent 100%
+		);
+	}
+
+	.yc-marquee-track {
+		display: flex;
+		align-items: center;
+		gap: 3rem;
+		width: max-content;
+		animation: yc-marquee-scroll 50s linear infinite;
+	}
+
+	.yc-marquee:hover .yc-marquee-track {
+		animation-play-state: paused;
+	}
+
+	@keyframes yc-marquee-scroll {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-50%);
+		}
+	}
+
+	.yc-marquee-item {
+		flex-shrink: 0;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-width: 140px;
+		height: 64px;
+		padding: 0 1.25rem;
+		text-decoration: none;
+		color: var(--yc-text-muted);
+		opacity: 0.6;
+		border-radius: 14px;
+		border: 1px solid transparent;
+		background: transparent;
+		transition:
+			opacity 220ms var(--e-standard),
+			color 220ms var(--e-standard),
+			transform 220ms var(--e-standard),
+			background 220ms var(--e-standard),
+			border-color 220ms var(--e-standard),
+			box-shadow 220ms var(--e-standard);
+	}
+
+	.yc-marquee-item:hover {
+		/* v1.20.27: glass treatment on hover per item-10 token spec */
+		background: linear-gradient(
+			135deg,
+			var(--yc-shimmer-08) 0%,
+			var(--yc-sheen-012) 50%,
+			var(--yc-ink-45) 100%
+		);
+		border-color: var(--yc-griege-25);
+		backdrop-filter: blur(var(--yc-blur-12)) saturate(var(--yc-sat-160));
+		-webkit-backdrop-filter: blur(var(--yc-blur-12)) saturate(var(--yc-sat-160));
+		box-shadow:
+			inset 0 var(--yc-edge-y) 0 var(--yc-shimmer-12),
+			0 8px 22px -8px var(--yc-shadow-45);
+		opacity: 1;
+		color: var(--yc-text);
+		transform: translateY(-2px);
+	}
+
+	.yc-marquee-item img {
+		max-height: 38px;
+		max-width: 140px;
+		width: auto;
+		height: auto;
+		object-fit: contain;
+		filter: brightness(0) invert(1);
+	}
+
+	.yc-marquee-wordmark {
+		font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+		font-size: 1.25rem;
+		font-weight: 300;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.yc-suppliers-note {
+		text-align: center;
+		font-size: 0.78rem;
+		color: var(--yc-text-faint);
+		font-style: italic;
+		margin: 0.5rem 0 0;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.yc-marquee-track {
+			animation: none;
+		}
+	}
+
+	/* Touch devices: pause marquee so finger taps don't land on a moving target,
+	   and replace the centered radial sheen on cards (which can't be moved without
+	   a pointer) with a static linear gradient that doesn't look frozen. */
+	@media (hover: none) {
+		.yc-marquee-track {
+			animation-play-state: paused;
+		}
+		.yc-marquee-item {
+			min-width: 160px;
+		}
+		.yc-product-card::before {
+			background: linear-gradient(
+				135deg,
+				var(--yc-sheen-12),
+				transparent 60%
+			);
+		}
+	}
+
+	/* Tighten the floating pill nav so all 4 links + brand fit narrow viewports. */
+	@media (max-width: 640px) {
+		.yc-nav {
+			gap: 4px;
+			padding: 6px;
+		}
+		.yc-nav-brand {
+			/* Brand is huge in the hero right below \u2014 free up nav width on mobile */
+			display: none;
+		}
+		.yc-nav-link {
+			padding: 13px 14px;
+			font-size: 0.8rem;
+		}
+	}
+
+	@media (max-width: 380px) {
+		.yc-nav-link {
+			padding: 13px 12px;
+			font-size: 0.78rem;
+		}
+	}
+
+	/* ─────────────────────────────────────────────────────────────────────
+	 * v1.21.0 — Theme toggle slot in navbar + cross-theme transition
+	 * ───────────────────────────────────────────────────────────────────── */
+	.yc-nav-divider {
+		display: inline-block;
+		width: 1px;
+		height: 20px;
+		margin: 0 4px;
+		background: var(--yc-sheen-12);
+		flex-shrink: 0;
+	}
+
+	.yc-nav :global(.theme-toggle) {
+		color: var(--yc-text-muted);
+	}
+
+	.yc-nav :global(.theme-toggle:hover) {
+		color: var(--yc-text);
+		background: rgba(var(--accent-gold), 0.06);
+		border-color: rgba(var(--accent-gold-hot), 0.45);
+		box-shadow:
+			inset 0 1px 0 rgba(var(--accent-gold-hot), 0.18),
+			0 0 24px -6px rgba(var(--accent-gold), 0.5);
+	}
+
+	@media (max-width: 640px) {
+		.yc-nav-divider {
+			margin: 0 2px;
+			height: 18px;
+		}
+	}
+
+	/* Cross-theme color transition — scoped, NOT global.
+	   v1.21.4: widened to include footer, cards, modal, eyebrows, dev badge,
+	   hero leaf so the entire page eases in unison instead of "tearing"
+	   (chrome smooths but slabs snap). */
+	.yc-page,
+	.yc-nav,
+	.yc-nav-brand,
+	.yc-nav-link,
+	.yc-footer,
+	.yc-product-card,
+	.yc-stat,
+	.yc-modal-body,
+	.yc-section-eyebrow,
+	.yc-footer-col-title,
+	.yc-dev-version-badge,
+	.yc-skip-link,
+	.yc-map-preview-iframe {
+		transition:
+			background-color 280ms cubic-bezier(0.4, 0, 0.2, 1),
+			border-color 280ms cubic-bezier(0.4, 0, 0.2, 1),
+			color 280ms cubic-bezier(0.4, 0, 0.2, 1),
+			box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1),
+			filter 280ms cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.yc-page,
+		.yc-nav,
+		.yc-nav-brand,
+		.yc-nav-link,
+		.yc-footer,
+		.yc-product-card,
+		.yc-stat,
+		.yc-modal-body,
+		.yc-section-eyebrow,
+		.yc-footer-col-title,
+		.yc-dev-version-badge,
+		.yc-skip-link,
+		.yc-map-preview-iframe {
+			transition: none;
+		}
+	}
+
+	/* ─────────────────────────────────────────────────────────────────────
+	 * v1.21.0 — LIGHT MODE component overrides
+	 *
+	 * Activated by <html data-theme="light"> (set by app.html FOUC script
+	 * + theme.svelte.ts store). Most theming flows automatically through
+	 * the token swaps in young-carpets-tokens.css. The overrides below
+	 * handle:
+	 *  - Hardcoded colors that pre-date the token system (yc-page bg,
+	 *    yc-nav bg, yc-text colors, etc.)
+	 *  - Components where the dark assumption is structural, not just a
+	 *    color value (e.g. the dark filters on product images, the
+	 *    grayscale invert on supplier logos, the modal scrim).
+	 * ───────────────────────────────────────────────────────────────────── */
+
+
+	/* Floating navbar — translucent white pill */
+	:global(:root[data-theme='light']) .yc-nav {
+		background: rgba(255, 255, 255, 0.72);
+		border-color: rgba(60, 50, 30, 0.10);
+		box-shadow:
+			inset 0 -1px 0 rgba(60, 50, 30, 0.06),
+			0 4px 12px rgba(60, 50, 30, 0.08),
+			0 18px 40px -16px rgba(60, 50, 30, 0.14);
+	}
+
+	:global(:root[data-theme='light']) .yc-nav-brand {
+		border-right-color: rgba(60, 50, 30, 0.10);
+	}
+
+	:global(:root[data-theme='light']) .yc-nav-divider {
+		background: rgba(60, 50, 30, 0.12);
+	}
+
+	/* Maple badge leaf — Canada red in BOTH modes for brand consistency */
+	:global(:root[data-theme='light']) .yc-maple-badge .yc-maple-leaf {
+		color: #c8102e;
+	}
+
+	/* Skip link — light bg + dark text */
+	:global(:root[data-theme='light']) .yc-skip-link {
+		background: #faf7f0;
+		color: #1d1d1f;
+		border-color: rgba(138, 106, 20, 0.7);
+		box-shadow: 0 8px 24px rgba(60, 50, 30, 0.18);
+	}
+
+	/* Dev version badge — deeper gold for contrast on cream */
+	:global(:root[data-theme='light']) .yc-dev-version-badge {
+		color: #8a6a14;
+		background: rgba(255, 255, 255, 0.94);
+		border-color: rgba(138, 106, 20, 0.40);
+		box-shadow:
+			inset 0 -1px 0 rgba(60, 50, 30, 0.05),
+			0 4px 14px -4px rgba(60, 50, 30, 0.18),
+			0 0 18px -4px rgba(212, 164, 74, 0.30);
+	}
+
+	/* Footer — flip the deep slab to warm cream */
+	:global(:root[data-theme='light']) .yc-footer {
+		background: #f2eee3;
+		color: var(--yc-text-muted);
+	}
+
+	/* Map preview iframe filter retune for cream */
+	:global(:root[data-theme='light']) .yc-map-preview-iframe {
+		filter: grayscale(0.30) brightness(1.02) contrast(0.98) saturate(0.85) sepia(0.05);
+	}
+
+	/* Map modal iframe — same retune */
+	:global(:root[data-theme='light']) .yc-map-modal-frame iframe {
+		filter: grayscale(0.30) brightness(1.02) contrast(0.98) saturate(0.85) sepia(0.05);
+	}
+
+	/* Marquee logos — flip from white to black via the token */
+	:global(:root[data-theme='light']) .yc-marquee-item img {
+		filter: var(--yc-logo-filter);
+	}
+
+	/* Marquee wordmark — warm shadow tint instead of white glow */
+	:global(:root[data-theme='light']) .yc-marquee-wordmark {
+		filter: var(--yc-marquee-wordmark-glow);
+	}
+
+	/* Modal backdrop scrim — warmer + lighter on cream */
+	:global(:root[data-theme='light']) .yc-modal {
+		background: rgba(60, 50, 30, 0.35);
+	}
+
+	/* Modal body — light glass surface */
+	:global(:root[data-theme='light']) .yc-modal-body {
+		background: rgba(255, 255, 255, 0.96);
+		border-color: rgba(60, 50, 30, 0.10);
+		box-shadow:
+			0 12px 36px -8px rgba(60, 50, 30, 0.18),
+			0 24px 60px -16px rgba(60, 50, 30, 0.14);
+	}
+
+	/* Product card backdrop gradient — warm graphite on white */
+	:global(:root[data-theme='light']) .yc-product-card {
+		background: linear-gradient(
+			135deg,
+			rgba(60, 50, 30, 0.035) 0%,
+			rgba(60, 50, 30, 0.008) 45%,
+			rgba(255, 255, 255, 0.85) 100%
+		);
+		border-color: rgba(60, 50, 30, 0.12);
+	}
+
+	/* Stat cards — warm graphite shadow instead of black drop */
+	:global(:root[data-theme='light']) .yc-stat {
+		background: linear-gradient(
+			135deg,
+			rgba(255, 255, 255, 0.7) 0%,
+			rgba(255, 255, 255, 0.95) 50%,
+			rgba(60, 50, 30, 0.04) 100%
+		);
+		border-color: rgba(60, 50, 30, 0.12);
+		box-shadow:
+			inset 0 -1px 0 rgba(60, 50, 30, 0.06),
+			0 4px 12px rgba(60, 50, 30, 0.10),
+			0 8px 32px rgba(60, 50, 30, 0.08);
+	}
+
+	/* Section eyebrows — readable warm griege text on cream */
+	:global(:root[data-theme='light']) .yc-section-eyebrow {
+		color: var(--section-eyebrow);
+		background: var(--yc-griege-08);
+		border-color: var(--yc-griege-20);
+	}
+
+	/* Footer column titles — same treatment */
+	:global(:root[data-theme='light']) .yc-footer-col-title {
+		color: rgba(29, 29, 31, 0.65);
+		background: var(--yc-griege-06);
+		border-color: var(--yc-griege-18);
+	}
+
+	/* prefers-reduced-transparency — drop backdrop-filter, opaque surfaces */
+	@media (prefers-reduced-transparency: reduce) {
+		:global(:root[data-theme='light']) .yc-page .yc-nav,
+		:global(:root[data-theme='light']) .yc-page .yc-stat,
+		:global(:root[data-theme='light']) .yc-page .yc-product-card,
+		:global(:root[data-theme='light']) .yc-page .yc-modal-body,
+		:global(:root[data-theme='light']) .yc-page .yc-section-eyebrow {
+			background: #ffffff;
+			backdrop-filter: none;
+			-webkit-backdrop-filter: none;
+			border-color: rgba(60, 50, 30, 0.35);
+		}
+	}
