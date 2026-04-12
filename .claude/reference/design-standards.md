@@ -15,6 +15,26 @@
 
 ---
 
+## Color Strategy
+
+**Grayscale only during dark mode buildout.** Every element laid over the background uses only black/white/gray. The warmth comes from the charcoal background showing through transparency — not from accent colors on the elements themselves.
+
+**No color porting from ay3.** When bringing components from the old website, strip all gold, amber, cyan, or any accent colors. Replace with grayscale equivalents. Color will be added deliberately at the end, element by element, after all dark mode layout is complete.
+
+**Color phase (later):** After dark mode is fully built, colors, glows, and highlights will be added selectively. This is a separate phase — not mixed into layout work.
+
+---
+
+## Component Architecture
+
+**Similar components share a base class.** When multiple elements have the same structure (e.g., product badges, service cards, contact items), they should inherit from a shared base style. Changing the base changes all instances.
+
+**Pattern from ay3:** Product badges for carpet tile, LVT, etc. all shared a common card structure. The same approach applies here — build a base, then apply variant-specific overrides only where needed.
+
+**When porting from ay3:** Extract the shared base pattern first, then the variants. Don't copy-paste individual component styles independently.
+
+---
+
 ## Contact Info
 
 Phone numbers and email addresses are **plain text** site-wide — no `tel:` or `mailto:` links. Users can highlight and copy. This may change later but is the current standard.
