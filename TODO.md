@@ -1,56 +1,54 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-11 (laptop session — reversed the ay3-to-GitHub plan).
+Last updated: 2026-04-11 (late evening — scaffold + Cloudflare Pages live).
 
-This file is the durable cross-session to-do list. Claude Code's in-session `TodoWrite` tool does **not** persist across sessions or machines — this file does. Edit it, commit it, push it. Both Claude and you read it at session start.
+This file is the durable cross-session to-do list. Both Claude and you read it at session start.
 
 Working branch: `claude/review-todo-list-CfdHE`. All pushes fast-forward into `main` on GitHub (`youngcarpets/website`).
 
 ---
 
-## Decisions locked in this session (2026-04-11)
+## Live preview URL (bookmark this)
 
-- **ay3 archive stays local-only.** The folder lives at `_archive/ay3/` on this laptop (215 MB, full tree, nested `.git` intact so it's still its own functional git repo). It is **gitignored** by the outer website repo via root `.gitignore` containing `_archive/`. It does **not** go to GitHub. Reason: 215 MB in git history forever would bloat every future clone of the website repo, and the archive is reference-only — when we need something from it, we port/copy deliberately rather than carry the whole thing.
-- **Implication for other devices.** On the work computer or any fresh clone, `_archive/` will not exist. If reference material is needed there, either re-copy ay3 from its canonical location or port specific pieces into the website repo proper.
-- **Push target.** Everything under `website/` goes to `main` on GitHub. No long-lived feature branches for solo work.
+**https://youngcarpets-website.pages.dev** — stable production URL on Cloudflare Pages. Never changes. Updates whenever you run `pnpm run deploy` locally. Use this on any device (phone, work computer, anywhere).
 
-## Next Up
+## Where we landed tonight (2026-04-11)
 
-- [ ] **Plan the ay3 archive port.** Source: local `_archive/ay3/` on this laptop.
-  - [ ] Start with **Apple/design resources** — locate them in the ay3 tree, list the files.
-  - [ ] Identify **domain content** to port: products, Ontario accounting, any brand/design material.
-  - [ ] **v7 reference** — `_archive/ay3/my-portal/src/routes/young-carpets/dev/v7/+page.svelte` is the visual target. Also relevant: sibling `v1–v12` folders and shared components under `_archive/ay3/my-portal/src/routes/young-carpets/components/`. These are reference snippets for animations and layout ideas, not code to import.
-  - [ ] Decide final destinations:
-    - Design + domain reference → `.claude/reference/`
-    - Flooring product knowledge → `.claude/resources/products/`
-  - [ ] Produce a written port plan (what to bring, what to rename, what to skip) before copying anything.
-  - [ ] **Do not port** ay3's Claude-protocol files (`agents/`, `commands/`, `rules/`, `settings/`). Those are stale and superseded by this project's `CLAUDE.md` + `.claude/` setup.
+- **Scaffold complete and deployed.** SvelteKit 2.57 + Svelte 5.55 + TypeScript strict + all tooling. Verified with `pnpm check` (0 errors), `pnpm lint` (clean), `pnpm build`, `pnpm run deploy` (live at the URL above).
+- **Home page** (`src/routes/+page.svelte`) currently shows just `<h1>hello</h1>` in a minimal hero section. Intentionally blank — **the background image is tomorrow's first task.**
+- **Cloudflare Pages project:** `youngcarpets-website`, created via `wrangler pages project create` from the CLI. Dashboard-level config done: `nodejs_compat` flag enabled via `wrangler.toml`. Uses local wrangler deploys (not GitHub auto-deploys — we hit a cascade of auth issues with Cloudflare's new Workers-first UI and switched to CLI deploys, which work cleanly).
+- **Deploy command:** `pnpm run deploy` — runs `pnpm build` + `wrangler pages deploy --branch=main --commit-dirty=true`. One command, one minute, URL updates.
+- **Claude Code permissions:** `.claude/settings.json` now has `defaultMode: "bypassPermissions"`. Takes effect in the NEXT Claude Code session — current session will keep prompting until you restart.
+- **Installed Claude plugins (project scope):** `feature-dev@claude-plugins-official`, `frontend-design@claude-plugins-official`.
+- **forClaude/ folder** (untracked, local only): contains `bg.jpg` (101 KB) and `Grok Image 2026-04-11 at 19.20.20.png` (the Grok-generated background you may use). Your call whether to commit these later.
 
-## Project Scaffolding (not started)
+## Resume here next session
 
-The Claude harness is complete, but the SvelteKit project itself is still a skeleton. When ready, scaffold in this order:
+1. **Pick the hero background image.** The Grok PNG in `forClaude/` is a candidate ("probably the right size"). Decide whether to use it or generate/find a different one.
+2. **Wire it in** using `@sveltejs/enhanced-img` (already installed). Target: `src/lib/assets/hero/` → imported into `src/routes/+page.svelte` as a full-bleed positioned `<enhanced:img>` under centered hero text. Prior attempt (later reverted) can be reconstructed from git — `pnpm run deploy`, reload `youngcarpets-website.pages.dev` on phone, iterate.
+3. **Hero text:** decide what replaces "hello". Brand name? Tagline? Nothing (image only)?
+4. **Typography + fonts:** still untouched. When background lands, need to decide on a self-hosted WOFF2 font (per CLAUDE.md: one variable WOFF2, `font-display: swap`, preload critical weight, no Google Fonts).
 
-- [ ] `package.json` + `pnpm-lock.yaml` with pinned versions from `.claude/research/2026-04-11-expert-setup-findings.md` §5
-- [ ] `svelte.config.js`, `vite.config.ts`, `tsconfig.json` (extends `./.svelte-kit/tsconfig.json`)
-- [ ] `.gitignore` expansion (currently only has `_archive/` — add Node/SvelteKit/OS entries at scaffold time), `.gitattributes` (Windows LF rules)
-- [ ] `.prettierrc` (tabs, single quotes, no trailing comma, printWidth 100)
-- [ ] `eslint.config.js` (flat config, recommended only)
-- [ ] `lefthook.yml` (pre-commit: prettier + eslint, parallel — **never** svelte-check)
-- [ ] `.github/workflows/ci.yml` (checkout → pnpm → node → install → check → lint → build)
-- [ ] `src/app.d.ts` with `App.Error` shape
-- [ ] `src/routes/+layout.svelte` (header, nav, main, footer, skip link, `afterNavigate` focus, View Transitions)
-- [ ] `src/routes/+layout.ts` with `export const prerender = true`
-- [ ] `src/routes/sitemap.xml/+server.ts`
-- [ ] `static/robots.txt`
+## Next Up (after hero background)
 
-## Content / Routes (after scaffold)
+- [ ] **Plan the ay3 archive port.** Source: local `_archive/ay3/` on this laptop (gitignored, never pushed). Candidates:
+  - Apple/design resources in ay3 tree
+  - v7 reference at `_archive/ay3/my-portal/src/routes/young-carpets/dev/v7/+page.svelte` and sibling `v1–v12`
+  - Flooring product knowledge → `.claude/resources/products/`
+  - Written port plan before copying anything.
 
-- [ ] Home page `+page.svelte` with hero + `LocalBusiness` JSON-LD
+## Site content (after scaffold — not started)
+
+- [ ] Real home page hero (background chosen, text decided, CTAs, JSON-LD `LocalBusiness`)
+- [ ] Header nav with real links (currently stub: just the brand link)
+- [ ] Footer with real content (currently stub: just copyright)
 - [ ] `(marketing)/services/+page.svelte` index
 - [ ] `(marketing)/services/[slug]/+page.svelte` (dynamic via `src/lib/content/services.ts`)
 - [ ] `(marketing)/gallery/+page.svelte` (before/after, informative alt text)
 - [ ] `(marketing)/about/+page.svelte`
 - [ ] `quote/+page.svelte` + `quote/+page.server.ts` (form action, Zod, honeypot, rate limit, Resend)
+- [ ] Favicon (currently removed from `app.html` — add a real one with the hero work)
+- [ ] Real self-hosted font
 
 ## Phase 2 (deferred — not started)
 
@@ -58,24 +56,30 @@ The Claude harness is complete, but the SvelteKit project itself is still a skel
 
 ## Done ✓
 
-- [x] CLAUDE.md written with all protocols (Current Status, Commands, Tooling, Workflow, Architecture, Svelte 5, TS, Import Order, Naming, Error Handling, Code Generation, SEO, a11y, Motion, Project Context, Claude Harness)
-- [x] Expert research file saved: `.claude/research/2026-04-11-expert-setup-findings.md`
-- [x] Claude harness scaffolded:
-  - [x] `.claude/settings.json` with permissions + PostToolUse hook
-  - [x] `.claude/hooks/format-on-edit.sh` (prettier on edit, safe no-op until project exists)
-  - [x] `.claude/commands/add-page.md`, `check-a11y.md`, `component-review.md`
-  - [x] `.claude/agents/svelte-reviewer.md`, `a11y-checker.md`
-  - [x] `.claude/reference/` and `.claude/resources/products/` placeholders
-- [x] ay3 archive copied to `_archive/ay3/` on this laptop for local reference (2026-04-11)
-- [x] Root `.gitignore` created with `_archive/` so the archive stays local-only
-- [x] **Superseded:** "copy + commit + push ay3 to GitHub" plan from the mobile handoff. Briefly executed and immediately reverted via force-push back to `c172a31` after deciding the 215 MB would bloat history forever. Replaced by the local-only decision above.
+- [x] CLAUDE.md with all protocols, TODO.md durable cross-session list
+- [x] `.claude/` harness scaffolded (settings.json, hooks, commands, agents, research dirs)
+- [x] Expert research file: `.claude/research/2026-04-11-expert-setup-findings.md`
+- [x] Workflow cycle research: `.claude/research/2026-04-11-workflow-cycle-research.md`
+- [x] Pre-flight install audit: `.claude/research/2026-04-11-preflight-install-audit.md`
+- [x] ay3 archive copied to `_archive/ay3/` (local only, gitignored)
+- [x] Git identity: `OnError <alanyoungjr@gmail.com>`, longpaths=true, autocrlf=input
+- [x] Windows Defender exclusion on project folder
+- [x] pnpm 10.33.0 via Corepack
+- [x] Claude Code plugins (project scope): `feature-dev`, `frontend-design`
+- [x] SvelteKit project scaffolded with pinned deps, all configs, source shell, CI, pre-push hook, lefthook pre-commit hook
+- [x] Cloudflare Pages project `youngcarpets-website` created and deployed
+- [x] `pnpm run deploy` script added — one-command build + deploy
+- [x] `wrangler.toml` at project root (nodejs_compat flag, pages_build_output_dir)
+- [x] `defaultMode: bypassPermissions` set in `.claude/settings.json` (active next session)
+- [x] Three new memory feedback rules added: stop-and-reassess-after-second-fix-fails, fetch-vendor-docs-first, recommend-one-path
+- [x] **Hello page live on production URL and verified working**
 
 ---
 
 ## How to use this file
 
 - **Start of a session:** read this file first, then read `CLAUDE.md`.
-- **Mid-session:** whenever a decision changes, update this file immediately — don't leave stale instructions at the top.
-- **End of a session:** update checkboxes, move finished items to Done, commit and push.
-- **Switching devices:** `git pull origin main` on the other device; this file travels with the repo.
-- Keep the list short and current. Delete stale items — don't let it rot.
+- **Mid-session:** whenever a decision changes, update this file immediately.
+- **End of a session:** update checkboxes, commit, push.
+- **Switching devices:** `git pull origin main` on the other device.
+- **Live preview:** `pnpm run deploy` → reload `https://youngcarpets-website.pages.dev`.
