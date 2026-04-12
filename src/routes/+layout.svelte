@@ -127,6 +127,28 @@
 <footer class="site-footer">
 	<div class="site-footer-inner">
 		<div class="site-footer-panel" class:open={footerOpen}>
+			<div class="site-footer-panel-header">
+				<button
+					class="site-footer-close"
+					onclick={() => (footerOpen = false)}
+					aria-label="Close footer details"
+				>
+					<svg
+						viewBox="0 0 24 24"
+						width="16"
+						height="16"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true"
+					>
+						<path d="M18 6L6 18" />
+						<path d="M6 6l12 12" />
+					</svg>
+				</button>
+			</div>
 			<div class="site-footer-grid">
 				<div class="site-footer-col">
 					<address class="site-footer-address">
@@ -176,16 +198,26 @@
 		</div>
 
 		<button
-			class="site-footer-toggle"
+			class="site-footer-bar"
 			onclick={() => (footerOpen = !footerOpen)}
 			aria-expanded={footerOpen}
+			aria-label={footerOpen ? 'Collapse footer' : 'Expand footer for details'}
 		>
+			<span class="site-footer-bar-brand">YOUNG</span>
+			<span class="site-footer-bar-sep" aria-hidden="true"></span>
+			<span class="site-footer-bar-item">1228 Old Innes Rd, Ottawa</span>
+			<span class="site-footer-bar-sep" aria-hidden="true"></span>
+			<span class="site-footer-bar-item">613-744-2744</span>
+			<span class="site-footer-bar-sep" aria-hidden="true"></span>
+			<span class="site-footer-bar-item">info@youngcarpets.com</span>
+			<span class="site-footer-bar-sep" aria-hidden="true"></span>
+			<span class="site-footer-bar-item">Mon–Fri 8–4</span>
 			<svg
-				class="site-footer-chevron"
+				class="site-footer-bar-chevron"
 				class:open={footerOpen}
 				viewBox="0 0 24 24"
-				width="16"
-				height="16"
+				width="14"
+				height="14"
 				fill="none"
 				stroke="currentColor"
 				stroke-width="2"
@@ -195,10 +227,6 @@
 			>
 				<path d="M18 15l-6-6-6 6" />
 			</svg>
-			<div class="site-footer-brand">
-				<span class="site-footer-brand-name">YOUNG</span>
-				<span class="site-footer-brand-sub">Commercial Flooring</span>
-			</div>
 		</button>
 	</div>
 </footer>
@@ -516,7 +544,6 @@
 	.site-footer {
 		background: #07070a;
 		color: #9a9aa1;
-		padding: 1.5rem 0 calc(1.5rem + env(safe-area-inset-bottom, 0px));
 		position: relative;
 		z-index: 1;
 		border-top: 1px solid #2a2a2f;
@@ -532,82 +559,125 @@
 		padding: 0 1.5rem;
 	}
 
-	.site-footer-toggle {
+	.site-footer-bar {
 		display: flex;
-		flex-direction: column;
 		align-items: center;
-		justify-content: center;
-		gap: 0.5rem;
 		width: 100%;
-		padding: 0.75rem 0;
+		min-height: 44px;
+		padding: 0.6rem 0;
+		padding-bottom: calc(0.6rem + env(safe-area-inset-bottom, 0px));
 		background: transparent;
 		border: none;
 		cursor: pointer;
-		color: inherit;
+		color: #9a9aa1;
+		font-size: 0.78rem;
+		font-family: 'Inter Variable', system-ui, sans-serif;
+		letter-spacing: -0.005em;
 		-webkit-tap-highlight-color: transparent;
+		-webkit-font-smoothing: antialiased;
 	}
 
-	.site-footer-toggle:focus-visible {
+	.site-footer-bar:focus-visible {
 		outline: 2px solid #d4b87a;
 		outline-offset: 4px;
 		border-radius: 8px;
 	}
 
-	.site-footer-chevron {
-		color: #6b6b73;
-		transition: transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+	.site-footer-bar-brand {
+		font-family: 'Square721Nav', ui-serif, Georgia, serif;
+		font-size: 0.95rem;
+		letter-spacing: 0.12em;
+		color: #e6e6e8;
 		flex-shrink: 0;
 	}
 
-	.site-footer-chevron.open {
+	.site-footer-bar-sep {
+		width: 3px;
+		height: 3px;
+		border-radius: 50%;
+		background: #6b6b73;
+		margin: 0 0.65rem;
+		flex-shrink: 0;
+	}
+
+	.site-footer-bar-item {
+		white-space: nowrap;
+		color: #9a9aa1;
+		flex-shrink: 1;
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.site-footer-bar-chevron {
+		margin-left: auto;
+		flex-shrink: 0;
+		color: #6b6b73;
+		transition: transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+	}
+
+	.site-footer-bar-chevron.open {
 		transform: rotate(180deg);
 	}
 
 	.site-footer-panel {
 		max-height: 0;
+		padding: 0;
 		overflow: hidden;
 		opacity: 0;
 		transition:
 			max-height 300ms cubic-bezier(0.2, 0.8, 0.2, 1),
+			padding 300ms cubic-bezier(0.2, 0.8, 0.2, 1),
 			opacity 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
 	}
 
 	.site-footer-panel.open {
 		max-height: 600px;
+		padding: 1.5rem 0 0;
 		opacity: 1;
+	}
+
+	.site-footer-panel-header {
+		display: flex;
+		justify-content: flex-end;
+		padding-bottom: 0.5rem;
+	}
+
+	.site-footer-close {
+		width: 44px;
+		height: 44px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 8px;
+		color: #9a9aa1;
+		cursor: pointer;
+		-webkit-tap-highlight-color: transparent;
+		transition:
+			color 180ms cubic-bezier(0.4, 0, 0.2, 1),
+			background 180ms cubic-bezier(0.4, 0, 0.2, 1),
+			border-color 180ms cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.site-footer-close:hover {
+		color: #e6e6e8;
+		background: rgba(212, 184, 122, 0.08);
+		border-color: rgba(212, 184, 122, 0.2);
+	}
+
+	.site-footer-close:focus-visible {
+		outline: 2px solid #d4b87a;
+		outline-offset: 2px;
 	}
 
 	.site-footer-grid {
 		display: grid;
 		grid-template-columns: 1fr 1.2fr 1fr;
 		gap: 2.5rem 2rem;
-		padding: 2rem 0 2.5rem;
+		padding-bottom: 2rem;
 		border-bottom: 1px solid #2a2a2f;
-	}
-
-	.site-footer-brand {
-		display: inline-flex;
-		flex-direction: column;
-		gap: 0.35rem;
-		line-height: 1;
-		width: fit-content;
-	}
-
-	.site-footer-brand-name {
-		font-family: 'Square721Nav', ui-serif, Georgia, serif;
-		font-size: 1.5rem;
-		font-weight: 400;
-		letter-spacing: 0.18em;
-		color: #e6e6e8;
-	}
-
-	.site-footer-brand-sub {
-		font-family: ui-monospace, 'SF Mono', monospace;
-		font-size: 0.65rem;
-		font-weight: 300;
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
-		color: #9a9aa1;
 	}
 
 	.site-footer-col-title {
@@ -686,6 +756,20 @@
 	}
 
 	@media (max-width: 520px) {
+		.site-footer-bar {
+			flex-wrap: wrap;
+			gap: 0.15rem 0;
+		}
+
+		.site-footer-bar-sep {
+			display: none;
+		}
+
+		.site-footer-bar-item {
+			padding: 0 0.4rem;
+			font-size: 0.72rem;
+		}
+
 		.site-footer-grid {
 			grid-template-columns: 1fr;
 			gap: 1.75rem;
@@ -696,7 +780,10 @@
 		.site-footer-panel {
 			transition: none;
 		}
-		.site-footer-chevron {
+		.site-footer-bar-chevron {
+			transition: none;
+		}
+		.site-footer-close {
 			transition: none;
 		}
 	}
