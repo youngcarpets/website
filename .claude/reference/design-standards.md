@@ -15,6 +15,12 @@
 
 ---
 
+## Contact Info
+
+Phone numbers and email addresses are **plain text** site-wide — no `tel:` or `mailto:` links. Users can highlight and copy. This may change later but is the current standard.
+
+---
+
 ## Border Radius
 
 | Element | Value | Notes |
