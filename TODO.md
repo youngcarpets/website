@@ -55,7 +55,7 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [ ] `(marketing)/gallery/+page.svelte` (before/after, informative alt text)
 - [ ] `(marketing)/about/+page.svelte`
 - [ ] `quote/+page.svelte` + `quote/+page.server.ts` (form action, Zod, honeypot, rate limit, Resend)
-- [ ] Favicon
+- [x] Favicon (SVG, "YCI" in Square721)
 - [ ] JSON-LD `LocalBusiness` on home page
 - [ ] Light mode color tuning (deferred to end)
 
