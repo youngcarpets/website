@@ -542,10 +542,12 @@
 	.site-footer-brand-sub {
 		font-family: ui-monospace, 'SF Mono', monospace;
 		font-size: 0.65rem;
-		font-weight: 500;
+		font-weight: 300;
 		text-transform: uppercase;
-		letter-spacing: 0.22em;
 		color: #9a9aa1;
+		width: 100%;
+		text-align: justify;
+		text-align-last: justify;
 	}
 
 	.site-footer-col-title {
