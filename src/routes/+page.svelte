@@ -31,11 +31,18 @@
 </svelte:head>
 
 <section class="hero">
-	<h1 class="wordmark" class:wordmark--ready={wordmarkReady} aria-label="Young">
-		{#each LETTERS as ch, i (ch + i)}
-			<span class="wordmark__char" style="--young-i: {i};" aria-hidden="true">{ch}</span>
-		{/each}
-	</h1>
+	<div class="hero-title">
+		<p class="hero-label" class:hero-label--ready={wordmarkReady}>COMMERCIAL FLOORING</p>
+		<h1 class="wordmark" class:wordmark--ready={wordmarkReady} aria-label="Young">
+			{#each LETTERS as ch, i (ch + i)}
+				<span class="wordmark__char" style="--young-i: {i};" aria-hidden="true">{ch}</span>
+			{/each}
+		</h1>
+		<p class="hero-tagline" class:hero-tagline--ready={wordmarkReady}>
+			Young Carpets Inc. — commercial flooring in Ottawa since 1991. Supply, installation,
+			maintenance — for offices, institutions, and retail.
+		</p>
+	</div>
 </section>
 
 <style>
@@ -44,6 +51,36 @@
 		display: grid;
 		place-items: center;
 		padding: 6rem 1rem 2rem;
+	}
+
+	.hero-title {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		text-align: center;
+	}
+
+	.hero-label {
+		font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
+		font-size: 0.8rem;
+		font-weight: 600;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		color: rgba(200, 200, 200, 0.7);
+		margin: 0 0 16px;
+		opacity: 0;
+		transform: translateY(-12px);
+	}
+
+	.hero-label--ready {
+		animation: hero-label-in 600ms cubic-bezier(0.22, 1, 0.36, 1) 200ms forwards;
+	}
+
+	@keyframes hero-label-in {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
 	}
 
 	.wordmark {
@@ -83,6 +120,27 @@
 		}
 	}
 
+	.hero-tagline {
+		font-size: 1.15rem;
+		color: rgba(200, 200, 200, 0.7);
+		margin: 16px 0 0;
+		max-width: 420px;
+		line-height: 1.5;
+		opacity: 0;
+		transform: translateY(12px);
+	}
+
+	.hero-tagline--ready {
+		animation: hero-tagline-in 600ms cubic-bezier(0.22, 1, 0.36, 1) 1100ms forwards;
+	}
+
+	@keyframes hero-tagline-in {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
 	@media (max-width: 768px) {
 		.wordmark {
 			font-size: 3.75rem;
@@ -94,6 +152,14 @@
 		color: #2a241a;
 	}
 
+	:global(:root[data-theme='light']) .hero-label {
+		color: rgba(40, 40, 40, 0.7);
+	}
+
+	:global(:root[data-theme='light']) .hero-tagline {
+		color: rgba(40, 40, 40, 0.7);
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		.wordmark {
 			visibility: visible;
@@ -102,6 +168,20 @@
 		.wordmark--ready .wordmark__char {
 			opacity: 1;
 			transform: none;
+			animation: none;
+		}
+		.hero-label {
+			opacity: 1;
+			transform: none;
+		}
+		.hero-label--ready {
+			animation: none;
+		}
+		.hero-tagline {
+			opacity: 1;
+			transform: none;
+		}
+		.hero-tagline--ready {
 			animation: none;
 		}
 	}

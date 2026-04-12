@@ -38,6 +38,10 @@ pnpm format            # prettier --write
 
 These are also blocked via `deny` rules in `.claude/settings.json`.
 
+## Deploy Flow
+
+After every visual change, run `pnpm run deploy` so the user can refresh on their phone and see it immediately. Bump the patch version in `package.json` before each deploy. The version badge on the site (`$app/environment` → `config.kit.version.name`) confirms the user is seeing the latest build.
+
 ## Tooling
 
 - **Versions** (verified 2026-04-11, pinned list in `.claude/research/2026-04-11-expert-setup-findings.md` §5): SvelteKit 2.57, Svelte 5.55, Vite 8.0, svelte-check 4.4, ESLint 10.2, typescript-eslint 8.58, eslint-plugin-svelte 3.17, Prettier 3.8, prettier-plugin-svelte 3.5, lefthook 2.1.
@@ -218,6 +222,14 @@ export const load: PageLoad = async ({ fetch }) => ({ services: await getService
 11. **Forms:** `<label for>` (no placeholder-as-label), `aria-invalid`, `aria-describedby` to error text, `<div role="status" aria-live="polite">` for success/error.
 12. **Motion:** honor `prefers-reduced-motion` on every transform/opacity/scroll animation.
 13. **Testing:** axe DevTools locally, `@axe-core/playwright` in CI.
+
+## Design Tokens
+
+Absolute consistency across all components. Build everything uniform first; selective tweaks come later.
+
+- **Border radius:** `16px` on large containers (nav, cards, modals, panels). Scale down proportionally on smaller elements (badges, pills → `8px`) so the visual squareness matches. No fully-round pills (`9999px`).
+- **Glass effect:** `background: rgba(18, 18, 21, 0.55)`, `border: 1px solid rgba(255, 255, 255, 0.1)`, `backdrop-filter: blur(24px) saturate(1.8)`, `box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 8px 24px rgba(0, 0, 0, 0.45)`. Same values on every glass container.
+- **Hover glow:** `background: rgba(212, 184, 122, 0.08)`, gold accent `#d4b87a`. Same treatment on all interactive elements.
 
 ## Motion + Transitions
 

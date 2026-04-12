@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { afterNavigate, onNavigate } from '$app/navigation';
 	import { resolve } from '$app/paths';
+	import { version } from '$app/environment';
 	import type { Snippet } from 'svelte';
 	import bg from '$lib/assets/hero/bg.jpg?enhanced';
 
@@ -41,6 +42,8 @@
 <a class="skip-link" href="#main">Skip to main content</a>
 
 <enhanced:img src={bg} alt="" class="site-bg" />
+
+<span class="site-version">v{version}</span>
 
 <header>
 	<nav class="site-nav" aria-label="Primary">
@@ -169,6 +172,24 @@
 			rgba(0, 0, 0, 0.08) 85%,
 			transparent 100%
 		);
+	}
+
+	.site-version {
+		position: fixed;
+		top: 6px;
+		left: 50%;
+		transform: translateX(-50%);
+		z-index: 200;
+		font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
+		font-size: 0.55rem;
+		font-weight: 600;
+		letter-spacing: 0.05em;
+		color: rgba(180, 160, 220, 0.9);
+		background: rgba(60, 40, 90, 0.5);
+		border: 1px solid rgba(160, 130, 210, 0.35);
+		border-radius: 6px;
+		padding: 0.15rem 0.5rem;
+		pointer-events: none;
 	}
 
 	.skip-link {
