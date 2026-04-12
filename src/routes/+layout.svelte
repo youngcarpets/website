@@ -201,10 +201,7 @@
 		margin: 0;
 		background: #0b0b0d;
 		color: #e6e6e8;
-		font-family:
-			system-ui,
-			-apple-system,
-			sans-serif;
+		font-family: 'Inter Variable', system-ui, sans-serif;
 	}
 
 	:global(.site-bg) {
@@ -277,7 +274,7 @@
 		min-height: 60vh;
 	}
 
-	main:focus {
+	main:focus:not(:focus-visible) {
 		outline: none;
 	}
 
@@ -343,6 +340,12 @@
 		justify-content: center;
 		gap: 5px;
 		padding: 0;
+		border-radius: 8px;
+	}
+
+	.site-hamburger:focus-visible {
+		outline: 2px solid #d4b87a;
+		outline-offset: 2px;
 	}
 
 	.site-hamburger-bar {
@@ -471,6 +474,22 @@
 
 	:global(:root[data-theme='light']) .site-theme {
 		color: #2a241a;
+	}
+
+	@media (prefers-reduced-transparency: reduce) {
+		.site-nav {
+			background: rgba(18, 18, 21, 0.95);
+			backdrop-filter: none;
+			-webkit-backdrop-filter: none;
+			border-color: rgba(255, 255, 255, 0.2);
+		}
+
+		.site-footer-col-title {
+			backdrop-filter: none;
+			-webkit-backdrop-filter: none;
+			background: rgba(194, 179, 154, 0.15);
+			border-color: rgba(194, 179, 154, 0.3);
+		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -603,7 +622,7 @@
 	.site-footer-list-key {
 		font-size: 0.74rem;
 		font-weight: 500;
-		color: #6b6b73;
+		color: #8e8e96;
 		text-transform: lowercase;
 	}
 
@@ -631,7 +650,7 @@
 	.site-footer-copy {
 		margin: 0;
 		font-size: 0.75rem;
-		color: #6b6b73;
+		color: #8e8e96;
 	}
 
 	@media (max-width: 880px) {
