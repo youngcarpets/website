@@ -2,7 +2,12 @@
 
 SvelteKit 2 + Svelte 5 + TypeScript. Phase 1: public marketing site. Phase 2: authenticated portal (deferred).
 
-Interaction style is governed by global memory at `~/.claude/`. Do not restate those rules here.
+Interaction style is governed by `~/.claude/CLAUDE.md`. Do not restate those rules here.
+
+## Output Formatting
+
+- **Links:** Bare URLs. Don't wrap in `**`, `*`, `_`, or backticks. Use `[label](url)` only when a label is needed.
+- **Short option lists:** Wrap in ``` code fences for tight monospace layout. Align columns with spaces.
 
 ## Task List
 
