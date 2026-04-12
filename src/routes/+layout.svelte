@@ -3,6 +3,7 @@
 	import { resolve } from '$app/paths';
 	import { version } from '$app/environment';
 	import type { Snippet } from 'svelte';
+	import '@fontsource-variable/inter';
 	import bg from '$lib/assets/hero/bg.jpg?enhanced';
 
 	interface Props {

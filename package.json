@@ -1,6 +1,6 @@
 {
 	"name": "youngcarpets-website",
-	"version": "0.1.22",
+	"version": "0.1.25",
 	"private": true,
 	"type": "module",
 	"scripts": {
@@ -42,5 +42,8 @@
 		"typescript-eslint": "^8.58.1",
 		"vite": "^8.0.8",
 		"wrangler": "^4.81.1"
+	},
+	"dependencies": {
+		"@fontsource-variable/inter": "^5.2.8"
 	}
 }

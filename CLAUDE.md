@@ -230,6 +230,7 @@ Absolute consistency across all components. Build everything uniform first; sele
 - **Border radius:** `16px` on large containers (nav, cards, modals, panels). Scale down proportionally on smaller elements (badges, pills → `8px`) so the visual squareness matches. No fully-round pills (`9999px`).
 - **Glass effect:** `background: rgba(18, 18, 21, 0.55)`, `border: 1px solid rgba(255, 255, 255, 0.1)`, `backdrop-filter: blur(24px) saturate(1.8)`, `box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 8px 24px rgba(0, 0, 0, 0.45)`. Same values on every glass container.
 - **Hover glow:** `background: rgba(212, 184, 122, 0.08)`, gold accent `#d4b87a`. Same treatment on all interactive elements.
+- **Body font:** `'Inter Variable', system-ui, sans-serif` via `@fontsource-variable/inter`. Weight 200 for headings/labels, default for body. Imported in `+layout.svelte`. Consistent across all platforms.
 
 ## Motion + Transitions
 

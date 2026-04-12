@@ -1,52 +1,61 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-12 (past midnight — dark mode layout, glass nav, wordmark bounce all live).
+Last updated: 2026-04-12 (hero layout with label + tagline, Inter font, version badge, design tokens).
 
 This file is the durable cross-session to-do list. Both Claude and you read it at session start.
-
-Working branch: `claude/review-todo-list-CfdHE`. All pushes fast-forward into `main` on GitHub (`youngcarpets/website`).
 
 ---
 
 ## Live preview URL (bookmark this)
 
-https://youngcarpets-website.pages.dev — stable production URL on Cloudflare Pages. Updates whenever you run `pnpm run deploy` locally.
+https://youngcarpets-website.pages.dev — stable production URL on Cloudflare Pages. Updates on `pnpm run deploy`.
 
 ## Where we landed (2026-04-12)
 
-- **Dark mode is the working mode.** Body `#0b0b0d`, text `#e6e6e8`. Light mode toggle works (sun/moon icons) but light-mode colors are not tuned — deferred to the very end.
-- **Site-wide bg image.** Moved from hero-only to layout: `position: fixed`, full-viewport `object-fit: cover`, v7 dark-mode filter (`invert(0.92) hue-rotate(180deg) brightness(0.7) contrast(1.1) saturate(0.25)`), `opacity: 0.55`, radial mask fading edges to black. Matches v7 look.
-- **Glass nav bar.** Floating pill (12px inset), `backdrop-filter: blur(24px) saturate(1.8)`, YOUNG brand (Square721 font) on left, sun/moon theme toggle + hamburger on right. Hamburger opens to: Services / Gallery / About / Quote (placeholder anchors, no sections yet).
-- **Square721 font embedded.** `static/fonts/square721.ttf`, preloaded in `app.html`, `@font-face` with `font-display: block` so fallback never paints.
-- **YOUNG wordmark bounce.** Home page `<h1>` with per-letter stagger animation (700ms, spring cubic-bezier 0.34/1.56/0.64/1, 80ms between letters). Gated on `document.fonts.load` so it only fires after Square721 is ready. `prefers-reduced-motion` respected.
-- **Workflow decided: Option C** (lightweight). Error checking = `pnpm check` + `pnpm lint`. No plugin-enforced gates, no TDD. Agents (svelte-reviewer, a11y-checker, code-reviewer) run only on explicit request.
-- **Removed:** "hello" placeholder text, copyright stub in footer.
+- **Dark mode is the working mode.** Body `#0b0b0d`, text `#e6e6e8`. Light mode toggle works but light-mode colors are not tuned — deferred.
+- **Site-wide bg image.** Fixed full-viewport `object-fit: cover`, dark-mode filter, radial mask. Original 2400x1850 bg.jpg.
+- **Glass nav bar.** Floating pill (12px inset, 16px radius), YOUNG brand on left, sun/moon theme toggle + hamburger on right. Menu links: Services, Gallery, About, Quote (anchors, no sections yet).
+- **Square721 font** for YOUNG brand/wordmark only. Preloaded in `app.html`.
+- **Inter Variable font** (`@fontsource-variable/inter`) for all body/UI text. Imported in `+layout.svelte`. Consistent across all platforms.
+- **Hero layout:**
+  - "COMMERCIAL FLOORING" label above wordmark (Inter weight 200, fades down, 200ms delay)
+  - YOUNG wordmark with per-letter bounce (Square721, 1000ms duration, 120ms stagger)
+  - Tagline below: "Young Carpets Inc. — commercial flooring in Ottawa since 1991..." (Inter weight 200, fades up, 1500ms delay)
+- **Version badge.** Purple pill, top center, reads from `package.json` via `$app/environment`. Bump patch on every deploy.
+- **Cache-busting `_headers`** at project root — `no-cache` on all routes. **Remove before production launch.**
+- **Design tokens in CLAUDE.md:** border radius (16px large / 8px small), glass effect, hover glow, body font.
+- **Deploy flow:** `pnpm run deploy` after every visual change. Version bump before each deploy.
+- **Global `~/.claude/CLAUDE.md`** created with interaction preferences. Project CLAUDE.md has output formatting rules.
+- **Memory cleaned up.** Feedback memories moved to global CLAUDE.md. 8 project-specific memories remain.
 - **0 errors, 0 warnings** on `pnpm check` + `pnpm lint`.
 
 ## Resume here next session
 
-1. **Continue adding components one at a time.** Dark mode first, light mode at the end. User's preferred flow: get each component right visually before moving on. Primary test device: iPhone portrait.
-2. **Wordmark position.** Currently centered in a 52vh hero. Don't tune further until page has more content — position will re-settle naturally.
-3. **Next component TBD.** User has not specified — ask at session start.
-4. **Real-ESRGAN still available if LANCZOS bg isn't sharp enough on phone.** Binary + models at `C:/Users/alany/tools/realesrgan/full/`. Blocker: `vulkan-1.dll` (install Vulkan Runtime from LunarG).
+1. **Continue adding components one at a time.** Dark mode first, light mode at the end. Primary test device: iPhone portrait.
+2. **Next component TBD.** User decides at session start.
+3. **"Young Carpets Inc." branding decision:** legal name goes in the hero tagline and footer/contact/billing. Not in nav or logo. Watermark-on-bg-image approach was tried and abandoned — positioning didn't work across viewport sizes.
+4. **bg-original.jpg** is backed up in `src/lib/assets/hero/` — can restore if needed.
 
 ## Site content (building out)
 
 - [x] Site-wide bg image (dark-mode filtered floor plan)
 - [x] Glass nav bar (floating pill, hamburger menu)
 - [x] Theme toggle (sun/moon, functional)
-- [x] Square721 font (embedded, preloaded)
+- [x] Square721 font (embedded, preloaded) — brand/wordmark only
+- [x] Inter Variable font (embedded) — body/UI text
 - [x] YOUNG wordmark with bounce-in animation
-- [ ] Hero content below wordmark (tagline? CTA? TBD)
+- [x] Hero label: "COMMERCIAL FLOORING" with fade-in
+- [x] Hero tagline with "Young Carpets Inc." and fade-in
+- [x] Version badge (purple pill, top center)
+- [x] Cache-busting headers for dev
 - [ ] Header nav links wired to real sections
-- [ ] Footer with real content
+- [ ] Footer with real content (legal name, address, contact)
 - [ ] `(marketing)/services/+page.svelte` index
 - [ ] `(marketing)/services/[slug]/+page.svelte` (dynamic via `src/lib/content/services.ts`)
 - [ ] `(marketing)/gallery/+page.svelte` (before/after, informative alt text)
 - [ ] `(marketing)/about/+page.svelte`
 - [ ] `quote/+page.svelte` + `quote/+page.server.ts` (form action, Zod, honeypot, rate limit, Resend)
 - [ ] Favicon
-- [ ] Body font (variable WOFF2, self-hosted)
 - [ ] JSON-LD `LocalBusiness` on home page
 - [ ] Light mode color tuning (deferred to end)
 
@@ -71,10 +80,17 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] `pnpm run deploy` script added — one-command build + deploy
 - [x] `wrangler.toml` at project root (nodejs_compat flag, pages_build_output_dir)
 - [x] `defaultMode: bypassPermissions` set in `.claude/settings.json`
-- [x] Memory feedback rules (stop-and-reassess, fetch-vendor-docs, recommend-one-path, links-no-markdown, code-fence-comparisons, error-check-scope)
-- [x] Verified deploy loop speed (each `pnpm run deploy` < 1 min)
+- [x] Memory feedback rules migrated to global `~/.claude/CLAUDE.md`
+- [x] Verified deploy loop speed (each `pnpm run deploy` < 15 sec)
 - [x] Dark mode layout live (bg filter + mask + opacity, glass nav, theme toggle, Square721 font, YOUNG wordmark bounce)
 - [x] Workflow decided: Option C (lightweight, `pnpm check` + `pnpm lint` for error checking)
+- [x] Hero layout: label + wordmark + tagline with staggered animations
+- [x] Inter Variable font embedded for body/UI text
+- [x] Version badge for cache verification
+- [x] Design tokens documented in CLAUDE.md
+- [x] Deploy flow documented in CLAUDE.md
+- [x] Output formatting rules in project CLAUDE.md (syncs via git)
+- [x] Global `~/.claude/CLAUDE.md` with interaction preferences
 
 ---
 

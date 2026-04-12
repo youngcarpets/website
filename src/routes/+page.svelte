@@ -61,9 +61,9 @@
 	}
 
 	.hero-label {
-		font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
-		font-size: 0.8rem;
-		font-weight: 600;
+		font-family: 'Inter Variable', system-ui, sans-serif;
+		font-size: 0.85rem;
+		font-weight: 200;
 		letter-spacing: 0.2em;
 		text-transform: uppercase;
 		color: rgba(200, 200, 200, 0.7);
@@ -108,8 +108,8 @@
 	}
 
 	.wordmark--ready .wordmark__char {
-		animation: wordmark-letter-in 700ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-		animation-delay: calc(var(--young-i, 0) * 80ms);
+		animation: wordmark-letter-in 1000ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+		animation-delay: calc(var(--young-i, 0) * 120ms);
 		will-change: transform, opacity;
 	}
 
@@ -121,7 +121,10 @@
 	}
 
 	.hero-tagline {
+		font-family: 'Inter Variable', system-ui, sans-serif;
 		font-size: 1.15rem;
+		font-weight: 200;
+		letter-spacing: 0.03em;
 		color: rgba(200, 200, 200, 0.7);
 		margin: 16px 0 0;
 		max-width: 420px;
@@ -131,7 +134,7 @@
 	}
 
 	.hero-tagline--ready {
-		animation: hero-tagline-in 600ms cubic-bezier(0.22, 1, 0.36, 1) 1100ms forwards;
+		animation: hero-tagline-in 600ms cubic-bezier(0.22, 1, 0.36, 1) 1500ms forwards;
 	}
 
 	@keyframes hero-tagline-in {
