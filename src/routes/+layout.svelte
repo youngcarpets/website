@@ -15,6 +15,7 @@
 	let mobileMenuOpen = $state(false);
 	let theme = $state<'dark' | 'light'>('dark');
 	let isInitialLoad = $state(true);
+	let footerOpen = $state(false);
 
 	$effect(() => {
 		document.documentElement.dataset.theme = theme;
@@ -125,58 +126,79 @@
 
 <footer class="site-footer">
 	<div class="site-footer-inner">
-		<div class="site-footer-grid">
-			<div class="site-footer-brand-block">
-				<div class="site-footer-brand">
-					<span class="site-footer-brand-name">YOUNG</span>
-					<span class="site-footer-brand-sub">Commercial Flooring</span>
+		<button
+			class="site-footer-toggle"
+			onclick={() => (footerOpen = !footerOpen)}
+			aria-expanded={footerOpen}
+		>
+			<div class="site-footer-brand">
+				<span class="site-footer-brand-name">YOUNG</span>
+				<span class="site-footer-brand-sub">Commercial Flooring</span>
+			</div>
+			<svg
+				class="site-footer-chevron"
+				class:open={footerOpen}
+				viewBox="0 0 24 24"
+				width="16"
+				height="16"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+				stroke-linecap="round"
+				stroke-linejoin="round"
+				aria-hidden="true"
+			>
+				<path d="M6 9l6 6 6-6" />
+			</svg>
+		</button>
+
+		<div class="site-footer-panel" class:open={footerOpen}>
+			<div class="site-footer-grid">
+				<div class="site-footer-col">
+					<address class="site-footer-address">
+						Young Carpets Inc.<br />
+						Unit 316 — 1228 Old Innes Road<br />
+						Ottawa, ON K1B 3V3<br />
+						Canada
+					</address>
+				</div>
+
+				<div class="site-footer-col">
+					<p class="site-footer-col-title">Contact</p>
+					<ul class="site-footer-list">
+						<li>
+							<span class="site-footer-list-key">Phone</span>
+							<span class="site-footer-list-val">613-744-2744</span>
+						</li>
+						<li>
+							<span class="site-footer-list-key">Email</span>
+							<span class="site-footer-list-val">info@youngcarpets.com</span>
+						</li>
+						<li>
+							<span class="site-footer-list-key">AP</span>
+							<span class="site-footer-list-val">ap@youngcarpets.com</span>
+						</li>
+					</ul>
+				</div>
+
+				<div class="site-footer-col">
+					<p class="site-footer-col-title">Hours</p>
+					<ul class="site-footer-list">
+						<li>
+							<span class="site-footer-list-key">Office</span>
+							<span class="site-footer-list-val">Mon–Fri 8 AM – 4 PM</span>
+						</li>
+						<li>
+							<span class="site-footer-list-key">Installation</span>
+							<span class="site-footer-list-val">24/7, 365</span>
+						</li>
+					</ul>
 				</div>
 			</div>
 
-			<div class="site-footer-col">
-				<address class="site-footer-address">
-					Young Carpets Inc.<br />
-					Unit 316 — 1228 Old Innes Road<br />
-					Ottawa, ON K1B 3V3<br />
-					Canada
-				</address>
+			<div class="site-footer-bottom">
+				<p class="site-footer-copy">&copy; 2026 Young Carpets Inc.</p>
 			</div>
-
-			<div class="site-footer-col">
-				<p class="site-footer-col-title">Contact</p>
-				<ul class="site-footer-list">
-					<li>
-						<span class="site-footer-list-key">Phone</span>
-						<span class="site-footer-list-val">613-744-2744</span>
-					</li>
-					<li>
-						<span class="site-footer-list-key">Email</span>
-						<span class="site-footer-list-val">info@youngcarpets.com</span>
-					</li>
-					<li>
-						<span class="site-footer-list-key">AP</span>
-						<span class="site-footer-list-val">ap@youngcarpets.com</span>
-					</li>
-				</ul>
-			</div>
-
-			<div class="site-footer-col">
-				<p class="site-footer-col-title">Hours</p>
-				<ul class="site-footer-list">
-					<li>
-						<span class="site-footer-list-key">Office</span>
-						<span class="site-footer-list-val">Mon–Fri 8 AM – 4 PM</span>
-					</li>
-					<li>
-						<span class="site-footer-list-key">Installation</span>
-						<span class="site-footer-list-val">24/7, 365</span>
-					</li>
-				</ul>
-			</div>
-		</div>
-
-		<div class="site-footer-bottom">
-			<p class="site-footer-copy">&copy; 2026 Young Carpets Inc.</p>
 		</div>
 	</div>
 </footer>
@@ -494,7 +516,7 @@
 	.site-footer {
 		background: #07070a;
 		color: #9a9aa1;
-		padding: 4rem 0 calc(2.5rem + env(safe-area-inset-bottom, 0px));
+		padding: 1.5rem 0 calc(1.5rem + env(safe-area-inset-bottom, 0px));
 		position: relative;
 		z-index: 1;
 		border-top: 1px solid #2a2a2f;
@@ -510,18 +532,56 @@
 		padding: 0 1.5rem;
 	}
 
-	.site-footer-grid {
-		display: grid;
-		grid-template-columns: 1.4fr 1fr 1.2fr 1fr;
-		gap: 2.5rem 2rem;
-		padding-bottom: 2.5rem;
-		border-bottom: 1px solid #2a2a2f;
+	.site-footer-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 1rem;
+		width: 100%;
+		padding: 0.75rem 0;
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		color: inherit;
+		-webkit-tap-highlight-color: transparent;
 	}
 
-	.site-footer-brand-block {
-		display: flex;
-		flex-direction: column;
-		gap: 0.85rem;
+	.site-footer-toggle:focus-visible {
+		outline: 2px solid #d4b87a;
+		outline-offset: 4px;
+		border-radius: 8px;
+	}
+
+	.site-footer-chevron {
+		color: #6b6b73;
+		transition: transform 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+		flex-shrink: 0;
+	}
+
+	.site-footer-chevron.open {
+		transform: rotate(180deg);
+	}
+
+	.site-footer-panel {
+		max-height: 0;
+		overflow: hidden;
+		opacity: 0;
+		transition:
+			max-height 300ms cubic-bezier(0.2, 0.8, 0.2, 1),
+			opacity 300ms cubic-bezier(0.2, 0.8, 0.2, 1);
+	}
+
+	.site-footer-panel.open {
+		max-height: 600px;
+		opacity: 1;
+	}
+
+	.site-footer-grid {
+		display: grid;
+		grid-template-columns: 1fr 1.2fr 1fr;
+		gap: 2.5rem 2rem;
+		padding: 2rem 0 2.5rem;
+		border-bottom: 1px solid #2a2a2f;
 	}
 
 	.site-footer-brand {
@@ -625,16 +685,18 @@
 	}
 
 	@media (max-width: 520px) {
-		.site-footer {
-			padding: 2.75rem 0 calc(1.5rem + env(safe-area-inset-bottom, 0px));
-		}
 		.site-footer-grid {
 			grid-template-columns: 1fr;
 			gap: 1.75rem;
 		}
-		.site-footer-brand-block {
-			align-items: center;
-			text-align: center;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.site-footer-panel {
+			transition: none;
+		}
+		.site-footer-chevron {
+			transition: none;
 		}
 	}
 </style>
