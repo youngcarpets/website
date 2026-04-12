@@ -544,7 +544,7 @@
 		font-size: 0.65rem;
 		font-weight: 300;
 		text-transform: uppercase;
-		letter-spacing: 0.12em;
+		letter-spacing: 0.06em;
 		color: #9a9aa1;
 	}
 
