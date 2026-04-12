@@ -4,6 +4,7 @@
 	import { version } from '$app/environment';
 	import type { Snippet } from 'svelte';
 	import '@fontsource-variable/inter';
+	import '../app.css';
 	import bg from '$lib/assets/hero/bg.jpg?enhanced';
 
 	interface Props {
@@ -39,6 +40,15 @@
 		});
 	});
 </script>
+
+<svelte:head>
+	<meta property="og:site_name" content="Young Carpets Inc." />
+	<meta property="og:type" content="website" />
+	<meta property="og:locale" content="en_CA" />
+	<meta name="author" content="Young Carpets Inc." />
+	<meta name="geo.region" content="CA-ON" />
+	<meta name="geo.placename" content="Ottawa" />
+</svelte:head>
 
 <a class="skip-link" href="#main">Skip to main content</a>
 
@@ -110,10 +120,10 @@
 		</div>
 		{#if mobileMenuOpen}
 			<div class="site-nav-menu">
+				<a href="#products" onclick={() => (mobileMenuOpen = false)}>Products</a>
 				<a href="#services" onclick={() => (mobileMenuOpen = false)}>Services</a>
-				<a href="#gallery" onclick={() => (mobileMenuOpen = false)}>Gallery</a>
-				<a href="#about" onclick={() => (mobileMenuOpen = false)}>About</a>
-				<a href="#quote" onclick={() => (mobileMenuOpen = false)}>Quote</a>
+				<a href="#suppliers" onclick={() => (mobileMenuOpen = false)}>Suppliers</a>
+				<a href="#contact" onclick={() => (mobileMenuOpen = false)}>Contact</a>
 			</div>
 		{/if}
 	</nav>
@@ -175,21 +185,6 @@
 </footer>
 
 <style>
-	:global(:root) {
-		--fast: 120ms;
-		--base: 200ms;
-		--slow: 320ms;
-		--ease-out: cubic-bezier(0.22, 1, 0.36, 1);
-		--ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-	}
-
-	:global(body) {
-		margin: 0;
-		background: #0b0b0d;
-		color: #e6e6e8;
-		font-family: 'Inter Variable', system-ui, sans-serif;
-	}
-
 	:global(.site-bg) {
 		position: fixed;
 		inset: 0;
@@ -221,20 +216,24 @@
 		);
 	}
 
+	:global(:root[data-theme='light'] .site-bg) {
+		filter: contrast(1.18) brightness(1.1) saturate(0.15) sepia(0.12);
+	}
+
 	.site-version {
 		position: fixed;
 		top: calc(6px + env(safe-area-inset-top, 0px));
 		left: 50%;
 		transform: translateX(-50%);
 		z-index: 200;
-		font-family: ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
+		font-family: var(--font-mono);
 		font-size: 0.55rem;
 		font-weight: 600;
 		letter-spacing: 0.05em;
 		color: rgba(180, 160, 220, 0.9);
 		background: rgba(60, 40, 90, 0.5);
 		border: 1px solid rgba(160, 130, 210, 0.35);
-		border-radius: 6px;
+		border-radius: var(--radius-xs);
 		padding: 0.15rem 0.5rem;
 		pointer-events: none;
 	}
@@ -272,6 +271,8 @@
 		font-display: block;
 	}
 
+	/* --- Nav ------------------------------------------------ */
+
 	.site-nav {
 		position: fixed;
 		top: calc(12px + env(safe-area-inset-top, 0px));
@@ -283,14 +284,12 @@
 		justify-content: space-between;
 		flex-wrap: wrap;
 		padding: 0.6rem 1rem;
-		border-radius: 16px;
-		background: rgba(18, 18, 21, 0.55);
-		border: 1px solid rgba(255, 255, 255, 0.1);
-		backdrop-filter: blur(24px) saturate(1.8);
-		-webkit-backdrop-filter: blur(24px) saturate(1.8);
-		box-shadow:
-			inset 0 1px 0 rgba(255, 255, 255, 0.08),
-			0 8px 24px rgba(0, 0, 0, 0.45);
+		border-radius: var(--radius-lg);
+		background: rgba(18, 18, 21, 0.18);
+		border: 1px solid var(--color-border-glass);
+		backdrop-filter: blur(8px) saturate(1.4);
+		-webkit-backdrop-filter: blur(8px) saturate(1.4);
+		box-shadow: var(--glass-shadow);
 	}
 
 	.site-nav-left {
@@ -300,11 +299,11 @@
 	}
 
 	.site-nav-brand {
-		font-family: 'Square721Nav', ui-serif, Georgia, serif;
+		font-family: var(--font-brand);
 		font-size: 1.1rem;
 		font-weight: 400;
 		letter-spacing: 0.1em;
-		color: #e6e6e8;
+		color: var(--color-text);
 		text-decoration: none;
 	}
 
@@ -319,14 +318,13 @@
 		height: 44px;
 		background: transparent;
 		border: none;
-		cursor: pointer;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		gap: 5px;
 		padding: 0;
-		border-radius: 8px;
+		border-radius: var(--radius-sm);
 	}
 
 	.site-hamburger:focus-visible {
@@ -337,9 +335,9 @@
 	.site-hamburger-bar {
 		width: 20px;
 		height: 2px;
-		background: #e6e6e8;
+		background: var(--color-text);
 		border-radius: 2px;
-		transition: all 0.3s ease;
+		transition: all var(--slow) ease;
 	}
 
 	.site-hamburger-bar.open:nth-child(1) {
@@ -361,34 +359,36 @@
 	}
 
 	.site-nav-menu a {
-		font-family: ui-monospace, 'SF Mono', monospace;
+		font-family: var(--font-mono);
 		font-size: 0.7rem;
 		font-weight: 700;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
-		color: rgba(200, 200, 200, 0.6);
+		color: var(--color-text-ghost);
 		padding: 0.75rem 0.5rem;
 		text-decoration: none;
-		border-radius: 8px;
+		border-radius: var(--radius-sm);
 		min-height: 44px;
 		display: flex;
 		align-items: center;
 		transition:
-			color 0.2s,
-			background 0.2s;
+			color var(--base),
+			background var(--base);
 	}
 
 	.site-nav-menu a:focus-visible {
-		color: #e6e6e8;
-		background: rgba(255, 255, 255, 0.06);
+		color: var(--color-text);
+		background: var(--hover-bg);
 	}
 
 	@media (hover: hover) {
 		.site-nav-menu a:hover {
-			color: #e6e6e8;
-			background: rgba(255, 255, 255, 0.06);
+			color: var(--color-text);
+			background: var(--hover-bg);
 		}
 	}
+
+	/* --- Theme Toggle --------------------------------------- */
 
 	.site-theme {
 		min-width: 44px;
@@ -400,8 +400,7 @@
 		background: transparent;
 		border: 1px solid transparent;
 		border-radius: 9999px;
-		color: #e6e6e8;
-		cursor: pointer;
+		color: var(--color-text);
 		-webkit-tap-highlight-color: transparent;
 		transition:
 			color 180ms cubic-bezier(0.4, 0, 0.2, 1),
@@ -443,62 +442,17 @@
 		}
 	}
 
-	:global(:root[data-theme='light'] body) {
-		background: #faf7f0;
-		color: #2a241a;
-	}
-
-	:global(:root[data-theme='light'] .site-bg) {
-		filter: contrast(1.18) brightness(1.1) saturate(0.15) sepia(0.12);
-	}
-
-	:global(:root[data-theme='light']) .site-nav {
-		background: rgba(250, 247, 240, 0.75);
-		border-color: rgba(90, 77, 53, 0.12);
-		box-shadow: 0 4px 16px rgba(90, 77, 53, 0.08);
-	}
-
-	:global(:root[data-theme='light']) .site-nav-brand {
-		color: #2a241a;
-	}
-
-	:global(:root[data-theme='light']) .site-hamburger-bar {
-		background: #2a241a;
-	}
-
-	:global(:root[data-theme='light']) .site-theme {
-		color: #2a241a;
-	}
-
-	@media (prefers-reduced-transparency: reduce) {
-		.site-nav {
-			background: rgba(18, 18, 21, 0.95);
-			backdrop-filter: none;
-			-webkit-backdrop-filter: none;
-			border-color: rgba(255, 255, 255, 0.2);
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		:global(*),
-		:global(*::before),
-		:global(*::after),
-		:global(::view-transition-old(*)),
-		:global(::view-transition-new(*)) {
-			animation-duration: 0.01ms !important;
-			animation-iteration-count: 1 !important;
-			transition-duration: 0.01ms !important;
-			scroll-behavior: auto !important;
-		}
-	}
+	/* --- Footer --------------------------------------------- */
 
 	.site-footer {
-		background: #07070a;
-		color: #9a9aa1;
+		background: rgba(7, 7, 10, 0.7);
+		backdrop-filter: blur(12px) saturate(1.4);
+		-webkit-backdrop-filter: blur(12px) saturate(1.4);
+		color: var(--color-text-muted);
 		padding: 2.5rem 0 calc(1.5rem + env(safe-area-inset-bottom, 0px));
 		position: relative;
 		z-index: 1;
-		border-top: 1px solid #2a2a2f;
+		border-top: 1px solid var(--color-border);
 		font-size: 14px;
 		line-height: 1.55;
 		-webkit-font-smoothing: antialiased;
@@ -517,7 +471,7 @@
 		grid-template-columns: 1.4fr 1fr 1.2fr 1fr;
 		gap: 2.5rem 2rem;
 		padding-bottom: 2.5rem;
-		border-bottom: 1px solid #2a2a2f;
+		border-bottom: 1px solid var(--color-border);
 	}
 
 	.site-footer-brand-block {
@@ -535,26 +489,26 @@
 	}
 
 	.site-footer-brand-name {
-		font-family: 'Square721Nav', ui-serif, Georgia, serif;
+		font-family: var(--font-brand);
 		font-size: 1.5rem;
 		font-weight: 400;
 		letter-spacing: 0.18em;
-		color: #e6e6e8;
+		color: var(--color-text);
 	}
 
 	.site-footer-brand-sub {
-		font-family: ui-monospace, 'SF Mono', monospace;
+		font-family: var(--font-mono);
 		font-size: 0.65rem;
 		font-weight: 300;
 		text-transform: uppercase;
 		letter-spacing: 0.06em;
-		color: #9a9aa1;
+		color: var(--color-text-muted);
 	}
 
 	.site-footer-address {
 		font-style: normal;
 		margin: 0;
-		color: #e6e6e8;
+		color: var(--color-text);
 		font-size: 0.82rem;
 		line-height: 1.6;
 	}
@@ -578,13 +532,13 @@
 	.site-footer-list-key {
 		font-size: 0.74rem;
 		font-weight: 500;
-		color: #8e8e96;
+		color: var(--color-text-subtle);
 		text-transform: lowercase;
 	}
 
 	.site-footer-list-val {
 		font-size: 0.82rem;
-		color: #e6e6e8;
+		color: var(--color-text);
 		font-feature-settings: 'tnum';
 		user-select: text;
 	}
@@ -601,9 +555,10 @@
 	.site-footer-copy {
 		margin: 0;
 		font-size: 0.75rem;
-		color: #8e8e96;
+		color: var(--color-text-subtle);
 	}
 
+	/* 960px */
 	@media (max-width: 960px) {
 		.site-footer-grid {
 			grid-template-columns: 1fr 1fr;
@@ -611,6 +566,7 @@
 		}
 	}
 
+	/* 520px */
 	@media (max-width: 520px) {
 		.site-footer-grid {
 			grid-template-columns: 1fr;
