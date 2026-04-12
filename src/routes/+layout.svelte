@@ -136,6 +136,7 @@
 			<div class="site-footer-col">
 				<p class="site-footer-col-title">Visit</p>
 				<address class="site-footer-address">
+					Young Carpets Inc.<br />
 					Unit 316 — 1228 Old Innes Road<br />
 					Ottawa, ON K1B 3V3<br />
 					Canada
@@ -148,10 +149,6 @@
 					<li>
 						<span class="site-footer-list-key">Phone</span>
 						<a href="tel:+16137442744" class="site-footer-list-val">613-744-2744</a>
-					</li>
-					<li>
-						<span class="site-footer-list-key">Fax</span>
-						<span class="site-footer-list-val">613-744-2995</span>
 					</li>
 					<li>
 						<span class="site-footer-list-key">Email</span>
@@ -172,7 +169,7 @@
 				<ul class="site-footer-list">
 					<li>
 						<span class="site-footer-list-key">Office</span>
-						<span class="site-footer-list-val">Mon–Fri 7:00 – 16:00</span>
+						<span class="site-footer-list-val">Mon–Fri 8 AM – 4 PM</span>
 					</li>
 					<li>
 						<span class="site-footer-list-key">Installation</span>
@@ -602,21 +599,6 @@
 		grid-template-columns: 48px 1fr;
 		align-items: baseline;
 		gap: 0.5rem;
-		position: relative;
-		padding-left: 18px;
-	}
-
-	.site-footer-list li::before {
-		content: '';
-		position: absolute;
-		left: 0;
-		top: 0.45em;
-		width: 11px;
-		height: 11px;
-		border-radius: 3px;
-		border: 1px solid rgba(255, 255, 255, 0.18);
-		background: rgba(255, 255, 255, 0.02);
-		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 	}
 
 	.site-footer-list-key {
