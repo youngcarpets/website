@@ -1,0 +1,220 @@
+# Site Layout Structure
+
+Working document for organizing sections and content hierarchy for the new Young Carpets website.
+
+---
+
+## ay3 Sections (original scroll order)
+
+```
+Nav        → #products, #what, #about, #contact
+Hero       → "COMMERCIAL FLOORING" label, "YOUNG" wordmark, tagline, maple badge
+Products   → 9 feature cards + secondary chips + per-product modals
+Services   → 4 cards (installation, consultation, maintenance, seasonal matting)
+About      → "Since 1991" eyebrow, company paragraph, 250+ / 50,000+ counters
+Suppliers  → 19-brand logo marquee
+Contact    → Sales team, accounting, phone/fax/email
+Map        → Address + Google Maps embed
+Footer     → Brand, address, contact, hours, copyright
+```
+
+---
+
+## New Site Sections (decided)
+
+```
+Hero/About   ("Since 1991", counters, company identity — merged, no standalone About)
+Products
+Services
+Suppliers    (18-brand logo marquee — COREtec removed)
+Contact/Map  (combined into one section)
+Footer
+```
+
+Gallery deferred to later phase.
+Quote removed from section list.
+
+---
+
+## New Site — Full Layout
+
+```
+Hero/About
+├── "COMMERCIAL FLOORING" label
+├── "YOUNG" animated wordmark
+├── Tagline
+├── "Since 1991" eyebrow
+├── 250+ years experience counter
+└── 50,000+ jobs counter
+
+Products
+├── Carpet Tile          (top badge)
+├── LVT                  (top badge)
+├── Carpet (Broadloom)   (top badge)
+├── Ceramic              (top badge)
+├── Rubber               (top badge)
+├── Matting              (top badge)
+├── Wood                 (top badge)
+├── Sheet Vinyl          (top badge)
+├── More Flooring        (badge → full catalog by category)
+│   ├── Soft Floor Coverings
+│   │   ├── Carpet Tile
+│   │   ├── Broadloom
+│   │   └── Custom Carpet
+│   ├── Resilient
+│   │   ├── LVT / LVP
+│   │   ├── Rigid Core / SPC
+│   │   ├── Sheet Vinyl
+│   │   ├── VCT
+│   │   ├── Linoleum
+│   │   ├── Rubber
+│   │   ├── Safety Flooring
+│   │   └── Cork
+│   ├── Hard Surface
+│   │   ├── Ceramic & Porcelain
+│   │   ├── Stone
+│   │   ├── Terrazzo
+│   │   └── Wood (engineered, solid, parquet)
+│   ├── Specialty / Performance
+│   │   ├── Resinous (epoxy, urethane, MMA)
+│   │   ├── Polished Concrete
+│   │   ├── ESD / Static Control
+│   │   ├── Sports Flooring
+│   │   ├── Raised Access Flooring
+│   │   └── Subfloor Systems
+│   └── Entryway & Matting
+│       ├── Recessed Grilles
+│       ├── Scraper Mats
+│       ├── Entrance Tile
+│       ├── Elevator Cab
+│       └── Drainage / Anti-Fatigue
+├── Accessories          (badge)
+│   ├── Wall Base & Millwork
+│   │   ├── Vinyl Base
+│   │   ├── Rubber Base
+│   │   ├── Millwork Profiles
+│   │   └── Corner Guards & Wall Protection
+│   ├── Stairwell Systems
+│   │   ├── Treads & Risers
+│   │   ├── Nosings
+│   │   └── Tactile Warning
+│   └── Trims & Transitions
+│       ├── Transition Strips
+│       ├── Reducers
+│       ├── Metal Profiles
+│       └── Feature Strips
+└── Installation         (badge)
+    └── Adhesives, Floor Prep, Moisture Mitigation, Setting Materials
+
+Services
+├── Commercial Installation
+├── Consultation
+├── Maintenance & Repair
+└── Seasonal Matting
+
+Suppliers
+└── 18-brand logo marquee
+
+Contact/Map
+├── Sales team
+├── Accounting
+├── Phone / Fax / Email
+├── Address (intentional redundancy with Footer)
+└── Google Maps embed
+
+Footer
+├── Brand block
+├── Address
+├── Contact
+├── Hours
+└── Copyright
+```
+
+---
+
+## Product Taxonomy — Full Reference
+
+Comprehensive commercial flooring taxonomy (expert-reviewed). This is the **data model** — the canonical structure for all products, used for sorting, filtering, and supplier mapping.
+
+### Two surfaces, one data model
+
+- **Marketing site (public):** Shows top product badges only (Carpet Tile, LVT, Broadloom, etc.) — simple, visual cards like ay3. The full taxonomy lives underneath but isn't exposed.
+- **Employee portal (future):** Full category browsing, search by category/supplier/product, master index. The taxonomy drives navigation and filtering here.
+- **Supplier ↔ Product mapping:** Each supplier is tagged to the products they actually offer. Filtering by supplier shows only relevant product badges. Filtering by product shows only relevant suppliers. This relationship is bidirectional and lives in the data layer.
+- **Category filtering:** Taxonomy groups (Soft, Resilient, Hard Surface, Specialty, Entryway) are metadata tags, not visible page sections. Filtering by a group (e.g. "Soft Floor Coverings") narrows the product badges shown to only those that belong to that group. The page layout stays flat — cards don't rearrange into category sections.
+- **More Flooring badge:** Opens the full product catalog organized by expert taxonomy categories. Contains every product including best sellers. Selecting a best-seller item from here opens the same detail view (3-tab layer) as tapping its top badge directly. Non-best-seller items get a basic info version of the same view. Detail layer design deferred.
+
+### Flooring Products
+
+```
+Soft Floor Coverings
+├── Carpet Tile
+├── Broadloom
+└── Custom Carpet
+
+Resilient Flooring
+├── LVT / LVP
+├── Rigid Core / SPC
+├── Sheet Vinyl (homogeneous + heterogeneous)
+├── VCT
+├── Linoleum
+├── Rubber
+├── Safety Flooring
+└── Cork
+
+Hard Surface
+├── Ceramic & Porcelain
+├── Stone
+├── Terrazzo
+└── Wood (engineered, solid, parquet)
+
+Specialty / Performance
+├── Resinous (epoxy, urethane, MMA)
+├── Polished Concrete
+├── ESD / Static Control
+├── Sports Flooring
+├── Raised Access Flooring
+└── Subfloor Systems
+
+Entryway & Matting
+├── Recessed Grilles
+├── Scraper Mats
+├── Entrance Tile
+├── Elevator Cab
+└── Drainage / Anti-Fatigue
+```
+
+### Accessories & Finishing
+
+```
+Wall Base & Millwork
+├── Vinyl Base
+├── Rubber Base
+├── Millwork Profiles
+└── Corner Guards & Wall Protection
+
+Stairwell Systems
+├── Treads & Risers
+├── Nosings
+└── Tactile Warning
+
+Trims & Transitions
+├── Transition Strips
+├── Reducers
+├── Metal Profiles
+└── Feature Strips
+```
+
+### Installation Materials (optional on site)
+
+```
+└── Adhesives, Floor Prep, Moisture Mitigation, Setting Materials
+```
+
+### Taxonomy Notes
+
+- **Porcelain/Ceramic:** merge into one category (industry standard)
+- **Bamboo/Cork:** Cork fits under Resilient; bamboo fits under Wood
+- **"Wood+":** non-industry naming — use "Wood" with subtypes
+- **Epoxy:** broaden to "Resinous" (includes urethane, MMA)
+- **Skip for commercial site:** Laminate (residential), Area Rugs, Outdoor products

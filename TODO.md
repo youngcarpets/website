@@ -26,11 +26,14 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 
 ## Resume here next session
 
-1. **Footer is done for now.** May revisit collapsible behavior later when more sections exist on the page.
-2. **Next component TBD.** User decides at session start. Candidates: services, gallery, about, quote form.
-3. **Grayscale rule.** Everything over the background is grayscale. Color phase is last.
-4. **Component philosophy.** Similar elements share a base class. Build the base first, variants on top.
-5. **Expert reviews.** Dispatch design/mobile/a11y/motion experts after each new component. Remaining warns from earlier reviews (view transitions CSS, `<svelte:head>` meta defaults, `font-display: swap`) can be addressed when relevant.
+**Follow the migration workflow:** `.claude/reference/migration-workflow.md`
+**Layout structure reference:** `.claude/reference/site-layout-structure.md`
+
+1. **Phase 0: Global Foundation.** Color system, glass/glow tokens, motion tokens, breakpoints, CSS reset, landmarks, View Transitions, meta defaults. Must be solid before any section work.
+2. **Phase 1: Sections top-to-bottom.** Hero/About → Products → Services → Suppliers → Contact/Map → Footer. Pull from ay3, rewrite to Svelte 5 runes, adapt to new design system, expert review each.
+3. **Design rules:** Gold `#d4b87a` only (no yellow), glass effect, glow, 16px radii, Inter Variable, motion respected.
+4. **Grayscale rule still applies.** Color phase is last.
+5. **Error checking on-demand.** User will ask for `pnpm check` + `pnpm lint` when needed.
 
 ## Site content (building out)
 
@@ -46,12 +49,14 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] Cache-busting headers for dev
 - [x] Favicon (SVG traced paths + PNG + apple-touch-icon)
 - [x] Footer (static 4-col grid, grayscale, plain text, responsive)
+- [ ] Phase 0: Global foundation (tokens, reset, landmarks, transitions, meta)
+- [ ] Section: Hero/About (wordmark, label, tagline, "Since 1991", counters)
+- [ ] Section: Products (top badges + More Flooring + Accessories + Installation)
+- [ ] Section: Services (4 cards)
+- [ ] Section: Suppliers (18-brand marquee)
+- [ ] Section: Contact/Map (team, info, Google Maps)
+- [ ] Section: Footer (reconcile with final content)
 - [ ] Header nav links wired to real sections
-- [ ] `(marketing)/services/+page.svelte` index
-- [ ] `(marketing)/services/[slug]/+page.svelte` (dynamic via `src/lib/content/services.ts`)
-- [ ] `(marketing)/gallery/+page.svelte` (before/after, informative alt text)
-- [ ] `(marketing)/about/+page.svelte`
-- [ ] `quote/+page.svelte` + `quote/+page.server.ts` (form action, Zod, honeypot, rate limit, Resend)
 - [ ] `<svelte:head>` base meta defaults (title, description, og)
 - [ ] JSON-LD `LocalBusiness` on home page
 - [ ] View transition CSS (selectors exist in JS, no CSS yet)
