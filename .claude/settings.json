@@ -54,7 +54,7 @@
       "Read(.env)",
       "Read(.env.*)"
     ],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "bypassPermissions"
   },
   "hooks": {
     "PostToolUse": [
