@@ -387,7 +387,7 @@
 	}
 
 	.site-hamburger:focus-visible {
-		outline: 2px solid #d4b87a;
+		outline: 2px solid rgba(255, 255, 255, 0.5);
 		outline-offset: 2px;
 	}
 
@@ -437,8 +437,8 @@
 
 	.site-nav-menu a:hover,
 	.site-nav-menu a:focus-visible {
-		color: #d4b87a;
-		background: rgba(212, 184, 122, 0.08);
+		color: #e6e6e8;
+		background: rgba(255, 255, 255, 0.06);
 	}
 
 	.site-theme {
@@ -578,7 +578,7 @@
 	}
 
 	.site-footer-bar:focus-visible {
-		outline: 2px solid #d4b87a;
+		outline: 2px solid rgba(255, 255, 255, 0.5);
 		outline-offset: 4px;
 		border-radius: 8px;
 	}
@@ -684,12 +684,12 @@
 
 	.site-footer-close:hover {
 		color: #e6e6e8;
-		background: rgba(212, 184, 122, 0.08);
-		border-color: rgba(212, 184, 122, 0.2);
+		background: rgba(255, 255, 255, 0.06);
+		border-color: rgba(255, 255, 255, 0.2);
 	}
 
 	.site-footer-close:focus-visible {
-		outline: 2px solid #d4b87a;
+		outline: 2px solid rgba(255, 255, 255, 0.5);
 		outline-offset: 2px;
 	}
 

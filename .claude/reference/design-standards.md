@@ -42,8 +42,9 @@ Phone numbers and email addresses are **plain text** site-wide — no `tel:` or 
 | Primary text | `#e6e6e8` | Same as ay3 |
 | Muted text | `#9a9aa1` | Same as ay3 `--yc-text-muted` |
 | Faint text | `#8e8e96` | **Lighter than ay3** (`#6b6b73`) — changed to pass WCAG 4.5:1 on `#07070a` |
-| Hover accent | `#d4b87a` | Gold — same palette direction as ay3 |
-| Hover background | `rgba(212, 184, 122, 0.08)` | Gold glow on interactive elements |
+| Hover accent | `#e6e6e8` | Grayscale — no color accents until later |
+| Hover background | `rgba(255, 255, 255, 0.06)` | Subtle white glow on interactive elements |
+| Focus outline | `rgba(255, 255, 255, 0.5)` | Semi-transparent white, 2px solid |
 
 ---
 
@@ -77,3 +78,4 @@ Phone numbers and email addresses are **plain text** site-wide — no `tel:` or 
 | 2026-04-12 | Faint text `#8e8e96` not `#6b6b73` | WCAG 4.5:1 contrast requirement on dark backgrounds |
 | 2026-04-12 | Inter Variable instead of system font | Cross-platform consistency, weight 200 for headings |
 | 2026-04-12 | `blur(24px)` not `blur(20px)` on nav | Stronger glass effect, per CLAUDE.md design tokens |
+| 2026-04-12 | Grayscale only — no gold/color accents | Colors will be added later; everything stays black/white/gray for now |
