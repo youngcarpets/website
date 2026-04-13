@@ -1,6 +1,6 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-13 (Product modal content layout + supplier mapping — v0.4.67).
+Last updated: 2026-04-13 (Shared ProductContentModal + 4/8 interactive features + ay3 badge SVGs — v0.4.73).
 
 This file is the durable cross-session to-do list. Both Claude and you read it at session start.
 
@@ -22,22 +22,30 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 
 ## Resume here next session
 
-**Agents to load immediately:**
-- `.claude/agents/INDEX.md` — scan for relevant agents
-- `.claude/agents/flip-animation.md` + `indexes/flip-animation.index.md` — FLIP grow/shrink patterns
-- `.claude/agents/motion-expert.md` — easing, timing, GPU compositing
-- `.claude/agents/design.md` — design tokens, glass effects
+**Current task: Product modal interactive features — 4 remaining.**
+Shared `ProductContentModal.svelte` renders all 8 real products from `product-details.ts`. Content (spec rows, install, care tabs) done for all 8. Badge SVGs restored from ay3 originals.
 
-**Current task: Product modal content — clone to other 10 badges.**
-Carpet Tile prototype is complete (v0.4.67). Layout, tabs, spec chart, supplier marquee, interactive button all working.
-1. **Clone Carpet Tile pattern to other 10 badges.** Each needs: lead description, 8 spec rows, supplier marquee (auto-filtered), interactive feature button (per-product SVG/video). Use flooring expert for content.
-2. **Build per-product interactive features.** Each Overview tab gets its own SVG animation (like tile morph for Carpet Tile). Install tab gets video placeholders.
-3. **Refine SVG drawings** — improve texture icons for each product type.
-4. **Then Services section.** 4 service cards.
-5. **Then Contact/Map section.** Team, info, Google Maps embed. Counter badges already placed.
-6. **Footer reconcile.** After all sections done.
-7. **Design rules:** Grayscale only. No gold/yellow until color phase. All visual properties use CSS custom properties. Opacity-based color hierarchy.
-8. **Error checking on-demand.** User will ask for `pnpm check` + `pnpm lint` when needed.
+**Interactive features done (4/8):**
+- Carpet Tile: tile morph patterns (6 patterns, pill selector)
+- LVT: exploded layer diagram (4-layer auto-animate)
+- Carpet: noise path IIC dampening (hard floor vs carpet+pad toggle, wave animation)
+- Ceramic: grout anatomy (5-step auto-reveal + replay button)
+
+**Interactive features remaining (4/8) — port from ay3:**
+1. **Rubber** — impact absorption by thickness (3-column SVG, thickness comparison)
+2. **Matting** — lobby heatmap zones (bird's-eye entrance with 3-zone overlay)
+3. **Wood+** — flip cards (6-card grid, front/back reveal)
+4. **Sheet Vinyl** — cove-build anatomy (4-step sheet vinyl install sequence)
+
+**Procedure:** `.claude/reference/product-port-procedure.md` — read ay3 source, map color tokens to grayscale, add state + SVG + CSS to ProductContentModal, deploy, verify.
+
+**After all 8 interactive features:**
+1. **More/Accessories/Installation badges** — divergent layout (no ModalTabs)
+2. **Then Services section.** 4 service cards.
+3. **Then Contact/Map section.** Team, info, Google Maps embed. Counter badges already placed.
+4. **Footer reconcile.** After all sections done.
+5. **Design rules:** Grayscale only. No gold/yellow until color phase. All visual properties use CSS custom properties. Opacity-based color hierarchy.
+6. **Error checking on-demand.** User will ask for `pnpm check` + `pnpm lint` when needed.
 
 ## Site content (building out)
 
@@ -67,7 +75,11 @@ Carpet Tile prototype is complete (v0.4.67). Layout, tabs, spec chart, supplier 
 - [x] Badge → modal transition LOCKED (FLIP grow/shrink, stagger return, scroll-to-center, SVG jitter fix — v0.4.51)
 - [x] Product modal content layout (Carpet Tile prototype — 3-tab, spec chart, supplier marquee, interactive button)
 - [x] Supplier → product mapping verified (18 suppliers, all websites checked)
-- [ ] Product modal content cloned to other 10 badges
+- [x] Shared ProductContentModal — data-driven, all 8 real products rendered from product-details.ts
+- [x] Badge SVGs restored from ay3 originals (200x200 viewBox, hand-crafted geometry)
+- [x] Interactive features: Carpet Tile (tile morph), LVT (exploded layers), Carpet (noise IIC), Ceramic (grout anatomy)
+- [ ] Interactive features: Rubber, Matting, Wood+, Sheet Vinyl (port from ay3)
+- [ ] More/Accessories/Installation badges (divergent layout)
 - [ ] Section: Services (4 cards)
 - [ ] Section: Contact/Map (team, info, Google Maps, counter badges already placed)
 - [ ] Section: Footer (reconcile with final content)
