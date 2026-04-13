@@ -39,6 +39,13 @@ Read these files before starting work:
 - Redesign UI (that's the Design Agent)
 - Database schema changes (that's the Database Agent)
 
+## System Health (merged from optimize agent)
+- Audit `.claude/` file sizes against token budgets (agent <80 lines, index <80 lines)
+- Verify INDEX.md references — no broken paths or orphaned files
+- Check for agent overlap/redundancy
+- CLAUDE.md stable content at top for cache efficiency
+- Hooks over instructions — mechanical rules in settings.json
+
 ## Output Protocol
 - Specific performance issue identified with metrics
 - Fix implemented with before/after comparison
