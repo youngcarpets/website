@@ -52,23 +52,22 @@
 		aspect-ratio: 1 / 1;
 		border-radius: var(--radius-sm);
 		padding: 0.3rem 0.35rem 0.5rem 0.5rem;
-		background: linear-gradient(
-			135deg,
-			rgba(255, 255, 255, 0.025) 0%,
-			rgba(255, 255, 255, 0.005) 45%,
-			rgba(0, 0, 0, 0.12) 100%
-		);
+		background:
+			radial-gradient(ellipse 80% 60% at 25% 15%, rgba(255, 255, 255, 0.04) 0%, transparent 70%),
+			radial-gradient(ellipse 50% 50% at 80% 85%, rgba(0, 0, 0, 0.2) 0%, transparent 70%),
+			rgba(11, 11, 13, 0.82);
 		border: 1px solid var(--color-border-glass);
-		backdrop-filter: var(--glass-blur);
-		-webkit-backdrop-filter: var(--glass-blur);
-		box-shadow: var(--glass-shadow);
+		box-shadow:
+			var(--glass-shadow),
+			0 0 4px rgba(255, 255, 255, 0.001),
+			0 0 10px rgba(255, 255, 255, 0.001),
+			inset 0 0 6px rgba(255, 255, 255, 0.001);
 		font: inherit;
 		color: inherit;
 		text-align: left;
 		cursor: pointer;
-		transform: translateY(0) scale(1);
-		opacity: 0;
-		animation: badge-in 700ms var(--ease-out) forwards;
+		opacity: 1;
+		animation: badge-in 700ms var(--ease-out) backwards;
 		animation-delay: calc(var(--i, 0) * 90ms + 200ms);
 		touch-action: manipulation;
 		transition:
@@ -78,18 +77,18 @@
 	}
 
 	:global(.illuminated) .product-badge {
-		box-shadow: var(--glass-shadow), var(--illuminate-glow);
+		box-shadow:
+			var(--glass-shadow),
+			0 0 4px rgba(255, 255, 255, 0.55),
+			0 0 10px rgba(255, 255, 255, 0.18),
+			inset 0 0 6px rgba(255, 255, 255, 0.12);
 		border-color: rgba(255, 255, 255, 0.18);
 	}
 
 	@keyframes badge-in {
 		from {
 			opacity: 0;
-			transform: translateY(28px) scale(0.96);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0) scale(1);
+			transform: translateY(28px);
 		}
 	}
 
@@ -103,7 +102,6 @@
 		z-index: 0;
 		color: rgba(255, 255, 255, 0.55);
 		opacity: 0.55;
-		mix-blend-mode: screen;
 		transition: transform 600ms var(--ease-out);
 	}
 
@@ -156,7 +154,11 @@
 		.product-badge:hover {
 			transform: translateY(-3px) scale(1.02);
 			border-color: rgba(255, 255, 255, 0.2);
-			box-shadow: var(--glass-shadow), var(--illuminate-glow);
+			box-shadow:
+				var(--glass-shadow),
+				0 0 4px rgba(255, 255, 255, 0.55),
+				0 0 10px rgba(255, 255, 255, 0.18),
+				inset 0 0 6px rgba(255, 255, 255, 0.12);
 		}
 
 		.product-badge:hover .product-badge__texture {
@@ -176,7 +178,11 @@
 
 	.product-badge--dimmed {
 		opacity: 0 !important;
-		transition: opacity 80ms var(--ease-out);
+		transition: opacity 200ms var(--ease-out);
+	}
+
+	.product-badge--dimmed .product-badge__texture {
+		transition: none;
 	}
 
 	@media (prefers-reduced-motion: reduce) {

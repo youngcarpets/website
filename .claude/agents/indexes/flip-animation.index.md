@@ -12,7 +12,7 @@
 | Double rAF | Required for both open AND close to ensure paint before transition |
 | Safari box-shadow | Crushed by GPU during `transform: scale()` — use layout animation instead |
 | Glow overlay | Separate div animated via top/left/width/height, never transform |
-| backdrop-filter | Compositor layers linger after removal — fresh elements bypass this |
+| backdrop-filter | REMOVED from products — breaks during transform: scale() |
 
 ## Project Files
 | File | Role |
@@ -29,17 +29,40 @@
 | SVG icon | center, ~60% badge | header top-left, 44×44px | runtime: badgeSvgW/44 |
 | Glow border | illuminate box-shadow | illuminate box-shadow | layout-animated (no scale) |
 
+## Background (LOCKED v0.4.39)
+Both badge and expanded use identical background — zero visual pop at FLIP boundaries:
+```css
+background:
+  radial-gradient(ellipse 80% 60% at 25% 15%, rgba(255, 255, 255, 0.04) 0%, transparent 70%),
+  radial-gradient(ellipse 50% 50% at 80% 85%, rgba(0, 0, 0, 0.2) 0%, transparent 70%),
+  rgba(11, 11, 13, 0.82);
+```
+- No `backdrop-filter` — removed because it breaks during `transform: scale()`
+- 82% opaque dark base for text/SVG legibility, 18% transparent for floor plan show-through
+- Radial gradients add depth (highlight top-left, shadow bottom-right)
+- All CSS gradients scale perfectly with `transform: scale()` — no rasterization artifacts
+
+## LOCKED — Grow/Shrink Animation (v0.4.41)
+The FLIP grow and shrink animations are working perfectly. Do NOT modify the transform logic, timing, easing, title/icon counter-FLIP, or glow overlay. Any future work on the products section must preserve this behavior exactly.
+
 ## Brightness Matching
 | Element | Badge | Expanded | Match Method |
 |---------|-------|----------|-------------|
 | Title text | opacity via illuminate CSS | full opacity white | Same effective color |
 | SVG icon | color 0.55 × opacity 0.55 | color 0.55 × opacity 0.55 | Identical values |
 | Border glow | --illuminate-glow | --illuminate-glow | Same CSS variable |
+| Background | identical gradient | identical gradient | Same CSS declaration |
 
 ## Timing
 - Duration: 900ms (EXPAND_MS constant)
 - Easing: `cubic-bezier(0.22, 1, 0.36, 1)`
 - All elements use same duration + easing
+
+## Workarounds / Patterns
+
+### backdrop-filter + transform: scale() = broken blur
+**Problem:** `backdrop-filter` gets rasterized at pre-scale size then stretched by GPU. Blur looks wrong during FLIP.
+**Solution:** Remove `backdrop-filter` entirely. Replace with opaque-enough CSS gradients that provide legibility without needing blur. CSS gradients are math — they scale perfectly with transforms.
 
 ## Related Resources
 | File | Relevance |

@@ -10,6 +10,7 @@
 
 	let expandedIndex: number | null = $state(null);
 	let hiddenIndex: number | null = $state(null);
+	let returningSet: Set<number> = $state(new Set());
 	let badgeRect: { x: number; y: number; w: number; h: number } | null = $state(null);
 	let textRect: { x: number; y: number } | null = $state(null);
 	let iconRect: { x: number; y: number; w: number; h: number } | null = $state(null);
@@ -49,12 +50,45 @@
 	}
 
 	function closeBadge() {
+		const wasExpanded = expandedIndex;
 		expandedIndex = null;
-		hiddenIndex = null;
 		badgeRect = null;
 		textRect = null;
 		iconRect = null;
-		if (gridEl) gridEl.style.minHeight = '';
+
+		// Strip illumination from all badge wrappers except the selected one
+		const wrappers = gridEl ? Array.from(gridEl.querySelectorAll<HTMLElement>(':scope > div')) : [];
+		wrappers.forEach((el, i) => {
+			if (i !== wasExpanded) el.classList.remove('illuminated');
+		});
+
+		// Stagger badges back in sequentially (unlit)
+		const indices = featureProducts.map((_, i) => i).filter((i) => i !== wasExpanded);
+		returningSet = new Set(indices);
+		hiddenIndex = null;
+
+		const FADE_STAGGER = 60;
+		indices.forEach((idx, order) => {
+			setTimeout(() => {
+				returningSet = new Set([...returningSet].filter((i) => i !== idx));
+			}, order * FADE_STAGGER);
+		});
+
+		// After all badges faded in, re-illuminate sequentially
+		const fadeInDone = indices.length * FADE_STAGGER + 200;
+		const ILLUMINATE_STAGGER = 50;
+		setTimeout(() => {
+			const unlitWrappers = wrappers.filter((_, i) => i !== wasExpanded);
+			unlitWrappers.forEach((el, order) => {
+				setTimeout(() => {
+					el.classList.add('illuminated');
+				}, order * ILLUMINATE_STAGGER);
+			});
+			// Clean up grid min-height after all illuminated
+			setTimeout(() => {
+				if (gridEl) gridEl.style.minHeight = '';
+			}, wrappers.length * ILLUMINATE_STAGGER);
+		}, fadeInDone);
 	}
 
 	let wordmarkReady = $state(false);
@@ -103,7 +137,7 @@
 					{product}
 					index={i}
 					hidden={hiddenIndex === i}
-					dimmed={expandedIndex !== null && expandedIndex !== i}
+					dimmed={(expandedIndex !== null && expandedIndex !== i) || returningSet.has(i)}
 					onclick={(e) => openBadge(i, e)}
 				/>
 			</div>

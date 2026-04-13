@@ -1,6 +1,6 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-13 (Product badge FLIP animation polished — v0.4.36).
+Last updated: 2026-04-13 (Product badge background fixed — v0.4.39).
 
 This file is the durable cross-session to-do list. Both Claude and you read it at session start.
 
@@ -15,7 +15,7 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - **Dark mode is the working mode.** Body `#0b0b0d`, text `#e6e6e8`. Grayscale only — no color accents until color phase at the end.
 - **System font stack.** SF Pro Display (Apple), Segoe UI (Windows), system-ui fallback. Square721 for YOUNG wordmark only.
 - **Global CSS foundation.** `src/app.css` with color tokens, glass/glow tokens, motion tokens, radius tokens, font tokens, CSS reset, light theme overrides, reduced-motion/transparency media queries.
-- **Product badge FLIP animation (v0.4.36).** Container-transform animation: badge grows to fill grid, inner elements (title, SVG icon) FLIP to header positions with size ratios. Glow overlay uses layout animation (top/left/width/height) for Safari compatibility. 900ms duration, ease-out curve. All endpoints matched for brightness/size. Backup at `backup/v0.4.26`.
+- **Product badge FLIP animation (v0.4.39).** Container-transform animation: badge grows to fill grid, inner elements (title, SVG icon) FLIP to header positions with size ratios. Glow overlay uses layout animation (top/left/width/height) for Safari compatibility. 900ms duration, ease-out curve. All endpoints matched for brightness/size. Background: shared opaque dark gradient (no backdrop-filter — removed because it breaks during transform: scale()). Backup at `backup/v0.4.26`.
 - **Agent system organized.** `.claude/agents/INDEX.md` is the single router. FLIP animation agent with full index. Agents accumulate project-specific knowledge. Check project agents before generic dispatch.
 
 ## Resume here next session
@@ -26,13 +26,10 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - `.claude/agents/motion-expert.md` — easing, timing, GPU compositing
 - `.claude/agents/design.md` — design tokens, glass effects
 
-**Current task: Product badge background during grow/shrink.**
-The badge background/glow has a slight visual difference between its resting state and the animation start/end. It's almost perfect but needs the same endpoint-matching treatment we applied to the title text and SVG icon — the background appearance at animation boundaries should be identical to the badge's resting state. Use the FLIP animation agent's endpoint matching rules.
-
-**Then continue with:**
+**Current task: Products section — continue building.**
 1. **Products section — in progress.** Carpet Tile badge is the prototype. Get it perfect, then clone for the other 10 badges. 11 badges total. See `.claude/reference/site-layout-structure.md` for full product tree.
 2. **Carpet Tile badge status:** Badge renders with code (CPTT) + name + SVG texture. FLIP animation grows badge to full grid with title/icon counter-FLIP. Modal has 3-tab layout (Product/Installation/Maintenance) with sticky tabs and scrollable panels. Pattern morph animation (6 patterns). Glow overlay for Safari. A11y: focus trap, keyboard nav, roving tabindex. Codes: CPTT, LVT, CPT, CT, RBR, MAT, WD, SVF.
-3. **Next on Carpet Tile:** Fix background endpoint matching on grow/shrink. Then refine SVG drawings, finalize badge spacing, build sub-category navigation within the modal.
+3. **Next on Carpet Tile:** Refine SVG drawings, finalize badge spacing, build sub-category navigation within the modal.
 4. **Then Services section.** 4 service cards.
 5. **Then Contact/Map section.** Team, info, Google Maps embed. Counter badges already placed.
 6. **Footer reconcile.** After all sections done.
@@ -63,7 +60,7 @@ The badge background/glow has a slight visual difference between its resting sta
 - [x] Section: Suppliers (18-brand marquee, "Trusted Brands Include:")
 - [x] Hero context blurb (est. 1991, commercial flooring, Ottawa area)
 - [x] Products section: 11 badges scaffolded, FLIP animation prototype on Carpet Tile
-- [ ] Product badge background endpoint matching on grow/shrink ← NEXT
+- [x] Product badge background — removed backdrop-filter, shared opaque gradient (v0.4.39)
 - [ ] Section: Services (4 cards)
 - [ ] Section: Contact/Map (team, info, Google Maps, counter badges already placed)
 - [ ] Section: Footer (reconcile with final content)
@@ -73,6 +70,10 @@ The badge background/glow has a slight visual difference between its resting sta
 - [ ] View transition CSS (selectors exist in JS, no CSS yet)
 - [ ] Color phase — accents, glows, highlights (after all dark mode layout is done)
 - [ ] Light mode color tuning (after color phase)
+
+## Known Bugs — Revisit Later
+
+- [ ] **SVG texture sub-pixel wiggle on illumination.** SVGs in product badges (especially 2nd/3rd grid columns) shift ~1px when badges illuminate or de-illuminate. Caused by sub-pixel rounding in CSS grid fractional column widths. We eliminated the major causes (permanent GPU compositor layer from `transform: translateY(0)`, `mix-blend-mode: screen`, mismatched shadow counts, `scale()` in badge-in animation) but a residual wiggle remains. Likely browser-level sub-pixel rounding during box-shadow repaint on fractional grid positions. Revisit when project is complete — possible approaches: fixed-pixel SVG sizes, integer-aligned grid widths, or SVG `transform` with pixel-snapping.
 
 ## Phase 2 (deferred — not started)
 
