@@ -1,6 +1,6 @@
 {
 	"name": "youngcarpets-website",
-	"version": "0.4.9",
+	"version": "0.4.25",
 	"private": true,
 	"type": "module",
 	"scripts": {

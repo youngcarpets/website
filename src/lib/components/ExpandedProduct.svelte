@@ -8,15 +8,16 @@
 		product: Product;
 		badgeRect: { x: number; y: number; w: number; h: number };
 		textRect: { x: number; y: number } | null;
-		onclosing?: () => void;
 		onclose: () => void;
 	}
 
-	let { product: prod, badgeRect, textRect, onclosing, onclose }: Props = $props();
+	let { product: prod, badgeRect, textRect, onclose }: Props = $props();
 
 	let cardEl: HTMLDivElement | undefined = $state();
 	let titleEl: HTMLDivElement | undefined = $state();
+	let glowEl: HTMLDivElement | undefined = $state();
 	let animating = $state(true);
+	let closing = $state(false);
 	let tabsVisible = $state(false);
 	let contentVisible = $state(false);
 	const previouslyFocused = document.activeElement as HTMLElement | null;
@@ -87,28 +88,63 @@
 
 	function handleClose() {
 		if (animating) return;
+		const closeBtn = cardEl?.querySelector<HTMLElement>('.expanded-close');
+		if (closeBtn) closeBtn.style.opacity = '0';
 		contentVisible = false;
-		tabsVisible = false;
 		animating = true;
-		onclosing?.();
+		closing = true;
+
+		// Strip glow from card — the fresh glowEl overlay will carry it
+		if (cardEl) {
+			cardEl.style.boxShadow = 'var(--glass-shadow)';
+		}
 
 		requestAnimationFrame(() => {
-			if (!cardEl) return;
-			const gW = cardEl.parentElement!.offsetWidth;
-			const gH = cardEl.parentElement!.offsetHeight;
-			const scaleX = badgeRect.w / gW;
-			const scaleY = badgeRect.h / gH;
+			requestAnimationFrame(() => {
+				if (!cardEl || !titleEl) return;
+				tabsVisible = false;
+				const gW = cardEl.parentElement!.offsetWidth;
+				const gH = cardEl.parentElement!.offsetHeight;
+				const scaleX = badgeRect.w / gW;
+				const scaleY = badgeRect.h / gH;
 
-			cardEl.style.transition = `transform ${EXPAND_MS}ms ${EASING}`;
-			cardEl.style.transform = `translate(${badgeRect.x}px, ${badgeRect.y}px) scale(${scaleX}, ${scaleY})`;
+				// Reverse FLIP for title: move it back to where badge text sits
+				if (textRect) {
+					const cardRect = cardEl.parentElement!.getBoundingClientRect();
+					const titleRect = titleEl.getBoundingClientRect();
 
-			const onEnd = (e: TransitionEvent) => {
-				if (e.target !== cardEl) return;
-				cardEl!.removeEventListener('transitionend', onEnd);
-				previouslyFocused?.focus();
-				onclose();
-			};
-			cardEl.addEventListener('transitionend', onEnd);
+					const titleCurrentX = titleRect.left - cardRect.left;
+					const titleCurrentY = titleRect.top - cardRect.top;
+					const targetX = textRect.x;
+					const targetY = textRect.y;
+
+					const dx = (targetX - badgeRect.x) / scaleX - titleCurrentX;
+					const dy = (targetY - badgeRect.y) / scaleY - titleCurrentY;
+
+					titleEl.style.transition = `transform ${EXPAND_MS}ms ${EASING}`;
+					titleEl.style.transform = `translate(${dx}px, ${dy}px) scale(${1 / scaleX}, ${1 / scaleY})`;
+					titleEl.style.transformOrigin = 'top left';
+				}
+
+				cardEl.style.transition = `transform ${EXPAND_MS}ms ${EASING}`;
+				cardEl.style.transform = `translate(${badgeRect.x}px, ${badgeRect.y}px) scale(${scaleX}, ${scaleY})`;
+
+				// Animate glow overlay via layout (not transform) so box-shadow survives
+				if (glowEl) {
+					glowEl.style.top = `${badgeRect.y}px`;
+					glowEl.style.left = `${badgeRect.x}px`;
+					glowEl.style.width = `${badgeRect.w}px`;
+					glowEl.style.height = `${badgeRect.h}px`;
+				}
+
+				const onEnd = (e: TransitionEvent) => {
+					if (e.target !== cardEl) return;
+					cardEl!.removeEventListener('transitionend', onEnd);
+					previouslyFocused?.focus();
+					onclose();
+				};
+				cardEl.addEventListener('transitionend', onEnd);
+			});
 		});
 	}
 
@@ -208,6 +244,10 @@
 	{/if}
 </div>
 
+{#if closing}
+	<div class="shrink-glow" bind:this={glowEl} aria-hidden="true"></div>
+{/if}
+
 <style>
 	.expanded-product {
 		position: absolute;
@@ -264,7 +304,7 @@
 	}
 
 	.expanded-name {
-		font-size: 1.1rem;
+		font-size: 0.9rem;
 		font-weight: 200;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
@@ -355,6 +395,24 @@
 		color: var(--color-text-muted);
 		line-height: 1.6;
 		margin: 0;
+	}
+
+	.shrink-glow {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 11;
+		border-radius: var(--radius-sm);
+		border: 1px solid rgba(255, 255, 255, 0.18);
+		box-shadow: var(--illuminate-glow);
+		pointer-events: none;
+		transition:
+			top 600ms cubic-bezier(0.22, 1, 0.36, 1),
+			left 600ms cubic-bezier(0.22, 1, 0.36, 1),
+			width 600ms cubic-bezier(0.22, 1, 0.36, 1),
+			height 600ms cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
 	@media (prefers-reduced-motion: reduce) {

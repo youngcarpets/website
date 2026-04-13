@@ -181,8 +181,8 @@
 	}
 
 	.product-badge--dimmed {
-		opacity: 0.15 !important;
-		transition: opacity 200ms var(--ease-out);
+		opacity: 0 !important;
+		transition: opacity 80ms var(--ease-out);
 	}
 
 	@media (prefers-reduced-motion: reduce) {

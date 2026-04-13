@@ -36,12 +36,9 @@
 		hiddenIndex = index;
 	}
 
-	function onBadgeClosing() {
-		hiddenIndex = null;
-	}
-
 	function closeBadge() {
 		expandedIndex = null;
+		hiddenIndex = null;
 		badgeRect = null;
 		textRect = null;
 		if (gridEl) gridEl.style.minHeight = '';
@@ -103,7 +100,6 @@
 				product={featureProducts[expandedIndex]!}
 				{badgeRect}
 				{textRect}
-				onclosing={onBadgeClosing}
 				onclose={closeBadge}
 			/>
 		{/if}
