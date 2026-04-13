@@ -3,7 +3,10 @@
 </script>
 
 <section id="suppliers" class="suppliers" aria-label="Suppliers">
-	<h2 class="suppliers-heading">Our Suppliers</h2>
+	<h2 class="suppliers-heading">
+		<span class="heading-accent">Trusted Brands</span>
+		<span class="heading-dim">We Carry Include:</span>
+	</h2>
 	<div class="marquee" aria-hidden="true">
 		<div class="marquee-track">
 			{#each suppliers as supplier (supplier.slug)}
@@ -23,45 +26,44 @@
 
 <style>
 	.suppliers {
-		padding: 3rem 1rem 2rem;
+		padding: 2rem 1rem 1rem;
 		overflow: hidden;
+	}
+
+	.heading-accent {
+		color: #f5f5f7;
+		text-shadow: 0 0 12px rgba(212, 184, 122, 0.15);
+	}
+
+	.heading-dim {
+		opacity: 0.7;
 	}
 
 	.suppliers-heading {
 		font-family: var(--font-body);
-		font-size: 0.75rem;
-		font-weight: 500;
-		letter-spacing: 0.15em;
+		font-size: 0.8rem;
+		font-weight: 200;
+		letter-spacing: 0.25em;
 		text-transform: uppercase;
-		color: var(--color-text-muted);
+		color: var(--color-text);
 		text-align: center;
-		margin-bottom: 1.5rem;
+		margin-bottom: 0.25rem;
 	}
 
 	.marquee {
 		position: relative;
 		width: 100%;
-		mask-image: linear-gradient(
-			to right,
-			transparent,
-			black 8%,
-			black 92%,
-			transparent
-		);
-		-webkit-mask-image: linear-gradient(
-			to right,
-			transparent,
-			black 8%,
-			black 92%,
-			transparent
-		);
+		background: rgba(0, 0, 0, 0.35);
+		padding: 0.75rem 0;
+		mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+		-webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
 	}
 
 	.marquee-track {
 		display: flex;
 		gap: 2rem;
 		width: max-content;
-		animation: marquee-scroll 40s linear infinite;
+		animation: marquee-scroll 70s linear infinite;
 	}
 
 	.marquee-item {
@@ -123,12 +125,12 @@
 
 	@media (min-width: 521px) {
 		.suppliers {
-			padding: 4rem 1.5rem 3rem;
+			padding: 2.5rem 1.5rem 1.5rem;
 		}
 
 		.suppliers-heading {
-			font-size: 0.85rem;
-			margin-bottom: 2rem;
+			font-size: 0.95rem;
+			margin-bottom: 0.25rem;
 		}
 
 		.marquee-item {

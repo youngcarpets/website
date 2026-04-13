@@ -142,34 +142,88 @@
 
 		<div class="site-footer-grid">
 			<div class="site-footer-col">
-				<address class="site-footer-address">
-					Young Carpets Inc.<br />
-					Unit 316 — 1228 Old Innes Road<br />
-					Ottawa, ON K1B 3V3
-				</address>
+				<div class="site-footer-address-row">
+					<span class="site-footer-list-key" aria-label="Address"
+						><svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="16"
+							height="16"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle
+								cx="12"
+								cy="10"
+								r="3"
+							/></svg
+						></span
+					>
+					<address class="site-footer-address">
+						Young Carpets Inc.<br />
+						Unit 316 — 1228 Old Innes Road<br />
+						Ottawa, ON K1B 3V3
+					</address>
+				</div>
 			</div>
 
 			<div class="site-footer-col">
 				<ul class="site-footer-list">
 					<li>
-						<span class="site-footer-list-key">Phone</span>
+						<span class="site-footer-list-key" aria-label="Phone"
+							><svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="16"
+								height="16"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								><path
+									d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+								/></svg
+							></span
+						>
 						<span class="site-footer-list-val">613-744-2744</span>
 					</li>
 					<li>
-						<span class="site-footer-list-key">Email</span>
+						<span class="site-footer-list-key" aria-label="Email"
+							><svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="16"
+								height="16"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								><rect width="20" height="16" x="2" y="4" rx="2" /><path
+									d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"
+								/></svg
+							></span
+						>
 						<span class="site-footer-list-val">info@youngcarpets.com</span>
 					</li>
 					<li>
-						<span class="site-footer-list-key">AP</span>
-						<span class="site-footer-list-val">ap@youngcarpets.com</span>
-					</li>
-				</ul>
-			</div>
-
-			<div class="site-footer-col">
-				<ul class="site-footer-list">
-					<li>
-						<span class="site-footer-list-key">Office</span>
+						<span class="site-footer-list-key" aria-label="Office hours"
+							><svg
+								xmlns="http://www.w3.org/2000/svg"
+								width="16"
+								height="16"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg
+							></span
+						>
 						<span class="site-footer-list-val">Mon–Fri 8 AM – 4 PM</span>
 					</li>
 				</ul>
@@ -466,7 +520,7 @@
 
 	.site-footer-grid {
 		display: grid;
-		grid-template-columns: 1fr 1.2fr 1fr;
+		grid-template-columns: 1fr 1fr;
 		gap: 2.5rem 2rem;
 		padding-bottom: 2.5rem;
 		border-bottom: 1px solid var(--color-border);
@@ -477,6 +531,16 @@
 		flex-direction: column;
 		align-items: start;
 		margin-bottom: 2rem;
+	}
+
+	.site-footer-address-row {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.5rem;
+	}
+
+	.site-footer-address-row .site-footer-list-key {
+		margin-top: 0.15rem;
 	}
 
 	.site-footer-address {
@@ -497,17 +561,15 @@
 	}
 
 	.site-footer-list li {
-		display: grid;
-		grid-template-columns: 48px 1fr;
-		align-items: baseline;
+		display: flex;
+		align-items: center;
 		gap: 0.5rem;
 	}
 
 	.site-footer-list-key {
-		font-size: 0.74rem;
-		font-weight: 500;
+		display: flex;
+		align-items: center;
 		color: var(--color-text-subtle);
-		text-transform: lowercase;
 	}
 
 	.site-footer-list-val {

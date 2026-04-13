@@ -52,15 +52,30 @@
 				x="14"
 				y="25"
 				fill="currentColor"
-				font-weight="500"
+				font-weight="200"
 				textLength="340"
 				lengthAdjust="spacing"
 			>
 				COMMERCIAL FLOORING
 			</text>
-			<g transform="translate(374, 16) scale(0.0063)">
+			<defs>
+				<filter id="leaf-glow" x="-40%" y="-40%" width="180%" height="180%">
+					<feGaussianBlur in="SourceGraphic" stdDeviation="1.2" result="blur1" />
+					<feGaussianBlur in="SourceGraphic" stdDeviation="0.4" result="blur2" />
+					<feMerge>
+						<feMergeNode in="blur1" />
+						<feMergeNode in="blur2" />
+						<feMergeNode in="SourceGraphic" />
+					</feMerge>
+				</filter>
+			</defs>
+			<g transform="translate(374, 16) scale(0.0063)" filter="url(#leaf-glow)">
 				<path
-					fill="currentColor"
+					fill="none"
+					stroke="currentColor"
+					stroke-width="120"
+					stroke-linejoin="round"
+					class="brand-mark__leaf"
 					d="m-90 2030 45-863a95 95 0 0 0-111-98l-859 151 116-320a65 65 0 0 0-20-73l-941-762 212-99a65 65 0 0 0 34-79l-186-572 542 115a65 65 0 0 0 73-38l105-247 423 454a65 65 0 0 0 111-57l-204-1052 327 189a65 65 0 0 0 91-27l332-652 332 652a65 65 0 0 0 91 27l327-189-204 1052a65 65 0 0 0 111 57l423-454 105 247a65 65 0 0 0 73 38l542-115-186 572a65 65 0 0 0 34 79l212 99-941 762a65 65 0 0 0-20 73l116 320-859-151a95 95 0 0 0-111 98l45 863z"
 				/>
 			</g>
@@ -138,11 +153,17 @@
 		}
 	}
 
+	.brand-mark__leaf {
+		stroke: currentColor;
+		opacity: 0.7;
+	}
+
 	.brand-mark__subtitle text {
 		font-family:
 			-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
 		font-size: 24px;
-		font-weight: 500;
+		font-weight: 200;
+		letter-spacing: 0.25em;
 	}
 
 	/* --- Hero size --- */
