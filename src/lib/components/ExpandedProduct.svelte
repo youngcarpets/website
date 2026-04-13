@@ -53,7 +53,7 @@
 			const dy = (targetY - titleCurrentY) / scaleY;
 
 			titleEl.style.transition = 'none';
-			titleEl.style.transform = `translate(${dx}px, ${dy}px) scale(${1 / scaleX}, ${1 / scaleY})`;
+			titleEl.style.transform = `translate(${dx}px, ${dy}px) scale(${0.714 / scaleX}, ${0.714 / scaleY})`;
 			titleEl.style.transformOrigin = 'top left';
 		}
 
@@ -122,7 +122,7 @@
 					const dy = (targetY - badgeRect.y) / scaleY - titleCurrentY;
 
 					titleEl.style.transition = `transform ${EXPAND_MS}ms ${EASING}`;
-					titleEl.style.transform = `translate(${dx}px, ${dy}px) scale(${1 / scaleX}, ${1 / scaleY})`;
+					titleEl.style.transform = `translate(${dx}px, ${dy}px) scale(${0.714 / scaleX}, ${0.714 / scaleY})`;
 					titleEl.style.transformOrigin = 'top left';
 				}
 
@@ -295,7 +295,7 @@
 	}
 
 	.expanded-code {
-		font-size: 0.5rem;
+		font-size: 0.7rem;
 		font-weight: 500;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
@@ -304,7 +304,7 @@
 	}
 
 	.expanded-name {
-		font-size: 0.9rem;
+		font-size: 1.26rem;
 		font-weight: 200;
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
