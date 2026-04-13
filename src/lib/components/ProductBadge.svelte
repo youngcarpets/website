@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Product } from '$lib/content/products';
 	import ProductTexture from './ProductTexture.svelte';
+	import type { Product } from '$lib/content/products';
 
 	interface Props {
 		product: Product;

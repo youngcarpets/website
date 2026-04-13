@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { Product } from '$lib/content/products';
 	import ModalTabs from './ModalTabs.svelte';
 	import CarpetTileModal from './CarpetTileModal.svelte';
 	import ProductTexture from './ProductTexture.svelte';
+	import type { Product } from '$lib/content/products';
 
 	interface Props {
 		product: Product;
@@ -430,6 +430,14 @@
 
 		.expanded-close {
 			opacity: 1;
+		}
+
+		.expanded-icon {
+			transition: none;
+		}
+
+		.shrink-glow {
+			transition: none;
 		}
 	}
 </style>
