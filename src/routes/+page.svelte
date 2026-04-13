@@ -2,6 +2,7 @@
 	import { onMount } from 'svelte';
 	import { countUp } from '$lib/actions/countUp';
 	import BrandMark from '$lib/components/BrandMark.svelte';
+	import SupplierMarquee from '$lib/components/SupplierMarquee.svelte';
 
 	let wordmarkReady = $state(false);
 
@@ -38,7 +39,7 @@
 
 <section id="products" class="section-placeholder" aria-label="Products"></section>
 <section id="services" class="section-placeholder" aria-label="Services"></section>
-<section id="suppliers" class="section-placeholder" aria-label="Suppliers"></section>
+<SupplierMarquee />
 
 <section id="contact" class="section-placeholder" aria-label="Contact">
 	<div class="stats-bar">
