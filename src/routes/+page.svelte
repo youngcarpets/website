@@ -126,8 +126,8 @@
 	<div class="hero-title">
 		<BrandMark size="hero" animated ready={wordmarkReady} tag="h1" />
 		<p class="hero-blurb">
-			Young Carpets Inc. has supplied and installed commercial flooring in Ottawa and the
-			surrounding area since 1991.
+			Young Carpets Inc. has been trusted to supply and install commercial flooring in Ottawa and
+			the surrounding area since 1991.
 		</p>
 	</div>
 </section>

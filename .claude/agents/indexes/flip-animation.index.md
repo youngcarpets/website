@@ -68,6 +68,12 @@ The FLIP grow and shrink animations are working perfectly. Do NOT modify the tra
 **Problem:** `backdrop-filter` gets rasterized at pre-scale size then stretched by GPU. Blur looks wrong during FLIP.
 **Solution:** Remove `backdrop-filter` entirely. Replace with opaque-enough CSS gradients that provide legibility without needing blur. CSS gradients are math — they scale perfectly with transforms.
 
+## Modal Content After FLIP (2026-04-13)
+
+After the FLIP expand animation completes, `CarpetTileModal` renders inside `ExpandedProduct.svelte`. The modal content uses `ModalTabs` with 3 tabs (Overview / Install / Care). The FLIP animation is **not affected** by the tab content — it operates on the card container, title group, and SVG icon only. Tab content fades in after animation completes via `tabsVisible` + `contentVisible` states.
+
+Key: the `featureOpen` state in `CarpetTileModal` swaps the Overview tab between text content and full-bleed interactive. This swap is purely inside the tab panel — no FLIP involvement.
+
 ## Related Resources
 | File | Relevance |
 |------|-----------|

@@ -46,6 +46,26 @@ Quote removed from section list.
 - **Grayscale only** during build phase. Color accents added at the end.
 - **Design tokens are single source of truth.** All visual properties flow through CSS custom properties in app.css. Never hardcode rgba/px values in components.
 
+### Product Modal Content Structure (decided 2026-04-13)
+
+**Three tabs**: Overview / Install / Care (labels in `ModalTabs.svelte`).
+
+**Overview tab** (the main content tab):
+1. Lead description (0.95rem, white text — stands out from specs)
+2. Spec chart — label:value rows with discreet horizontal borders
+   - Universal labels: Sizes, Wear, Install, Traffic, Fire, For, Maintain, Life
+3. Filtered supplier marquee — `<SupplierMarquee material="..." compact />`
+4. Interactive feature button — pinned at bottom, play-circle icon, "(interactive)" hint
+   - Tapping opens full-bleed interactive in the tab panel
+   - "Back to overview" button to return
+
+**Install tab**: media/video area + spec rows (methods, techniques)
+**Care tab**: small static icon (32px) + cleaning schedule rows + warranty footnote
+
+**Supplier data**: `src/lib/content/suppliers.ts` — each supplier has `materials[]` array. Verified against all 18 supplier websites 2026-04-13. Reference grid at `.claude/reference/supplier-product-mapping.md`.
+
+**Prototype**: Carpet Tile (`CarpetTileModal.svelte`). All other 10 products clone this pattern with different data.
+
 ---
 
 ## New Site — Full Layout

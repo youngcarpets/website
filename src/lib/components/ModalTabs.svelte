@@ -2,22 +2,22 @@
 	import { tick } from 'svelte';
 	import type { Snippet } from 'svelte';
 
-	type ModalTab = 'product' | 'install' | 'maintain';
+	type ModalTab = 'overview' | 'install' | 'care';
 	const tabs: { id: ModalTab; label: string }[] = [
-		{ id: 'product', label: 'Product' },
-		{ id: 'install', label: 'Installation' },
-		{ id: 'maintain', label: 'Maintenance' }
+		{ id: 'overview', label: 'Overview' },
+		{ id: 'install', label: 'Install' },
+		{ id: 'care', label: 'Care' }
 	];
 
 	interface Props {
-		product: Snippet;
+		overview: Snippet;
 		install: Snippet;
-		maintain: Snippet;
+		care: Snippet;
 		stagger?: boolean;
 	}
 
-	let { product, install, maintain, stagger = false }: Props = $props();
-	let active: ModalTab = $state('product');
+	let { overview, install, care, stagger = false }: Props = $props();
+	let active: ModalTab = $state('overview');
 	let tablistEl: HTMLDivElement | undefined = $state();
 
 	async function handleTabKeydown(e: KeyboardEvent, index: number) {
@@ -63,12 +63,12 @@
 
 {#key active}
 	<div class="modal-tab-panel" role="tabpanel" id="panel-{active}" aria-labelledby="tab-{active}">
-		{#if active === 'product'}
-			{@render product()}
+		{#if active === 'overview'}
+			{@render overview()}
 		{:else if active === 'install'}
 			{@render install()}
 		{:else}
-			{@render maintain()}
+			{@render care()}
 		{/if}
 	</div>
 {/key}

@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { tick } from 'svelte';
 	import ModalTabs from './ModalTabs.svelte';
+	import SupplierMarquee from './SupplierMarquee.svelte';
 	import { type TilePattern, tilePatternList } from '$lib/content/interactions';
 
+	let featureOpen = $state(false);
 	let activeTilePattern: TilePattern = $state('monolithic');
 	let radiogroupEl: HTMLDivElement | undefined = $state();
 
@@ -65,196 +67,227 @@
 </script>
 
 <ModalTabs>
-	{#snippet product()}
-		<div class="tab-scroll">
-			<div class="tab-section">
-				<h4 class="tab-heading">What It Is</h4>
-				<p class="tab-text">
-					Modular carpet squares and planks — 18×18, 24×24, 18×36, and plank formats. Each tile is
-					individually replaceable without tearing up the whole floor.
-				</p>
+	{#snippet overview()}
+		{#if featureOpen}
+			<div class="feature-stage">
+				<button
+					type="button"
+					class="feature-back"
+					aria-label="Back to overview"
+					onclick={() => (featureOpen = false)}
+				>
+					<svg viewBox="0 0 16 16" aria-hidden="true" width="14" height="14">
+						<path
+							d="M10 3 L5 8 L10 13"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						/>
+					</svg>
+					Back to overview
+				</button>
+				<h4 class="feature-title">Install patterns</h4>
+				<div class="feature-morph">
+					<svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+						<defs>
+							<clipPath id="tile-morph-clip">
+								<rect x="0" y="0" width="180" height="180" />
+							</clipPath>
+						</defs>
+						<g clip-path="url(#tile-morph-clip)">
+							{#each Array.from({ length: 36 }, (__, idx) => idx) as i (i)}
+								<g class="tile-morph-tile" transform={tileTransform(i, activeTilePattern)}>
+									<rect
+										x="0"
+										y="0"
+										width="30"
+										height="30"
+										rx="2"
+										fill="rgba(255, 255, 255, 0.04)"
+										stroke="rgba(255, 255, 255, 0.2)"
+										stroke-width="0.8"
+									/>
+									<line
+										x1="6"
+										y1="6"
+										x2="14"
+										y2="6"
+										stroke="rgba(255, 255, 255, 0.35)"
+										stroke-width="1"
+										stroke-linecap="round"
+									/>
+									<line
+										x1="6"
+										y1="6"
+										x2="6"
+										y2="14"
+										stroke="rgba(255, 255, 255, 0.35)"
+										stroke-width="1"
+										stroke-linecap="round"
+									/>
+								</g>
+							{/each}
+						</g>
+					</svg>
+				</div>
+				<div
+					class="pattern-pills"
+					role="radiogroup"
+					aria-label="Install pattern"
+					bind:this={radiogroupEl}
+				>
+					{#each tilePatternList as p, i (p.id)}
+						<button
+							type="button"
+							class="pattern-pill"
+							class:pattern-pill--active={activeTilePattern === p.id}
+							role="radio"
+							aria-checked={activeTilePattern === p.id}
+							tabindex={activeTilePattern === p.id ? 0 : -1}
+							onclick={() => (activeTilePattern = p.id)}
+							onkeydown={(e) => handlePillKeydown(e, i)}
+						>
+							{p.label}
+						</button>
+					{/each}
+				</div>
 			</div>
-			<div class="tab-section">
-				<h4 class="tab-heading">Construction</h4>
-				<p class="tab-text">
-					Tufted nylon or PET face fibre on a dimensionally stable backing — typically PVC, bitumen,
-					or cushion-back. Some lines use recycled content backing (Shaw EcoWorx, Interface
-					TacTiles).
-				</p>
+		{:else}
+			<div class="overview-layout">
+				<div class="tab-scroll">
+					<p class="tab-lead">
+						Modular squares & planks that swap out one tile at a time — no full-room tearup.
+					</p>
+					<div class="spec-rows">
+						<div class="spec-row">
+							<span class="spec-label">Sizes</span>
+							<span class="spec-value">18×18 · 24×24 · 18×36 · plank</span>
+						</div>
+						<div class="spec-row">
+							<span class="spec-label">Wear</span>
+							<span class="spec-value">Nylon or PET, loop or cut-pile</span>
+						</div>
+						<div class="spec-row">
+							<span class="spec-label">Install</span>
+							<span class="spec-value">Peel-stick, glue-down, or loose-lay</span>
+						</div>
+						<div class="spec-row">
+							<span class="spec-label">Traffic</span>
+							<span class="spec-value">Heavy commercial</span>
+						</div>
+						<div class="spec-row">
+							<span class="spec-label">Fire</span>
+							<span class="spec-value">Class 1 (ASTM E648)</span>
+						</div>
+						<div class="spec-row">
+							<span class="spec-label">For</span>
+							<span class="spec-value">Offices, schools, healthcare, retail</span>
+						</div>
+						<div class="spec-row">
+							<span class="spec-label">Maintain</span>
+							<span class="spec-value">Vacuum + spot-replace damaged tiles</span>
+						</div>
+						<div class="spec-row">
+							<span class="spec-label">Life</span>
+							<span class="spec-value">15–25 yr in commercial settings</span>
+						</div>
+					</div>
+					<SupplierMarquee material="carpet-tile" compact />
+				</div>
+				<button type="button" class="feature-btn" onclick={() => (featureOpen = true)}>
+					<span class="feature-btn__icon" aria-hidden="true">
+						<svg viewBox="0 0 24 24" width="18" height="18">
+							<circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5" />
+							<path d="M10 8.5 L16 12 L10 15.5 Z" fill="currentColor" />
+						</svg>
+					</span>
+					<span class="feature-btn__text">Install patterns</span>
+					<span class="feature-btn__hint">(interactive)</span>
+				</button>
 			</div>
-			<div class="tab-section">
-				<h4 class="tab-heading">Where It Goes</h4>
-				<ul class="tab-list">
-					<li>Open-plan offices, call centres, co-working</li>
-					<li>Schools, universities, libraries</li>
-					<li>Healthcare corridors (with sealed edges)</li>
-					<li>Retail, hospitality, airports</li>
-				</ul>
-			</div>
-			<div class="tab-section">
-				<h4 class="tab-heading">Ratings & Certifications</h4>
-				<ul class="tab-list">
-					<li>CRI Green Label Plus (indoor air quality)</li>
-					<li>NSF/ANSI 140 — Sustainable Carpet Assessment</li>
-					<li>Class 1 fire rating (ASTM E648 / CAN/ULC S102.2)</li>
-					<li>LEED v4 credit-eligible (recycled content, EPD)</li>
-				</ul>
-			</div>
-		</div>
+		{/if}
 	{/snippet}
 
 	{#snippet install()}
 		<div class="tab-scroll">
-			<div class="tile-morph-stage">
-				<svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-					<defs>
-						<clipPath id="tile-morph-clip">
-							<rect x="0" y="0" width="180" height="180" />
-						</clipPath>
-					</defs>
-					<g clip-path="url(#tile-morph-clip)">
-						{#each Array.from({ length: 36 }, (__, idx) => idx) as i (i)}
-							<g class="tile-morph-tile" transform={tileTransform(i, activeTilePattern)}>
-								<rect
-									x="0"
-									y="0"
-									width="30"
-									height="30"
-									rx="2"
-									fill="rgba(255, 255, 255, 0.04)"
-									stroke="rgba(255, 255, 255, 0.2)"
-									stroke-width="0.8"
-								/>
-								<line
-									x1="6"
-									y1="6"
-									x2="14"
-									y2="6"
-									stroke="rgba(255, 255, 255, 0.35)"
-									stroke-width="1"
-									stroke-linecap="round"
-								/>
-								<line
-									x1="6"
-									y1="6"
-									x2="6"
-									y2="14"
-									stroke="rgba(255, 255, 255, 0.35)"
-									stroke-width="1"
-									stroke-linecap="round"
-								/>
-							</g>
-						{/each}
-					</g>
-				</svg>
+			<div class="media-stage media-stage--placeholder">
+				<span class="placeholder-label">Video</span>
 			</div>
-			<div
-				class="tile-morph-pills"
-				role="radiogroup"
-				aria-label="Install pattern"
-				bind:this={radiogroupEl}
-			>
-				{#each tilePatternList as p, i (p.id)}
-					<button
-						type="button"
-						class="tile-morph-pill"
-						class:tile-morph-pill--active={activeTilePattern === p.id}
-						role="radio"
-						aria-checked={activeTilePattern === p.id}
-						tabindex={activeTilePattern === p.id ? 0 : -1}
-						onclick={() => (activeTilePattern = p.id)}
-						onkeydown={(e) => handlePillKeydown(e, i)}
-					>
-						{p.label}
-					</button>
-				{/each}
-			</div>
-			<div class="tab-section">
-				<h4 class="tab-heading">Install Methods</h4>
-				<ul class="tab-list">
-					<li>
-						<strong>Glue-down</strong> — full-spread pressure-sensitive adhesive. Most common commercial
-						method.
-					</li>
-					<li>
-						<strong>Tackifier release</strong> — repositionable adhesive for easy tile swaps and access
-						floor panels.
-					</li>
-					<li>
-						<strong>Peel-and-stick</strong> — factory-applied adhesive backing. Fast install, lower bond
-						strength.
-					</li>
-					<li>
-						<strong>TacTiles (Interface)</strong> — adhesive-free connectors between tiles. No wet adhesive,
-						no VOC.
-					</li>
-				</ul>
-			</div>
-			<div class="tab-section">
-				<h4 class="tab-heading">Subfloor Prep</h4>
-				<ul class="tab-list">
-					<li>Concrete must be dry (≤ 5 lbs MVER or ≤ 80% RH per ASTM F2170)</li>
-					<li>Patch and level — FF25/FL20 minimum for glue-down</li>
-					<li>Remove all curing compounds, sealers, adhesive residue</li>
-					<li>Acclimate tiles in conditioned space 24–48 hrs before install</li>
-				</ul>
+			<div class="spec-rows">
+				<div class="spec-row">
+					<span class="spec-label">Glue-down</span>
+					<span class="spec-value">Permanent, most common</span>
+				</div>
+				<div class="spec-row">
+					<span class="spec-label">Tackifier</span>
+					<span class="spec-value">Repositionable, access floors</span>
+				</div>
+				<div class="spec-row">
+					<span class="spec-label">Peel & stick</span>
+					<span class="spec-value">Factory adhesive, fastest</span>
+				</div>
+				<div class="spec-row">
+					<span class="spec-label">Adhesive-free</span>
+					<span class="spec-value">Zero VOC connectors</span>
+				</div>
 			</div>
 		</div>
 	{/snippet}
 
-	{#snippet maintain()}
+	{#snippet care()}
 		<div class="tab-scroll">
-			<div class="tab-section">
-				<h4 class="tab-heading">Routine Cleaning</h4>
-				<ul class="tab-list">
-					<li>
-						<strong>Daily:</strong> vacuum with CRI-approved upright (beater bar off for loop pile)
-					</li>
-					<li><strong>Weekly:</strong> spot-clean spills within 24 hrs — blot, don't rub</li>
-					<li><strong>Quarterly:</strong> interim extraction or encapsulation cleaning</li>
-					<li><strong>Annual:</strong> hot-water extraction (truck-mount or portable)</li>
-				</ul>
+			<div class="care-icon-row" aria-hidden="true">
+				<svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" class="care-icon">
+					<circle
+						cx="24"
+						cy="24"
+						r="20"
+						fill="none"
+						stroke="rgba(255,255,255,0.15)"
+						stroke-width="1.5"
+					/>
+					<path
+						d="M16 32 L24 16 L32 32"
+						fill="none"
+						stroke="rgba(255,255,255,0.4)"
+						stroke-width="1.5"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					/>
+					<line
+						x1="24"
+						y1="26"
+						x2="24"
+						y2="28"
+						stroke="rgba(255,255,255,0.4)"
+						stroke-width="1.5"
+						stroke-linecap="round"
+					/>
+				</svg>
 			</div>
-			<div class="tab-section">
-				<h4 class="tab-heading">Tile Replacement</h4>
-				<p class="tab-text">
-					The killer advantage of modular tile: pull up the damaged tile, drop in a replacement from
-					attic stock. No seaming, no re-stretch. Keep 3–5% attic stock from every job for
-					colour-lot matching.
-				</p>
+			<div class="spec-rows">
+				<div class="spec-row">
+					<span class="spec-label">Daily</span>
+					<span class="spec-value">Vacuum, beater bar off for loop</span>
+				</div>
+				<div class="spec-row">
+					<span class="spec-label">Spills</span>
+					<span class="spec-value">Spot-clean within 24 hrs</span>
+				</div>
+				<div class="spec-row">
+					<span class="spec-label">Quarterly</span>
+					<span class="spec-value">Extraction or encap cleaning</span>
+				</div>
+				<div class="spec-row">
+					<span class="spec-label">Annual</span>
+					<span class="spec-value">Hot-water extraction</span>
+				</div>
 			</div>
-			<div class="tab-section">
-				<h4 class="tab-heading">Lifecycle</h4>
-				<ul class="tab-list">
-					<li>
-						<strong>Commercial life:</strong> 10–15 years in moderate traffic, 7–10 in heavy
-					</li>
-					<li>
-						<strong>Warranty:</strong> most manufacturers offer 10-year commercial wear + 15-year structural
-					</li>
-					<li>
-						<strong>End of life:</strong> many mills offer take-back recycling (Shaw re[TURN], Interface
-						ReEntry)
-					</li>
-				</ul>
-			</div>
-			<div class="tab-section">
-				<h4 class="tab-heading">Pros & Cons Over Time</h4>
-				<ul class="tab-list">
-					<li>
-						<strong>Pro:</strong> individual tile replacement — no full-room disruption
-					</li>
-					<li>
-						<strong>Pro:</strong> access to underfloor services (data, power) without destroying the floor
-					</li>
-					<li>
-						<strong>Con:</strong> seams can telegraph dirt lines in high-traffic paths if not maintained
-					</li>
-					<li>
-						<strong>Con:</strong> edge curl on low-quality tiles or poor adhesive application
-					</li>
-				</ul>
-			</div>
+			<p class="tab-footnote">
+				10–15 yr life, moderate traffic. Typical warranty: 10-yr wear + 15-yr structural.
+			</p>
 		</div>
 	{/snippet}
 </ModalTabs>
@@ -265,10 +298,130 @@
 		overflow-y: auto;
 		-webkit-overflow-scrolling: touch;
 		overscroll-behavior: contain;
+		min-height: 0;
 	}
 
-	.tile-morph-stage {
-		margin: 1.25rem auto 0.85rem;
+	/* Feature stage — full-bleed takeover of tab panel */
+	.feature-stage {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+	}
+
+	.feature-back {
+		display: flex;
+		align-items: center;
+		gap: 0.3rem;
+		font-family: var(--font-body);
+		font-size: 0.7rem;
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--color-text-muted);
+		background: none;
+		border: none;
+		padding: 0.4rem 0;
+		cursor: pointer;
+		transition: color var(--base);
+	}
+
+	.feature-back:hover {
+		color: var(--color-text);
+	}
+
+	.feature-back:focus-visible {
+		outline: 2px solid rgba(255, 255, 255, 0.5);
+		outline-offset: 2px;
+	}
+
+	.feature-title {
+		font-family: var(--font-body);
+		font-size: 0.75rem;
+		font-weight: 500;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--color-text);
+		margin: 0;
+		text-align: center;
+	}
+
+	.feature-morph {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.5rem;
+	}
+
+	.feature-morph svg {
+		display: block;
+		width: 100%;
+		max-width: 280px;
+		height: auto;
+	}
+
+	/* Feature button on overview */
+	.overview-layout {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+	}
+
+	.feature-btn {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		width: 100%;
+		padding: 0.65rem 0.75rem;
+		margin: auto 0 0;
+		flex-shrink: 0;
+		border-radius: var(--radius-sm);
+		background: rgba(255, 255, 255, 0.03);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		color: var(--color-text);
+		cursor: pointer;
+		transition:
+			background var(--base),
+			border-color var(--base);
+	}
+
+	.feature-btn:hover {
+		background: rgba(255, 255, 255, 0.06);
+		border-color: rgba(255, 255, 255, 0.18);
+	}
+
+	.feature-btn:focus-visible {
+		outline: 2px solid rgba(255, 255, 255, 0.5);
+		outline-offset: 2px;
+	}
+
+	.feature-btn__icon {
+		flex-shrink: 0;
+		display: flex;
+		color: var(--color-text-muted);
+	}
+
+	.feature-btn__text {
+		font-family: var(--font-body);
+		font-size: 0.75rem;
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	.feature-btn__hint {
+		font-size: 0.65rem;
+		font-weight: 400;
+		letter-spacing: 0.04em;
+		color: var(--color-text-muted);
+		margin-left: auto;
+	}
+
+	/* Media stage (install tab placeholder) */
+	.media-stage {
+		margin: 0.75rem auto 0.85rem;
 		padding: 1rem;
 		border-radius: var(--radius-lg);
 		background: rgba(0, 0, 0, 0.3);
@@ -276,12 +429,34 @@
 		max-width: 280px;
 	}
 
-	.tile-morph-stage svg {
-		display: block;
-		width: 100%;
-		height: auto;
+	.media-stage--placeholder {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		aspect-ratio: 16 / 10;
 	}
 
+	.placeholder-label {
+		font-size: 0.7rem;
+		font-weight: 500;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.2);
+	}
+
+	/* Care tab icon */
+	.care-icon-row {
+		display: flex;
+		justify-content: center;
+		margin: 0.5rem 0 0.75rem;
+	}
+
+	.care-icon {
+		width: 32px;
+		height: 32px;
+	}
+
+	/* Tile morph animation */
 	.tile-morph-tile {
 		transition: transform 460ms cubic-bezier(0.2, 0.9, 0.25, 1.05);
 		transform-box: fill-box;
@@ -293,15 +468,17 @@
 		}
 	}
 
-	.tile-morph-pills {
+	/* Pattern pills */
+	.pattern-pills {
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 0.45rem;
-		margin: 0.85rem auto 1.25rem;
+		margin: 0 auto;
+		padding: 0 0.5rem 0.5rem;
 		max-width: 320px;
 	}
 
-	.tile-morph-pill {
+	.pattern-pill {
 		font-family: var(--font-body);
 		font-size: 0.58rem;
 		font-weight: 500;
@@ -320,70 +497,62 @@
 			color var(--base);
 	}
 
-	.tile-morph-pill:focus-visible {
+	.pattern-pill:focus-visible {
 		outline: 2px solid rgba(255, 255, 255, 0.5);
 		outline-offset: 2px;
 	}
 
-	.tile-morph-pill:hover {
+	.pattern-pill:hover {
 		color: var(--color-text);
 		background: rgba(255, 255, 255, 0.04);
 		border-color: rgba(255, 255, 255, 0.15);
 	}
 
-	.tile-morph-pill--active {
+	.pattern-pill--active {
 		color: var(--color-text);
 		background: rgba(255, 255, 255, 0.08);
 		border-color: rgba(255, 255, 255, 0.25);
 	}
 
-	.tab-section {
-		margin-bottom: 1rem;
-	}
-
-	.tab-section:last-child {
-		margin-bottom: 0;
-	}
-
-	.tab-heading {
-		font-family: var(--font-body);
-		font-size: 0.7rem;
-		font-weight: 500;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
+	/* Shared text styles */
+	.tab-lead {
+		font-size: 0.95rem;
 		color: var(--color-text);
-		margin: 0 0 0.4rem;
+		line-height: 1.5;
+		margin: 0 0 0.85rem;
 	}
 
-	.tab-text {
-		font-size: 0.88rem;
-		color: var(--color-text-muted);
-		line-height: 1.6;
-		margin: 0;
-	}
-
-	.tab-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
+	.spec-rows {
 		display: flex;
 		flex-direction: column;
-		gap: 0.35rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.06);
 	}
 
-	.tab-list li {
-		font-size: 0.85rem;
-		color: var(--color-text-muted);
-		line-height: 1.5;
-		padding-left: 1rem;
-		position: relative;
+	.spec-row {
+		display: flex;
+		align-items: baseline;
+		font-size: 0.78rem;
+		line-height: 1.4;
+		padding: 0.4rem 0;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 	}
 
-	.tab-list li::before {
-		content: '·';
-		position: absolute;
-		left: 0.25rem;
+	.spec-label {
+		flex-shrink: 0;
+		width: 5rem;
+		font-weight: 500;
+		letter-spacing: 0.04em;
 		color: var(--color-text);
-		font-weight: 700;
+	}
+
+	.spec-value {
+		color: var(--color-text-muted);
+	}
+
+	.tab-footnote {
+		font-size: 0.75rem;
+		color: rgba(255, 255, 255, 0.3);
+		line-height: 1.5;
+		margin: 0.85rem 0 0;
 	}
 </style>

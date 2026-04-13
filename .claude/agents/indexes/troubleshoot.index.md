@@ -15,6 +15,8 @@
 | 2 | 2026-04-07 | "Blocked request. This host is not allowed" via tunnel | Vite `server.allowedHosts` missing tunnel domain | `30-troubleshooting-playbooks.md` § Vite-AllowedHosts |
 | 3 | 2026-04-07 | Cached "Blocked request" error persists on phone after fix | Mobile browser cached the 4xx error | `30-troubleshooting-playbooks.md` § Mobile-Cache-Bust |
 | 4 | 2026-04-07 | Multiple Vite instances on 5173/5174/5175 | Stale `node` processes from prior sessions | `30-troubleshooting-playbooks.md` § Stale-Vite-Cleanup |
+| 5 | 2026-04-13 | Build error after renaming ModalTabs snippet props | Must update type, props, render, and all consumer snippet blocks | `30-troubleshooting-playbooks.md` § ModalTabs-Snippet-Rename |
+| 6 | 2026-04-13 | SupplierMarquee shows all suppliers in modal | Missing `material` filter prop | `30-troubleshooting-playbooks.md` § SupplierMarquee-Filter-Prop |
 
 ---
 

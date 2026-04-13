@@ -214,8 +214,30 @@ When the user says "research [product]" or new product info is needed:
 - **Database agent** — if YCI ever needs a `products` table, the schema can be derived from this library's frontmatter
 - **Research agent** — generic web research dispatcher; this agent is the *flooring-specific* version
 
-## State (as of creation 2026-04-07)
+## State (as of 2026-04-13)
 
-This agent was scaffolded by the main thread per user request. The resource library at `.claude/resources/products/` is **planned but not yet populated**. Phase 1 = create the directory + INDEX.md + 8 stub product files. Phase 2 = dispatch 8 parallel sub-agents to populate each file with real research. Phase 3 = wire the YCI marketing site product modals to consume from this library.
+### Supplier → Product Mapping (VERIFIED)
+All 18 suppliers verified against their actual websites on 2026-04-13 by dispatching 10 parallel web-checking agents.
+- **Source of truth**: `src/lib/content/suppliers.ts` — each supplier has a `materials: Material[]` array
+- **Human-readable reference**: `.claude/reference/supplier-product-mapping.md` — grid table + notes
+- **Filter utility**: `suppliersByMaterial(material)` function exported from suppliers.ts
+- **UI integration**: `SupplierMarquee` component accepts `material` + `compact` props to show filtered suppliers per product modal
 
-Sub-agent dispatch is gated on user direction — this agent will not start mass research without explicit "go".
+### Product Modal Content Structure (DECIDED 2026-04-13)
+Three tabs per product: **Overview / Install / Care**. Tab names are in `ModalTabs.svelte`.
+- **Overview**: lead description (0.95rem, white) → spec chart (label:value rows with discreet borders) → filtered supplier marquee → pinned interactive button at bottom
+- **Install**: video/media placeholder + spec rows
+- **Care**: small static icon + spec rows + warranty footnote
+- **Interactive feature**: opens full-bleed in tab panel via `featureOpen` state toggle, with "Back to overview" button + title header
+- **Universal spec row labels**: Sizes, Wear, Install, Traffic, Fire, For, Maintain, Life — work across all 11 products
+
+### Key Findings from Supplier Verification
+- **CIOT** URL was wrong (`cfrancis.ca` is parked) — corrected to `ciot.com`
+- **Gerflor** is much narrower than expected — LVT and sheet vinyl only in Canada
+- **Centura** is the broadest distributor — carries almost every category
+- **Forbo** does list carpet tile (Tessera + Flotex lines)
+- **Vifloor** is a Shaw/Patcraft distributor, not just LVT — carries carpet-tile, carpet, matting, sheet
+- **Fuzion** now lists carpet tile on their website
+
+### Resource Library
+The resource library at `.claude/resources/products/` is **planned but not yet populated** with full product files. The supplier mapping is complete. Next: populate per-product files using the schema above, starting with carpet-tile.

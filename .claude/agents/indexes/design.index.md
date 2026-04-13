@@ -56,6 +56,20 @@
 | 1 | 2026-04-06 | Dev page (`/dev`) | Apple Light Glass layout, header, table cards, tab bar, CRUD panels, response panel |
 | 2 | 2026-04-06 | Dev page dark mode toggle | Pill toggle in header top-right, sun/moon icons, 350ms transition, dark color scheme |
 
+## Product Modal Content Layout (2026-04-13)
+
+Standard layout for all 11 product badge modals:
+- **Tabs**: Overview / Install / Care (defined in `ModalTabs.svelte`)
+- **Overview tab structure**: `.overview-layout` flex column → `.tab-scroll` (scrollable) + `.feature-btn` (pinned bottom)
+  - Lead description: 0.95rem, `var(--color-text)` (white, stands out from specs)
+  - Spec chart: `.spec-rows` with `border-top/bottom: 1px solid rgba(255,255,255,0.06)`, label width 5rem
+  - Supplier marquee: `<SupplierMarquee material="..." compact />` — filtered, auto-scrolling
+  - Interactive button: play-circle icon + label + "(interactive)" hint, pinned via `margin: auto 0 0`
+- **Feature stage**: full-bleed takeover of tab panel, "Back to overview" button + title + interactive content
+- **Install tab**: media placeholder + spec rows
+- **Care tab**: small icon (32px) + spec rows + footnote
+- **Prototype**: `CarpetTileModal.svelte` — all other products clone this pattern
+
 ## Research Log
 | Date | Topic | Source | Added To |
 |------|-------|--------|----------|
@@ -63,3 +77,4 @@
 | 2026-04-06 | Catalog keyboard navigation patterns | Storybook a11y docs, Apple HIG | `resources/04-accessibility-wcag22.md` (Catalog Keyboard Patterns, Focus-Visible Ring) |
 | 2026-04-07 | Dark glass pills + 3D drafting-desk tilt | Apple HIG dark mode, Liquid Glass patterns, Young Carpets website | `resources/20-dark-glass-pills-glows.md` |
 | 2026-04-07 | Architectural finishes plan conventions | AIA layer standards, metric working drawings | `resources/21-architectural-finishes-plan.md` |
+| 2026-04-13 | Product modal 3-tab layout + supplier marquee | Session work, flooring expert | Design index § Product Modal Content Layout |

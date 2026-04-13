@@ -145,6 +145,36 @@ cd my-portal && npm run dev -- --host
 
 ---
 
+## ModalTabs-Snippet-Rename
+
+**Symptom:** Build error after renaming ModalTabs snippet props (e.g. `product` → `overview`, `maintain` → `care`).
+
+**Cause:** ModalTabs.svelte defines snippet props (`overview`, `install`, `care`) that must match the `{#snippet name()}` blocks in every consumer. If you rename a tab, you must update: (1) ModalTabs.svelte type + props + render block, (2) CarpetTileModal.svelte snippets, (3) ExpandedProduct.svelte generic fallback snippets.
+
+**Fix:** Search for old snippet name across all three files. The tab type, props interface, destructuring, and `{@render}` calls all need updating.
+
+**Files involved:**
+- `src/lib/components/ModalTabs.svelte` — type, props, render
+- `src/lib/components/CarpetTileModal.svelte` — snippet blocks
+- `src/lib/components/ExpandedProduct.svelte` — generic fallback snippets
+
+---
+
+## SupplierMarquee-Filter-Prop
+
+**Symptom:** SupplierMarquee shows all 18 suppliers instead of filtered list in product modal.
+
+**Cause:** Missing `material` prop. The component defaults to showing all suppliers when no material is passed.
+
+**Fix:** Pass `material="carpet-tile"` (or whichever product) and `compact` to the component:
+```svelte
+<SupplierMarquee material="carpet-tile" compact />
+```
+
+**Data dependency:** `src/lib/content/suppliers.ts` must have `materials[]` array on each supplier. The `suppliersByMaterial()` function filters by it.
+
+---
+
 ## Database-Connection-Refused (template — fill in when first encountered)
 
 > Will be populated the first time we hit a Supabase connection issue. Anchor symptoms to look for:

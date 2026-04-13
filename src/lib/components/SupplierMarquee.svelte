@@ -1,30 +1,56 @@
 <script lang="ts">
-	import { suppliers } from '$lib/content/suppliers';
+	import { suppliers, suppliersByMaterial } from '$lib/content/suppliers';
+	import type { Product } from '$lib/content/products';
+
+	interface Props {
+		material?: Product['material'];
+		compact?: boolean;
+	}
+
+	let { material, compact = false }: Props = $props();
+
+	const filtered = $derived(material ? suppliersByMaterial(material) : suppliers);
 </script>
 
-<section id="suppliers" class="suppliers" aria-label="Suppliers">
-	<h2 class="suppliers-heading">
-		<span class="heading-accent">Trusted Brands</span>
-		<span class="heading-dim">Include:</span>
-	</h2>
-	<div class="marquee" aria-hidden="true">
-		<div class="marquee-track">
-			{#each suppliers as supplier (supplier.slug)}
-				<span class="marquee-item">{supplier.name}</span>
+{#if !compact}
+	<section id="suppliers" class="suppliers" aria-label="Suppliers">
+		<h2 class="suppliers-heading">
+			<span class="heading-accent">Trusted Brands</span>
+			<span class="heading-dim">Include:</span>
+		</h2>
+		<div class="marquee" aria-hidden="true">
+			<div class="marquee-track">
+				{#each filtered as supplier (supplier.slug)}
+					<span class="marquee-item">{supplier.name}</span>
+				{/each}
+				{#each filtered as supplier (`${supplier.slug}-dup`)}
+					<span class="marquee-item">{supplier.name}</span>
+				{/each}
+			</div>
+		</div>
+		<ul class="suppliers-sr-only">
+			{#each filtered as supplier (supplier.slug)}
+				<li>{supplier.name}</li>
 			{/each}
-			{#each suppliers as supplier (`${supplier.slug}-dup`)}
-				<span class="marquee-item">{supplier.name}</span>
-			{/each}
+		</ul>
+	</section>
+{:else}
+	<div class="compact-suppliers" aria-label="Suppliers for this product">
+		<div class="compact-marquee" aria-hidden="true">
+			<div class="compact-track">
+				{#each filtered as supplier (supplier.slug)}
+					<span class="compact-item">{supplier.name}</span>
+				{/each}
+				{#each filtered as supplier (`${supplier.slug}-dup`)}
+					<span class="compact-item">{supplier.name}</span>
+				{/each}
+			</div>
 		</div>
 	</div>
-	<ul class="suppliers-sr-only">
-		{#each suppliers as supplier (supplier.slug)}
-			<li>{supplier.name}</li>
-		{/each}
-	</ul>
-</section>
+{/if}
 
 <style>
+	/* === Full-size (main page) === */
 	.suppliers {
 		padding: 2rem 1rem 1rem;
 		overflow: hidden;
@@ -140,6 +166,60 @@
 
 		.marquee-track {
 			gap: 2.5rem;
+		}
+	}
+
+	/* === Compact (product modal) === */
+	.compact-suppliers {
+		overflow: hidden;
+		margin: 0.6rem 0 0;
+	}
+
+	.compact-marquee {
+		position: relative;
+		width: 100%;
+		padding: 0.4rem 0;
+		mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+		-webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+	}
+
+	.compact-track {
+		display: flex;
+		gap: 0.6rem;
+		width: max-content;
+		animation: marquee-scroll 30s linear infinite;
+	}
+
+	.compact-item {
+		flex-shrink: 0;
+		font-family: var(--font-body);
+		font-size: 0.65rem;
+		font-weight: 400;
+		letter-spacing: 0.04em;
+		color: var(--color-text-muted);
+		white-space: nowrap;
+		padding: 0.25rem 0.55rem;
+		border: 1px solid rgba(255, 255, 255, 0.06);
+		border-radius: var(--radius-sm);
+	}
+
+	@media (hover: hover) {
+		.compact-marquee:hover .compact-track {
+			animation-play-state: paused;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.compact-track {
+			animation: none;
+			flex-wrap: wrap;
+			justify-content: center;
+			width: auto;
+		}
+
+		.compact-marquee {
+			mask-image: none;
+			-webkit-mask-image: none;
 		}
 	}
 </style>

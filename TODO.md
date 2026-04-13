@@ -1,6 +1,6 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-13 (Product badge → modal transition complete — v0.4.51).
+Last updated: 2026-04-13 (Product modal content layout + supplier mapping — v0.4.67).
 
 This file is the durable cross-session to-do list. Both Claude and you read it at session start.
 
@@ -17,6 +17,8 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - **Global CSS foundation.** `src/app.css` with color tokens, glass/glow tokens, motion tokens, radius tokens, font tokens, CSS reset, light theme overrides, reduced-motion/transparency media queries.
 - **Product badge FLIP animation (v0.4.51 — LOCKED).** Container-transform animation: badge grows to fill grid, inner elements (title, SVG icon) FLIP to header positions with size ratios. Glow overlay uses layout animation for Safari. 900ms duration, ease-out curve. Background: shared opaque dark gradient (no backdrop-filter). Smooth scroll to center products section on open. Stagger return on close: badges fade in sequentially (unlit), then illuminate sequentially. Selected badge stays lit throughout. SVG jitter fix: removed permanent GPU layer, matched shadow structure, 2s illuminate speed. Backups at `backup/v0.4.26`, `backup/v0.4.49`.
 - **Agent system organized.** `.claude/agents/INDEX.md` is the single router. FLIP animation agent with full index. Agents accumulate project-specific knowledge. Check project agents before generic dispatch.
+- **Product modal content layout (v0.4.67).** Three tabs: Overview / Install / Care. Overview: lead description → spec chart (8 universal rows) → filtered supplier marquee → pinned interactive button. Install: video placeholder + method rows. Care: small icon + cleaning rows + warranty footnote. Interactive feature opens full-bleed in tab panel with "Back to overview". Carpet Tile is the prototype.
+- **Supplier → product mapping (verified 2026-04-13).** All 18 suppliers verified against their actual websites by 10 parallel agents. Each supplier has `materials[]` in `suppliers.ts`. Filtered marquee in product modals via `<SupplierMarquee material="..." compact />`. Reference grid at `.claude/reference/supplier-product-mapping.md`. CIOT URL corrected to `ciot.com`.
 
 ## Resume here next session
 
@@ -26,10 +28,10 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - `.claude/agents/motion-expert.md` — easing, timing, GPU compositing
 - `.claude/agents/design.md` — design tokens, glass effects
 
-**Current task: Product modal content.**
-The badge → modal transition is complete and locked. Next: build out the product modal content itself.
-1. **Carpet Tile modal content** — refine the 3-tab content (Product/Installation/Maintenance), sub-category navigation within the modal.
-2. **Then clone for other 10 badges.** 11 badges total. See `.claude/reference/site-layout-structure.md` for full product tree. Codes: CPTT, LVT, CPT, CT, RBR, MAT, WD, SVF.
+**Current task: Product modal content — clone to other 10 badges.**
+Carpet Tile prototype is complete (v0.4.67). Layout, tabs, spec chart, supplier marquee, interactive button all working.
+1. **Clone Carpet Tile pattern to other 10 badges.** Each needs: lead description, 8 spec rows, supplier marquee (auto-filtered), interactive feature button (per-product SVG/video). Use flooring expert for content.
+2. **Build per-product interactive features.** Each Overview tab gets its own SVG animation (like tile morph for Carpet Tile). Install tab gets video placeholders.
 3. **Refine SVG drawings** — improve texture icons for each product type.
 4. **Then Services section.** 4 service cards.
 5. **Then Contact/Map section.** Team, info, Google Maps embed. Counter badges already placed.
@@ -63,7 +65,9 @@ The badge → modal transition is complete and locked. Next: build out the produ
 - [x] Products section: 11 badges scaffolded, FLIP animation prototype on Carpet Tile
 - [x] Product badge background — shared opaque gradient, no backdrop-filter (v0.4.39)
 - [x] Badge → modal transition LOCKED (FLIP grow/shrink, stagger return, scroll-to-center, SVG jitter fix — v0.4.51)
-- [ ] Product modal content (Carpet Tile first, then clone to other 10)
+- [x] Product modal content layout (Carpet Tile prototype — 3-tab, spec chart, supplier marquee, interactive button)
+- [x] Supplier → product mapping verified (18 suppliers, all websites checked)
+- [ ] Product modal content cloned to other 10 badges
 - [ ] Section: Services (4 cards)
 - [ ] Section: Contact/Map (team, info, Google Maps, counter badges already placed)
 - [ ] Section: Footer (reconcile with final content)

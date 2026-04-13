@@ -256,7 +256,7 @@
 			<CarpetTileModal />
 		{:else if prod.details}
 			<ModalTabs stagger>
-				{#snippet product()}
+				{#snippet overview()}
 					<div class="expanded-body" class:expanded-body--visible={contentVisible}>
 						<div class="tab-section">
 							<p class="tab-text">{prod.details}</p>
@@ -270,10 +270,10 @@
 						</div>
 					</div>
 				{/snippet}
-				{#snippet maintain()}
+				{#snippet care()}
 					<div class="expanded-body" class:expanded-body--visible={contentVisible}>
 						<div class="tab-section">
-							<p class="tab-text">Maintenance details coming soon.</p>
+							<p class="tab-text">Care details coming soon.</p>
 						</div>
 					</div>
 				{/snippet}
