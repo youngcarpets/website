@@ -1,6 +1,6 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-13 (Products section in progress — Carpet Tile badge prototype, v0.3.4).
+Last updated: 2026-04-13 (Product badge FLIP animation polished — v0.4.36).
 
 This file is the durable cross-session to-do list. Both Claude and you read it at session start.
 
@@ -15,32 +15,28 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - **Dark mode is the working mode.** Body `#0b0b0d`, text `#e6e6e8`. Grayscale only — no color accents until color phase at the end.
 - **System font stack.** SF Pro Display (Apple), Segoe UI (Windows), system-ui fallback. Square721 for YOUNG wordmark only.
 - **Global CSS foundation.** `src/app.css` with color tokens, glass/glow tokens, motion tokens, radius tokens, font tokens, CSS reset, light theme overrides, reduced-motion/transparency media queries.
-- **Site-wide bg image.** Fixed full-viewport `object-fit: cover`, dark-mode filter, radial mask.
-- **Glass effect.** `rgba(18, 18, 21, 0.18)` bg, `blur(8px) saturate(1.4)` — light enough to see background detail through.
-- **BrandMark component.** `src/lib/components/BrandMark.svelte` — reusable for hero + footer. YOUNG wordmark (Square721, near-white, bounce-in in hero) + "COMMERCIAL FLOORING 🍁" SVG subtitle (textLength auto-scaling, font 24px/500, opacity 0.7). `bind:clientWidth` ensures SVG matches YOUNG width at any scale. Drop-shadow behind. Maple leaf at scale 0.0063.
-- **Counter badges.** Three glass cards (35+ years / 50,000+ jobs / 250+ experience) with `countUp` action, IntersectionObserver trigger, `prefers-reduced-motion` respected. In Contact section.
-- **Nav bar.** Glass pill, safe-area-inset support. Links: Products, Services, Suppliers, Contact.
-- **Footer.** Semi-transparent, BrandMark at top, 3-col grid (address/contact/hours), responsive breakpoints.
-- **Component architecture.** Repeated visual elements = one component, instances differ by props only. Tree diagram maps to component classes.
-- **Favicon.** SVG with traced "YCI" glyph paths (1.2KB), PNG fallback, apple-touch-icon.
-- **Meta.** Base OG tags in layout `<svelte:head>`. Page-level title/description in `+page.svelte`.
-- **Accessibility.** `prefers-reduced-transparency` fallback. `prefers-reduced-motion` on all animations. Focus indicators. Skip link. `afterNavigate` focus management.
-- **View Transitions.** `onNavigate` hook with `startViewTransition`.
-- **Section anchors.** Placeholder sections for Products, Services, Suppliers, Contact.
-- **0 errors, 0 warnings** on `pnpm check` + `pnpm lint` (as of v0.2.0).
+- **Product badge FLIP animation (v0.4.36).** Container-transform animation: badge grows to fill grid, inner elements (title, SVG icon) FLIP to header positions with size ratios. Glow overlay uses layout animation (top/left/width/height) for Safari compatibility. 900ms duration, ease-out curve. All endpoints matched for brightness/size. Backup at `backup/v0.4.26`.
+- **Agent system organized.** `.claude/agents/INDEX.md` is the single router. FLIP animation agent with full index. Agents accumulate project-specific knowledge. Check project agents before generic dispatch.
 
 ## Resume here next session
 
-**Follow the migration workflow:** `.claude/reference/migration-workflow.md`
-**Layout structure reference:** `.claude/reference/site-layout-structure.md`
+**Agents to load immediately:**
+- `.claude/agents/INDEX.md` — scan for relevant agents
+- `.claude/agents/flip-animation.md` + `indexes/flip-animation.index.md` — FLIP grow/shrink patterns
+- `.claude/agents/motion-expert.md` — easing, timing, GPU compositing
+- `.claude/agents/design.md` — design tokens, glass effects
 
-1. **Products section — in progress.** Carpet Tile badge is the prototype. Get it perfect (badge design, 3-tab modal, pattern animation, sub-categories), then clone for the other 10 badges. 11 badges total (not 9). See `.claude/reference/site-layout-structure.md` for full product tree.
-2. **Carpet Tile badge status:** Badge renders with code (CPTT) + name + SVG texture. Modal opens with 3-tab layout (Product/Installation/Maintenance). Pattern morph animation works (6 patterns). A11y: focus trap, keyboard nav, roving tabindex all implemented. Codes updated to architectural standards (CPTT, LVT, CPT, CT, RBR, MAT, WD, SVF). No codes on More/Accessories/Installation.
-3. **Next on Carpet Tile:** Refine SVG drawings, finalize badge spacing, build out sub-category navigation within the modal.
+**Current task: Product badge background during grow/shrink.**
+The badge background/glow has a slight visual difference between its resting state and the animation start/end. It's almost perfect but needs the same endpoint-matching treatment we applied to the title text and SVG icon — the background appearance at animation boundaries should be identical to the badge's resting state. Use the FLIP animation agent's endpoint matching rules.
+
+**Then continue with:**
+1. **Products section — in progress.** Carpet Tile badge is the prototype. Get it perfect, then clone for the other 10 badges. 11 badges total. See `.claude/reference/site-layout-structure.md` for full product tree.
+2. **Carpet Tile badge status:** Badge renders with code (CPTT) + name + SVG texture. FLIP animation grows badge to full grid with title/icon counter-FLIP. Modal has 3-tab layout (Product/Installation/Maintenance) with sticky tabs and scrollable panels. Pattern morph animation (6 patterns). Glow overlay for Safari. A11y: focus trap, keyboard nav, roving tabindex. Codes: CPTT, LVT, CPT, CT, RBR, MAT, WD, SVF.
+3. **Next on Carpet Tile:** Fix background endpoint matching on grow/shrink. Then refine SVG drawings, finalize badge spacing, build sub-category navigation within the modal.
 4. **Then Services section.** 4 service cards.
 5. **Then Contact/Map section.** Team, info, Google Maps embed. Counter badges already placed.
 6. **Footer reconcile.** After all sections done.
-7. **Design rules:** Grayscale only. No gold/yellow until color phase at the end. All visual properties must use CSS custom properties from app.css — never hardcode. Opacity-based color hierarchy (one base color, opacity controls emphasis).
+7. **Design rules:** Grayscale only. No gold/yellow until color phase. All visual properties use CSS custom properties. Opacity-based color hierarchy.
 8. **Error checking on-demand.** User will ask for `pnpm check` + `pnpm lint` when needed.
 
 ## Site content (building out)
@@ -65,8 +61,9 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] countUp action with IntersectionObserver
 - [x] Maple leaf SVG (currentColor, scale 0.0063)
 - [x] Section: Suppliers (18-brand marquee, "Trusted Brands Include:")
-- [ ] Hero context blurb (est. 1991, Young Carpets Inc., commercial flooring, Ottawa area — format TBD)
-- [ ] Section: Products (11 badges — Carpet Tile prototype in progress) ← IN PROGRESS
+- [x] Hero context blurb (est. 1991, commercial flooring, Ottawa area)
+- [x] Products section: 11 badges scaffolded, FLIP animation prototype on Carpet Tile
+- [ ] Product badge background endpoint matching on grow/shrink ← NEXT
 - [ ] Section: Services (4 cards)
 - [ ] Section: Contact/Map (team, info, Google Maps, counter badges already placed)
 - [ ] Section: Footer (reconcile with final content)
@@ -130,7 +127,7 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] BrandMark.svelte extracted — reusable component, hero + footer instances
 - [x] bind:clientWidth technique for SVG-to-text width matching
 - [x] Footer restructured: BrandMark above grid, 3-col grid below
-- [x] Hero/About section layout done (v0.2.11) — context blurb still needed
+- [x] Hero/About section layout done (v0.2.11)
 - [x] Footer: SVG icons for phone/email/clock/address, 2-col layout, AP email removed
 - [x] BrandMark: maple leaf outline with warm glow filter, COMMERCIAL FLOORING weight 200 + 0.25em tracking
 - [x] Suppliers section: 18 brands, "Trusted Brands Include:" heading, marquee with black band, 70s scroll
@@ -143,6 +140,18 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] Badge grid: 3-col on iPhone, 4/5/6 cols on wider screens
 - [x] Design tokens enforced: CSS custom properties as single source of truth
 - [x] Site layout structure doc updated with 11-badge plan + build approach
+- [x] FLIP animation: title text (code+name) with 0.714 font ratio, matched endpoints
+- [x] FLIP animation: SVG icon from badge center to header top-left, brightness matched
+- [x] Glow overlay: layout-animated (top/left/width/height) for Safari box-shadow survival
+- [x] Other badges vanish in 80ms on selection
+- [x] Close button: instant hide on close, fade-in after expand
+- [x] Sticky tabs with scrollable panel content
+- [x] SVG icon moved left of title in expanded header
+- [x] Title bottom-aligned to icon baseline
+- [x] 900ms animation duration, ease-out curve
+- [x] FLIP animation agent created with full index
+- [x] Agent system organized: INDEX.md router, lean files, on-demand loading
+- [x] Backup branch: `backup/v0.4.26`
 
 ---
 
