@@ -2,13 +2,38 @@
 	import { onMount } from 'svelte';
 	import BrandMark from '$lib/components/BrandMark.svelte';
 	import ProductBadge from '$lib/components/ProductBadge.svelte';
-	import ProductModal from '$lib/components/ProductModal.svelte';
+	import ExpandedProduct from '$lib/components/ExpandedProduct.svelte';
 	import SupplierMarquee from '$lib/components/SupplierMarquee.svelte';
 	import { countUp } from '$lib/actions/countUp';
 	import { illuminateOnScroll } from '$lib/actions/illuminateOnScroll';
-	import { featureProducts, type Product } from '$lib/content/products';
+	import { featureProducts } from '$lib/content/products';
 
-	let openProduct: Product | null = $state(null);
+	let expandedIndex: number | null = $state(null);
+	let badgeRect: { x: number; y: number; w: number; h: number } | null = $state(null);
+	let gridEl: HTMLDivElement | undefined = $state();
+
+	function openBadge(index: number, e: MouseEvent) {
+		const wrapper = (e.currentTarget as HTMLElement).closest('.products-grid > div');
+		if (!wrapper || !gridEl) return;
+		const bRect = wrapper.getBoundingClientRect();
+		const gRect = gridEl.getBoundingClientRect();
+
+		gridEl.style.minHeight = `${gridEl.offsetHeight}px`;
+
+		badgeRect = {
+			x: bRect.left - gRect.left,
+			y: bRect.top - gRect.top,
+			w: bRect.width,
+			h: bRect.height
+		};
+		expandedIndex = index;
+	}
+
+	function closeBadge() {
+		expandedIndex = null;
+		badgeRect = null;
+		if (gridEl) gridEl.style.minHeight = '';
+	}
 
 	let wordmarkReady = $state(false);
 
@@ -40,23 +65,32 @@
 <section class="hero">
 	<div class="hero-title">
 		<BrandMark size="hero" animated ready={wordmarkReady} tag="h1" />
+		<p class="hero-blurb">
+			Young Carpets Inc. has supplied and installed commercial flooring in Ottawa and the
+			surrounding area since 1991.
+		</p>
 	</div>
 </section>
 
 <section id="products" class="products" aria-label="Products">
 	<h2 class="section-heading">Products</h2>
-	<div class="products-grid">
+	<div class="products-grid" bind:this={gridEl}>
 		{#each featureProducts as product, i (product.material)}
 			<div use:illuminateOnScroll>
-				<ProductBadge {product} index={i} onclick={() => (openProduct = featureProducts[0]!)} />
+				<ProductBadge
+					{product}
+					index={i}
+					hidden={expandedIndex === i}
+					dimmed={expandedIndex !== null && expandedIndex !== i}
+					onclick={(e) => openBadge(i, e)}
+				/>
 			</div>
 		{/each}
+		{#if expandedIndex !== null && badgeRect}
+			<ExpandedProduct product={featureProducts[expandedIndex]!} {badgeRect} onclose={closeBadge} />
+		{/if}
 	</div>
 </section>
-
-{#if openProduct}
-	<ProductModal product={openProduct} onclose={() => (openProduct = null)} />
-{/if}
 <section id="services" class="section-placeholder" aria-label="Services"></section>
 <SupplierMarquee />
 
@@ -114,6 +148,7 @@
 		padding: 2rem 0.75rem;
 		max-width: 1200px;
 		margin: 0 auto;
+		scroll-margin-top: 5rem;
 	}
 
 	.section-heading {
@@ -128,6 +163,7 @@
 	}
 
 	.products-grid {
+		position: relative;
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 0.5rem;
@@ -175,6 +211,16 @@
 		flex-direction: column;
 		align-items: center;
 		text-align: center;
+	}
+
+	.hero-blurb {
+		font-family: var(--font-body);
+		font-size: 0.85rem;
+		font-weight: 300;
+		color: var(--color-text-muted);
+		max-width: 28ch;
+		line-height: 1.5;
+		margin-top: 1.25rem;
 	}
 
 	/* --- Stats / Counters ----------------------------------- */

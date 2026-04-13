@@ -4,15 +4,19 @@
 	interface Props {
 		product: Product;
 		index?: number;
-		onclick: () => void;
+		hidden?: boolean;
+		dimmed?: boolean;
+		onclick: (e: MouseEvent) => void;
 	}
 
-	let { product, index = 0, onclick }: Props = $props();
+	let { product, index = 0, hidden = false, dimmed = false, onclick }: Props = $props();
 </script>
 
 <button
 	type="button"
 	class="product-badge"
+	class:product-badge--hidden={hidden}
+	class:product-badge--dimmed={dimmed}
 	style="--i: {index};"
 	aria-label="View {product.name} details"
 	{onclick}
@@ -254,7 +258,6 @@
 			border-color var(--illuminate-speed) var(--ease-out);
 	}
 
-	/* Dimmed state (default after entrance animation) */
 	:global(.illuminated) .product-badge {
 		box-shadow: var(--glass-shadow), var(--illuminate-glow);
 		border-color: rgba(255, 255, 255, 0.18);
@@ -352,6 +355,15 @@
 	.product-badge:focus-visible {
 		outline: 2px solid rgba(255, 255, 255, 0.5);
 		outline-offset: 4px;
+	}
+
+	.product-badge--hidden {
+		visibility: hidden;
+	}
+
+	.product-badge--dimmed {
+		opacity: 0.15 !important;
+		transition: opacity 200ms var(--ease-out);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
