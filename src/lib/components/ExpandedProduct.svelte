@@ -1,8 +1,8 @@
 <script lang="ts">
-	import ModalTabs from './ModalTabs.svelte';
-	import CarpetTileModal from './CarpetTileModal.svelte';
+	import ProductContentModal from './ProductContentModal.svelte';
 	import ProductTexture from './ProductTexture.svelte';
 	import type { Product } from '$lib/content/products';
+	import { productDetails } from '$lib/content/product-details';
 
 	interface Props {
 		product: Product;
@@ -21,7 +21,6 @@
 	let animating = $state(true);
 	let closing = $state(false);
 	let tabsVisible = $state(false);
-	let contentVisible = $state(false);
 	const previouslyFocused = document.activeElement as HTMLElement | null;
 
 	const EXPAND_MS = 900;
@@ -97,7 +96,6 @@
 					tabsVisible = true;
 					// Content appears after tabs stagger in (~300ms for 3 tabs)
 					setTimeout(() => {
-						contentVisible = true;
 						const closeBtn = cardEl?.querySelector<HTMLElement>('.expanded-close');
 						closeBtn?.focus();
 					}, 300);
@@ -111,7 +109,6 @@
 		if (animating) return;
 		const closeBtn = cardEl?.querySelector<HTMLElement>('.expanded-close');
 		if (closeBtn) closeBtn.style.opacity = '0';
-		contentVisible = false;
 		animating = true;
 		closing = true;
 
@@ -251,34 +248,8 @@
 		</button>
 	</div>
 
-	{#if tabsVisible}
-		{#if prod.material === 'carpet-tile'}
-			<CarpetTileModal />
-		{:else if prod.details}
-			<ModalTabs stagger>
-				{#snippet overview()}
-					<div class="expanded-body" class:expanded-body--visible={contentVisible}>
-						<div class="tab-section">
-							<p class="tab-text">{prod.details}</p>
-						</div>
-					</div>
-				{/snippet}
-				{#snippet install()}
-					<div class="expanded-body" class:expanded-body--visible={contentVisible}>
-						<div class="tab-section">
-							<p class="tab-text">Installation details coming soon.</p>
-						</div>
-					</div>
-				{/snippet}
-				{#snippet care()}
-					<div class="expanded-body" class:expanded-body--visible={contentVisible}>
-						<div class="tab-section">
-							<p class="tab-text">Care details coming soon.</p>
-						</div>
-					</div>
-				{/snippet}
-			</ModalTabs>
-		{/if}
+	{#if tabsVisible && productDetails[prod.material]}
+		<ProductContentModal material={prod.material} />
 	{/if}
 </div>
 
@@ -395,34 +366,6 @@
 		border-color: rgba(255, 255, 255, 0.15);
 	}
 
-	.expanded-body {
-		flex: 1;
-		overflow-y: auto;
-		-webkit-overflow-scrolling: touch;
-		overscroll-behavior: contain;
-		opacity: 0;
-		transition: opacity 250ms var(--ease-out);
-	}
-
-	.expanded-body--visible {
-		opacity: 1;
-	}
-
-	.tab-section {
-		margin-bottom: 1rem;
-	}
-
-	.tab-section:last-child {
-		margin-bottom: 0;
-	}
-
-	.tab-text {
-		font-size: 0.88rem;
-		color: var(--color-text-muted);
-		line-height: 1.6;
-		margin: 0;
-	}
-
 	.shrink-glow {
 		position: absolute;
 		top: 0;
@@ -448,10 +391,6 @@
 
 		.expanded-title-group {
 			transition: none !important;
-		}
-
-		.expanded-body {
-			transition: none;
 		}
 
 		.expanded-close {

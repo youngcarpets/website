@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Product } from '$lib/content/products';
-	import CarpetTileModal from './CarpetTileModal.svelte';
+	import { productDetails } from '$lib/content/product-details';
+	import ProductContentModal from './ProductContentModal.svelte';
 
 	interface Props {
 		product: Product;
@@ -86,8 +87,8 @@
 			<p class="modal-details">{product.details}</p>
 		{/if}
 
-		{#if product.material === 'carpet-tile'}
-			<CarpetTileModal />
+		{#if productDetails[product.material]}
+			<ProductContentModal material={product.material} />
 		{/if}
 	</div>
 </div>
