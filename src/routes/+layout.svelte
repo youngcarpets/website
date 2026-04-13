@@ -6,6 +6,7 @@
 	import '@fontsource-variable/inter';
 	import '../app.css';
 	import bg from '$lib/assets/hero/bg.jpg?enhanced';
+	import BrandMark from '$lib/components/BrandMark.svelte';
 
 	interface Props {
 		children: Snippet;
@@ -135,14 +136,11 @@
 
 <footer class="site-footer">
 	<div class="site-footer-inner">
-		<div class="site-footer-grid">
-			<div class="site-footer-brand-block">
-				<div class="site-footer-brand">
-					<span class="site-footer-brand-name">YOUNG</span>
-					<span class="site-footer-brand-sub">Commercial Flooring</span>
-				</div>
-			</div>
+		<div class="site-footer-brand-block">
+			<BrandMark size="footer" />
+		</div>
 
+		<div class="site-footer-grid">
 			<div class="site-footer-col">
 				<address class="site-footer-address">
 					Young Carpets Inc.<br />
@@ -468,7 +466,7 @@
 
 	.site-footer-grid {
 		display: grid;
-		grid-template-columns: 1.4fr 1fr 1.2fr 1fr;
+		grid-template-columns: 1fr 1.2fr 1fr;
 		gap: 2.5rem 2rem;
 		padding-bottom: 2.5rem;
 		border-bottom: 1px solid var(--color-border);
@@ -477,32 +475,8 @@
 	.site-footer-brand-block {
 		display: flex;
 		flex-direction: column;
-		gap: 0.85rem;
-	}
-
-	.site-footer-brand {
-		display: inline-flex;
-		flex-direction: column;
-		gap: 0.35rem;
-		line-height: 1;
-		width: fit-content;
-	}
-
-	.site-footer-brand-name {
-		font-family: var(--font-brand);
-		font-size: 1.5rem;
-		font-weight: 400;
-		letter-spacing: 0.18em;
-		color: var(--color-text);
-	}
-
-	.site-footer-brand-sub {
-		font-family: var(--font-mono);
-		font-size: 0.65rem;
-		font-weight: 300;
-		text-transform: uppercase;
-		letter-spacing: 0.06em;
-		color: var(--color-text-muted);
+		align-items: start;
+		margin-bottom: 2rem;
 	}
 
 	.site-footer-address {
