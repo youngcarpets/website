@@ -192,6 +192,9 @@
 	bind:this={cardEl}
 >
 	<div class="expanded-header">
+		<div class="expanded-icon" aria-hidden="true">
+			<ProductTexture material={prod.material} />
+		</div>
 		<div class="expanded-title-group" bind:this={titleEl}>
 			{#if prod.code}<span class="expanded-code">{prod.code}</span>{/if}
 			<span class="expanded-name">
@@ -202,9 +205,6 @@
 					{prod.name}
 				{/if}
 			</span>
-		</div>
-		<div class="expanded-icon" aria-hidden="true">
-			<ProductTexture material={prod.material} />
 		</div>
 		<button
 			type="button"
@@ -218,29 +218,33 @@
 	</div>
 
 	{#if tabsVisible}
-		<div class="expanded-body" class:expanded-body--visible={contentVisible}>
-			{#if prod.material === 'carpet-tile'}
-				<CarpetTileModal />
-			{:else if prod.details}
-				<ModalTabs stagger>
-					{#snippet product()}
+		{#if prod.material === 'carpet-tile'}
+			<CarpetTileModal />
+		{:else if prod.details}
+			<ModalTabs stagger>
+				{#snippet product()}
+					<div class="expanded-body" class:expanded-body--visible={contentVisible}>
 						<div class="tab-section">
 							<p class="tab-text">{prod.details}</p>
 						</div>
-					{/snippet}
-					{#snippet install()}
+					</div>
+				{/snippet}
+				{#snippet install()}
+					<div class="expanded-body" class:expanded-body--visible={contentVisible}>
 						<div class="tab-section">
 							<p class="tab-text">Installation details coming soon.</p>
 						</div>
-					{/snippet}
-					{#snippet maintain()}
+					</div>
+				{/snippet}
+				{#snippet maintain()}
+					<div class="expanded-body" class:expanded-body--visible={contentVisible}>
 						<div class="tab-section">
 							<p class="tab-text">Maintenance details coming soon.</p>
 						</div>
-					{/snippet}
-				</ModalTabs>
-			{/if}
-		</div>
+					</div>
+				{/snippet}
+			</ModalTabs>
+		{/if}
 	{/if}
 </div>
 
@@ -278,7 +282,7 @@
 
 	.expanded-header {
 		display: flex;
-		align-items: flex-start;
+		align-items: flex-end;
 		gap: 0.5rem;
 		min-height: 44px;
 		flex-shrink: 0;

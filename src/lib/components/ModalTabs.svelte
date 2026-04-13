@@ -79,6 +79,7 @@
 		grid-template-columns: repeat(3, 1fr);
 		gap: 0.35rem;
 		margin: 0.75rem 0 1rem;
+		flex-shrink: 0;
 	}
 
 	.modal-tab {
@@ -131,7 +132,10 @@
 	}
 
 	.modal-tab-panel {
-		min-height: 120px;
+		min-height: 0;
+		flex: 1;
+		display: flex;
+		flex-direction: column;
 	}
 
 	@media (prefers-reduced-motion: reduce) {
