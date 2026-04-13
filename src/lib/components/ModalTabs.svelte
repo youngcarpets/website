@@ -13,9 +13,10 @@
 		product: Snippet;
 		install: Snippet;
 		maintain: Snippet;
+		stagger?: boolean;
 	}
 
-	let { product, install, maintain }: Props = $props();
+	let { product, install, maintain, stagger = false }: Props = $props();
 	let active: ModalTab = $state('product');
 	let tablistEl: HTMLDivElement | undefined = $state();
 
@@ -45,6 +46,8 @@
 			type="button"
 			class="modal-tab"
 			class:modal-tab--active={active === t.id}
+			class:modal-tab--stagger={stagger}
+			style={stagger ? `--tab-i: ${i}` : ''}
 			id="tab-{t.id}"
 			role="tab"
 			aria-selected={active === t.id}
@@ -113,7 +116,29 @@
 		border-color: rgba(255, 255, 255, 0.25);
 	}
 
+	.modal-tab--stagger {
+		opacity: 0;
+		transform: translateY(6px);
+		animation: tab-pop-in 200ms var(--ease-out) forwards;
+		animation-delay: calc(var(--tab-i, 0) * 80ms);
+	}
+
+	@keyframes tab-pop-in {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
 	.modal-tab-panel {
 		min-height: 120px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.modal-tab--stagger {
+			opacity: 1;
+			transform: none;
+			animation: none;
+		}
 	}
 </style>

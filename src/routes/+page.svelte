@@ -9,14 +9,19 @@
 	import { featureProducts } from '$lib/content/products';
 
 	let expandedIndex: number | null = $state(null);
+	let hiddenIndex: number | null = $state(null);
 	let badgeRect: { x: number; y: number; w: number; h: number } | null = $state(null);
+	let textRect: { x: number; y: number } | null = $state(null);
 	let gridEl: HTMLDivElement | undefined = $state();
 
 	function openBadge(index: number, e: MouseEvent) {
-		const wrapper = (e.currentTarget as HTMLElement).closest('.products-grid > div');
-		if (!wrapper || !gridEl) return;
-		const bRect = wrapper.getBoundingClientRect();
+		const badge = (e.currentTarget as HTMLElement).closest('.products-grid > div');
+		if (!badge || !gridEl) return;
+		const bRect = badge.getBoundingClientRect();
 		const gRect = gridEl.getBoundingClientRect();
+
+		const bodyEl = (e.currentTarget as HTMLElement).querySelector('.product-badge__body');
+		const bodyRect = bodyEl?.getBoundingClientRect();
 
 		gridEl.style.minHeight = `${gridEl.offsetHeight}px`;
 
@@ -26,12 +31,19 @@
 			w: bRect.width,
 			h: bRect.height
 		};
+		textRect = bodyRect ? { x: bodyRect.left - gRect.left, y: bodyRect.top - gRect.top } : null;
 		expandedIndex = index;
+		hiddenIndex = index;
+	}
+
+	function onBadgeClosing() {
+		hiddenIndex = null;
 	}
 
 	function closeBadge() {
 		expandedIndex = null;
 		badgeRect = null;
+		textRect = null;
 		if (gridEl) gridEl.style.minHeight = '';
 	}
 
@@ -80,14 +92,20 @@
 				<ProductBadge
 					{product}
 					index={i}
-					hidden={expandedIndex === i}
+					hidden={hiddenIndex === i}
 					dimmed={expandedIndex !== null && expandedIndex !== i}
 					onclick={(e) => openBadge(i, e)}
 				/>
 			</div>
 		{/each}
 		{#if expandedIndex !== null && badgeRect}
-			<ExpandedProduct product={featureProducts[expandedIndex]!} {badgeRect} onclose={closeBadge} />
+			<ExpandedProduct
+				product={featureProducts[expandedIndex]!}
+				{badgeRect}
+				{textRect}
+				onclosing={onBadgeClosing}
+				onclose={closeBadge}
+			/>
 		{/if}
 	</div>
 </section>

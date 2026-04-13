@@ -2,42 +2,85 @@
 	import type { Product } from '$lib/content/products';
 	import ModalTabs from './ModalTabs.svelte';
 	import CarpetTileModal from './CarpetTileModal.svelte';
+	import ProductTexture from './ProductTexture.svelte';
 
 	interface Props {
 		product: Product;
 		badgeRect: { x: number; y: number; w: number; h: number };
+		textRect: { x: number; y: number } | null;
+		onclosing?: () => void;
 		onclose: () => void;
 	}
 
-	let { product: prod, badgeRect, onclose }: Props = $props();
+	let { product: prod, badgeRect, textRect, onclosing, onclose }: Props = $props();
 
 	let cardEl: HTMLDivElement | undefined = $state();
-	let contentVisible = $state(false);
+	let titleEl: HTMLDivElement | undefined = $state();
 	let animating = $state(true);
+	let tabsVisible = $state(false);
+	let contentVisible = $state(false);
 	const previouslyFocused = document.activeElement as HTMLElement | null;
 
+	const EXPAND_MS = 600;
+	const EASING = 'cubic-bezier(0.22, 1, 0.36, 1)';
+
 	$effect(() => {
-		if (!cardEl) return;
+		if (!cardEl || !titleEl) return;
 
 		const gW = cardEl.parentElement!.offsetWidth;
 		const gH = cardEl.parentElement!.offsetHeight;
 		const scaleX = badgeRect.w / gW;
 		const scaleY = badgeRect.h / gH;
 
+		// Card FLIP: start at badge position/size
+		cardEl.style.transition = 'none';
 		cardEl.style.transform = `translate(${badgeRect.x}px, ${badgeRect.y}px) scale(${scaleX}, ${scaleY})`;
+
+		// Title counter-FLIP: start at badge text position
+		if (textRect) {
+			const cardRect = cardEl.parentElement!.getBoundingClientRect();
+			const titleRect = titleEl.getBoundingClientRect();
+
+			// Where the title currently renders (at card's scaled position)
+			// We need it to appear at textRect instead
+			const titleCurrentX = titleRect.left - cardRect.left;
+			const titleCurrentY = titleRect.top - cardRect.top;
+			const targetX = textRect.x;
+			const targetY = textRect.y;
+
+			const dx = (targetX - titleCurrentX) / scaleX;
+			const dy = (targetY - titleCurrentY) / scaleY;
+
+			titleEl.style.transition = 'none';
+			titleEl.style.transform = `translate(${dx}px, ${dy}px) scale(${1 / scaleX}, ${1 / scaleY})`;
+			titleEl.style.transformOrigin = 'top left';
+		}
 
 		requestAnimationFrame(() => {
 			requestAnimationFrame(() => {
-				if (!cardEl) return;
+				if (!cardEl || !titleEl) return;
+
+				// Animate card to fill grid
+				cardEl.style.transition = `transform ${EXPAND_MS}ms ${EASING}`;
 				cardEl.style.transform = '';
 
-				const onEnd = () => {
+				// Animate title to header position
+				titleEl.style.transition = `transform ${EXPAND_MS}ms ${EASING}`;
+				titleEl.style.transform = '';
+
+				const onEnd = (e: TransitionEvent) => {
+					if (e.target !== cardEl) return;
+					cardEl!.removeEventListener('transitionend', onEnd);
 					animating = false;
-					contentVisible = true;
-					const closeBtn = cardEl?.querySelector<HTMLElement>('.expanded-close');
-					closeBtn?.focus();
+					tabsVisible = true;
+					// Content appears after tabs stagger in (~300ms for 3 tabs)
+					setTimeout(() => {
+						contentVisible = true;
+						const closeBtn = cardEl?.querySelector<HTMLElement>('.expanded-close');
+						closeBtn?.focus();
+					}, 300);
 				};
-				cardEl.addEventListener('transitionend', onEnd, { once: true });
+				cardEl.addEventListener('transitionend', onEnd);
 			});
 		});
 	});
@@ -45,7 +88,9 @@
 	function handleClose() {
 		if (animating) return;
 		contentVisible = false;
+		tabsVisible = false;
 		animating = true;
+		onclosing?.();
 
 		requestAnimationFrame(() => {
 			if (!cardEl) return;
@@ -54,13 +99,16 @@
 			const scaleX = badgeRect.w / gW;
 			const scaleY = badgeRect.h / gH;
 
+			cardEl.style.transition = `transform ${EXPAND_MS}ms ${EASING}`;
 			cardEl.style.transform = `translate(${badgeRect.x}px, ${badgeRect.y}px) scale(${scaleX}, ${scaleY})`;
 
-			const onEnd = () => {
+			const onEnd = (e: TransitionEvent) => {
+				if (e.target !== cardEl) return;
+				cardEl!.removeEventListener('transitionend', onEnd);
 				previouslyFocused?.focus();
 				onclose();
 			};
-			cardEl.addEventListener('transitionend', onEnd, { once: true });
+			cardEl.addEventListener('transitionend', onEnd);
 		});
 	}
 
@@ -108,7 +156,7 @@
 	bind:this={cardEl}
 >
 	<div class="expanded-header">
-		<div class="expanded-title-group">
+		<div class="expanded-title-group" bind:this={titleEl}>
 			{#if prod.code}<span class="expanded-code">{prod.code}</span>{/if}
 			<span class="expanded-name">
 				{#if prod.nameHtml}
@@ -119,34 +167,45 @@
 				{/if}
 			</span>
 		</div>
-		<button type="button" class="expanded-close" aria-label="Close" onclick={handleClose}>
+		<div class="expanded-icon" aria-hidden="true">
+			<ProductTexture material={prod.material} />
+		</div>
+		<button
+			type="button"
+			class="expanded-close"
+			class:expanded-close--visible={!animating}
+			aria-label="Close"
+			onclick={handleClose}
+		>
 			×
 		</button>
 	</div>
 
-	<div class="expanded-body" class:expanded-body--visible={contentVisible}>
-		{#if prod.material === 'carpet-tile'}
-			<CarpetTileModal />
-		{:else if prod.details}
-			<ModalTabs>
-				{#snippet product()}
-					<div class="tab-section">
-						<p class="tab-text">{prod.details}</p>
-					</div>
-				{/snippet}
-				{#snippet install()}
-					<div class="tab-section">
-						<p class="tab-text">Installation details coming soon.</p>
-					</div>
-				{/snippet}
-				{#snippet maintain()}
-					<div class="tab-section">
-						<p class="tab-text">Maintenance details coming soon.</p>
-					</div>
-				{/snippet}
-			</ModalTabs>
-		{/if}
-	</div>
+	{#if tabsVisible}
+		<div class="expanded-body" class:expanded-body--visible={contentVisible}>
+			{#if prod.material === 'carpet-tile'}
+				<CarpetTileModal />
+			{:else if prod.details}
+				<ModalTabs stagger>
+					{#snippet product()}
+						<div class="tab-section">
+							<p class="tab-text">{prod.details}</p>
+						</div>
+					{/snippet}
+					{#snippet install()}
+						<div class="tab-section">
+							<p class="tab-text">Installation details coming soon.</p>
+						</div>
+					{/snippet}
+					{#snippet maintain()}
+						<div class="tab-section">
+							<p class="tab-text">Maintenance details coming soon.</p>
+						</div>
+					{/snippet}
+				</ModalTabs>
+			{/if}
+		</div>
+	{/if}
 </div>
 
 <style>
@@ -168,7 +227,6 @@
 		-webkit-backdrop-filter: var(--glass-blur);
 		box-shadow: var(--glass-shadow), var(--illuminate-glow);
 		padding: 0.75rem;
-		transition: transform 250ms var(--ease-out);
 		transform-origin: top left;
 		will-change: transform;
 	}
@@ -176,12 +234,11 @@
 	.expanded-product--animating {
 		backdrop-filter: none;
 		-webkit-backdrop-filter: none;
-		box-shadow: none;
 	}
 
 	.expanded-header {
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		gap: 0.5rem;
 		min-height: 44px;
 		flex-shrink: 0;
@@ -193,6 +250,8 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.1rem;
+		transform-origin: top left;
+		will-change: transform;
 	}
 
 	.expanded-code {
@@ -216,6 +275,25 @@
 		text-overflow: ellipsis;
 	}
 
+	.expanded-icon {
+		width: 44px;
+		height: 44px;
+		flex-shrink: 0;
+		color: rgba(255, 255, 255, 0.45);
+		opacity: 0;
+		transition: opacity 300ms var(--ease-out);
+	}
+
+	:global(.expanded-icon svg) {
+		width: 100%;
+		height: 100%;
+		display: block;
+	}
+
+	.expanded-product:not(.expanded-product--animating) .expanded-icon {
+		opacity: 1;
+	}
+
 	.expanded-close {
 		width: 44px;
 		height: 44px;
@@ -230,9 +308,15 @@
 		font-size: 1.5rem;
 		line-height: 1;
 		cursor: pointer;
+		opacity: 0;
 		transition:
+			opacity 200ms var(--ease-out),
 			background var(--base),
 			border-color var(--base);
+	}
+
+	.expanded-close--visible {
+		opacity: 1;
 	}
 
 	.expanded-close:focus-visible {
@@ -251,7 +335,7 @@
 		-webkit-overflow-scrolling: touch;
 		overscroll-behavior: contain;
 		opacity: 0;
-		transition: opacity 200ms var(--ease-out);
+		transition: opacity 250ms var(--ease-out);
 	}
 
 	.expanded-body--visible {
@@ -275,11 +359,19 @@
 
 	@media (prefers-reduced-motion: reduce) {
 		.expanded-product {
-			transition: none;
+			transition: none !important;
+		}
+
+		.expanded-title-group {
+			transition: none !important;
 		}
 
 		.expanded-body {
 			transition: none;
+		}
+
+		.expanded-close {
+			opacity: 1;
 		}
 	}
 </style>
