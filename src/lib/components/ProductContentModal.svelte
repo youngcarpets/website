@@ -4,7 +4,12 @@
 	import { productDetails } from '$lib/content/product-details';
 	import ModalTabs from './ModalTabs.svelte';
 	import SupplierMarquee from './SupplierMarquee.svelte';
-	import { type TilePattern, tilePatternList } from '$lib/content/interactions';
+	import {
+		type TilePattern,
+		tilePatternList,
+		type HardwoodCard,
+		hardwoodCards
+	} from '$lib/content/interactions';
 
 	interface Props {
 		material: Product['material'];
@@ -149,6 +154,84 @@
 		}
 		return `translate(${tx} ${ty}) translate(15 15) rotate(${rot}) scale(${scale}) translate(-15 -15)`;
 	}
+
+	/* ── Matting: lobby heatmap zones ── */
+	let mattingShowZones = $state(false);
+
+	$effect(() => {
+		if (material === 'matting' && featureOpen) {
+			mattingShowZones = false;
+			const id = setTimeout(() => {
+				mattingShowZones = true;
+			}, 1500);
+			return () => clearTimeout(id);
+		}
+	});
+
+	/* ── Hardwood: flip cards state ── */
+	let flippedCard = $state<HardwoodCard | null>(null);
+
+	function toggleHwFlip(id: HardwoodCard) {
+		flippedCard = flippedCard === id ? null : id;
+	}
+
+	$effect(() => {
+		if (material !== 'hardwood' || !featureOpen) {
+			flippedCard = null;
+		}
+	});
+
+	/* ── Sheet Vinyl: cove-build anatomy state ── */
+	const CV = {
+		cornerX: 60,
+		cornerY: 160,
+		r: 22,
+		floorRight: 230,
+		capY: 100,
+		inset: 3,
+		seamX: 160
+	};
+	const CV_ARC_TOP_X = CV.cornerX;
+	const CV_ARC_TOP_Y = CV.cornerY - CV.r;
+	const CV_ARC_RIGHT_X = CV.cornerX + CV.r;
+	const CV_ARC_RIGHT_Y = CV.cornerY;
+	const CV_SHEET_R = CV.r - CV.inset;
+	const CV_SHEET_FLOOR_Y = CV.cornerY - CV.inset;
+	const CV_SHEET_WALL_X = CV.cornerX + CV.inset;
+	const CV_SHEET_ARC_FLOOR_X = CV_ARC_RIGHT_X;
+	const CV_SHEET_ARC_FLOOR_Y = CV_SHEET_FLOOR_Y;
+	const CV_SHEET_ARC_WALL_X = CV_SHEET_WALL_X;
+	const CV_SHEET_ARC_WALL_Y = CV_ARC_TOP_Y;
+	const COVE_STICK_D = `M ${CV_ARC_TOP_X} ${CV_ARC_TOP_Y} L ${CV.cornerX} ${CV.cornerY} L ${CV_ARC_RIGHT_X} ${CV_ARC_RIGHT_Y} A ${CV.r} ${CV.r} 0 0 1 ${CV_ARC_TOP_X} ${CV_ARC_TOP_Y} Z`;
+	const BORDER_PIECE_D = `M ${CV_SHEET_WALL_X} ${CV.capY} L ${CV_SHEET_ARC_WALL_X} ${CV_SHEET_ARC_WALL_Y} A ${CV_SHEET_R} ${CV_SHEET_R} 0 0 0 ${CV_SHEET_ARC_FLOOR_X} ${CV_SHEET_ARC_FLOOR_Y} L ${CV.seamX} ${CV_SHEET_FLOOR_Y}`;
+	const FIELD_PIECE_D = `M ${CV.floorRight} ${CV_SHEET_FLOOR_Y} L ${CV.seamX} ${CV_SHEET_FLOOR_Y}`;
+	const SHEET_BORDER_LEN = 150;
+	const SHEET_FIELD_LEN = 70;
+
+	let coveStep: number = $state(0);
+	let coveTimer: ReturnType<typeof setTimeout> | null = null;
+
+	function playCoveSequence() {
+		if (coveTimer) clearTimeout(coveTimer);
+		coveStep = 0;
+		const advance = (n: number) => {
+			coveStep = n;
+			if (n < 4) coveTimer = setTimeout(() => advance(n + 1), 700);
+		};
+		coveTimer = setTimeout(() => advance(1), 350);
+	}
+
+	$effect(() => {
+		if (material === 'sheet' && featureOpen) {
+			playCoveSequence();
+			return () => {
+				if (coveTimer) {
+					clearTimeout(coveTimer);
+					coveTimer = null;
+				}
+			};
+		}
+	});
 </script>
 
 {#if details}
@@ -467,6 +550,681 @@
 								Side-view cutaway — layers build bottom-up as installed on site.
 							</p>
 							<button type="button" class="grout-replay" onclick={() => playGroutSequence()}>
+								&#x21bb;&ensp;Replay anatomy
+							</button>
+						</div>
+					{:else if material === 'rubber'}
+						<div class="feature-impact">
+							<svg viewBox="0 0 300 150" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+								<!-- Column 1: 6 mm -->
+								<g transform="translate(20, 0)">
+									<rect
+										x="0"
+										y="100"
+										width="70"
+										height="24"
+										rx="2"
+										fill="rgba(255,255,255,0.12)"
+										stroke="rgba(255,255,255,0.2)"
+										stroke-width="0.5"
+									/>
+									<rect
+										class="impact-flash impact-flash--thin"
+										x="0"
+										y="100"
+										width="70"
+										height="24"
+										rx="2"
+										fill="rgba(255,255,255,0.5)"
+										opacity="0"
+									/>
+									<rect
+										x="0"
+										y="94"
+										width="70"
+										height="6"
+										rx="1"
+										fill="rgba(255,255,255,0.2)"
+										stroke="rgba(255,255,255,0.15)"
+										stroke-width="0.5"
+									/>
+									<g class="impact-weight impact-weight--thin">
+										<circle cx="12" cy="4" r="4" fill="rgba(255,255,255,0.45)" />
+										<rect
+											x="12"
+											y="1"
+											width="46"
+											height="6"
+											rx="1.5"
+											fill="rgba(255,255,255,0.45)"
+										/>
+										<circle cx="58" cy="4" r="4" fill="rgba(255,255,255,0.45)" />
+									</g>
+									<text
+										x="35"
+										y="136"
+										text-anchor="middle"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										font-size="8"
+										fill="rgba(255,255,255,0.45)"
+										letter-spacing="0.05em">6 mm</text
+									>
+									<text
+										x="35"
+										y="145"
+										text-anchor="middle"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										font-size="7"
+										fill="rgba(255,255,255,0.3)"
+										letter-spacing="0.05em">✗</text
+									>
+								</g>
+								<!-- Column 2: 8 mm -->
+								<g transform="translate(115, 0)">
+									<rect
+										x="0"
+										y="100"
+										width="70"
+										height="24"
+										rx="2"
+										fill="rgba(255,255,255,0.12)"
+										stroke="rgba(255,255,255,0.2)"
+										stroke-width="0.5"
+									/>
+									<rect
+										class="impact-flash impact-flash--mid"
+										x="0"
+										y="100"
+										width="70"
+										height="24"
+										rx="2"
+										fill="rgba(255,255,255,0.35)"
+										opacity="0"
+									/>
+									<rect
+										x="0"
+										y="92"
+										width="70"
+										height="8"
+										rx="1"
+										fill="rgba(255,255,255,0.2)"
+										stroke="rgba(255,255,255,0.15)"
+										stroke-width="0.5"
+									/>
+									<g class="impact-weight impact-weight--mid">
+										<circle cx="12" cy="4" r="4" fill="rgba(255,255,255,0.45)" />
+										<rect
+											x="12"
+											y="1"
+											width="46"
+											height="6"
+											rx="1.5"
+											fill="rgba(255,255,255,0.45)"
+										/>
+										<circle cx="58" cy="4" r="4" fill="rgba(255,255,255,0.45)" />
+									</g>
+									<text
+										x="35"
+										y="136"
+										text-anchor="middle"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										font-size="8"
+										fill="rgba(255,255,255,0.45)"
+										letter-spacing="0.05em">8 mm</text
+									>
+									<text
+										x="35"
+										y="145"
+										text-anchor="middle"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										font-size="7"
+										fill="rgba(255,255,255,0.45)"
+										letter-spacing="0.05em">~</text
+									>
+								</g>
+								<!-- Column 3: 12 mm -->
+								<g transform="translate(210, 0)">
+									<rect
+										x="0"
+										y="100"
+										width="70"
+										height="24"
+										rx="2"
+										fill="rgba(255,255,255,0.12)"
+										stroke="rgba(255,255,255,0.2)"
+										stroke-width="0.5"
+									/>
+									<rect
+										class="impact-flash impact-flash--thick"
+										x="0"
+										y="100"
+										width="70"
+										height="24"
+										rx="2"
+										fill="rgba(255,255,255,0.15)"
+										opacity="0"
+									/>
+									<rect
+										x="0"
+										y="88"
+										width="70"
+										height="12"
+										rx="1"
+										fill="rgba(255,255,255,0.2)"
+										stroke="rgba(255,255,255,0.15)"
+										stroke-width="0.5"
+									/>
+									<g class="impact-weight impact-weight--thick">
+										<circle cx="12" cy="4" r="4" fill="rgba(255,255,255,0.45)" />
+										<rect
+											x="12"
+											y="1"
+											width="46"
+											height="6"
+											rx="1.5"
+											fill="rgba(255,255,255,0.45)"
+										/>
+										<circle cx="58" cy="4" r="4" fill="rgba(255,255,255,0.45)" />
+									</g>
+									<text
+										x="35"
+										y="136"
+										text-anchor="middle"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										font-size="8"
+										fill="rgba(255,255,255,0.45)"
+										letter-spacing="0.05em">12 mm</text
+									>
+									<text
+										x="35"
+										y="145"
+										text-anchor="middle"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										font-size="7"
+										fill="rgba(255,255,255,0.6)"
+										letter-spacing="0.05em">✓</text
+									>
+								</g>
+							</svg>
+						</div>
+					{:else if material === 'matting'}
+						<div class="feature-heatmap">
+							<svg viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+								<defs>
+									<radialGradient id="mat-heat-core" cx="50%" cy="12%" r="55%" fx="50%" fy="12%">
+										<stop offset="0%" stop-color="rgba(255,255,255,0.35)" />
+										<stop offset="30%" stop-color="rgba(255,255,255,0.18)" />
+										<stop offset="60%" stop-color="rgba(255,255,255,0.12)" />
+										<stop offset="100%" stop-color="rgba(255,255,255,0)" />
+									</radialGradient>
+									<radialGradient id="mat-heat-left" cx="25%" cy="10%" r="35%">
+										<stop offset="0%" stop-color="rgba(255,255,255,0.2)" />
+										<stop offset="55%" stop-color="rgba(255,255,255,0.08)" />
+										<stop offset="100%" stop-color="rgba(255,255,255,0)" />
+									</radialGradient>
+									<radialGradient id="mat-heat-right" cx="75%" cy="10%" r="35%">
+										<stop offset="0%" stop-color="rgba(255,255,255,0.2)" />
+										<stop offset="55%" stop-color="rgba(255,255,255,0.08)" />
+										<stop offset="100%" stop-color="rgba(255,255,255,0)" />
+									</radialGradient>
+									<pattern id="mat-grid" patternUnits="userSpaceOnUse" width="6" height="6">
+										<line
+											x1="0"
+											y1="3"
+											x2="6"
+											y2="3"
+											stroke="rgba(255,255,255,0.35)"
+											stroke-width="0.5"
+											stroke-linecap="round"
+										/>
+										<line
+											x1="3"
+											y1="0"
+											x2="3"
+											y2="6"
+											stroke="rgba(255,255,255,0.35)"
+											stroke-width="0.5"
+											stroke-linecap="round"
+										/>
+									</pattern>
+									<pattern id="mat-pile" patternUnits="userSpaceOnUse" width="4" height="4">
+										<line
+											x1="2"
+											y1="0"
+											x2="2"
+											y2="4"
+											stroke="rgba(255,255,255,0.45)"
+											stroke-width="0.6"
+											stroke-linecap="round"
+										/>
+									</pattern>
+								</defs>
+								<!-- Lobby floor -->
+								<rect
+									x="10"
+									y="6"
+									width="300"
+									height="148"
+									rx="4"
+									fill="rgba(255,255,255,0.05)"
+									stroke="rgba(255,255,255,0.28)"
+									stroke-width="1"
+								/>
+								<!-- Door opening -->
+								<line
+									x1="110"
+									y1="6"
+									x2="210"
+									y2="6"
+									stroke="rgba(255,255,255,0.45)"
+									stroke-width="1.8"
+									stroke-linecap="round"
+								/>
+								<text
+									x="160"
+									y="3"
+									font-size="5.5"
+									font-family="ui-monospace, 'SF Mono', monospace"
+									fill="rgba(255,255,255,0.3)"
+									letter-spacing="0.08em"
+									text-anchor="middle">ENTRANCE</text
+								>
+								<!-- Heatmap pulses -->
+								<rect
+									x="10"
+									y="6"
+									width="300"
+									height="148"
+									rx="4"
+									fill="url(#mat-heat-core)"
+									class="hm-pulse"
+								/>
+								<rect
+									x="10"
+									y="6"
+									width="300"
+									height="148"
+									rx="4"
+									fill="url(#mat-heat-left)"
+									class="hm-pulse hm-pulse-2"
+								/>
+								<rect
+									x="10"
+									y="6"
+									width="300"
+									height="148"
+									rx="4"
+									fill="url(#mat-heat-right)"
+									class="hm-pulse hm-pulse-3"
+								/>
+								<!-- Traffic flow lines -->
+								<line
+									x1="160"
+									y1="14"
+									x2="140"
+									y2="80"
+									stroke="rgba(255,255,255,0.28)"
+									stroke-width="0.6"
+									stroke-linecap="round"
+									stroke-dasharray="3 4"
+								/>
+								<line
+									x1="160"
+									y1="14"
+									x2="180"
+									y2="80"
+									stroke="rgba(255,255,255,0.28)"
+									stroke-width="0.6"
+									stroke-linecap="round"
+									stroke-dasharray="3 4"
+								/>
+								<line
+									x1="160"
+									y1="14"
+									x2="160"
+									y2="85"
+									stroke="rgba(255,255,255,0.28)"
+									stroke-width="0.6"
+									stroke-linecap="round"
+									stroke-dasharray="3 4"
+								/>
+								<line
+									x1="160"
+									y1="14"
+									x2="110"
+									y2="70"
+									stroke="rgba(255,255,255,0.28)"
+									stroke-width="0.6"
+									stroke-linecap="round"
+									stroke-dasharray="3 4"
+								/>
+								<line
+									x1="160"
+									y1="14"
+									x2="210"
+									y2="70"
+									stroke="rgba(255,255,255,0.28)"
+									stroke-width="0.6"
+									stroke-linecap="round"
+									stroke-dasharray="3 4"
+								/>
+								<!-- 3-zone overlay -->
+								<g class="hm-zones" class:hm-zones-visible={mattingShowZones}>
+									<!-- Zone 1: SCRAPE -->
+									<rect
+										x="50"
+										y="12"
+										width="220"
+										height="34"
+										rx="2"
+										fill="url(#mat-grid)"
+										stroke="rgba(255,255,255,0.5)"
+										stroke-width="1.2"
+										stroke-dasharray="4 2"
+										opacity="0.85"
+									/>
+									<text
+										x="160"
+										y="32"
+										font-size="8.5"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										fill="rgba(255,255,255,0.45)"
+										letter-spacing="0.1em"
+										text-anchor="middle">SCRAPE</text
+									>
+									<text
+										x="160"
+										y="42"
+										font-size="6.5"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										fill="rgba(255,255,255,0.3)"
+										letter-spacing="0.05em"
+										text-anchor="middle">grit + mud · 0–4 ft</text
+									>
+									<!-- Zone 2: WIPE -->
+									<rect
+										x="35"
+										y="52"
+										width="250"
+										height="40"
+										rx="2"
+										fill="url(#mat-pile)"
+										stroke="rgba(255,255,255,0.35)"
+										stroke-width="1"
+										stroke-dasharray="4 2"
+										opacity="0.75"
+									/>
+									<text
+										x="160"
+										y="74"
+										font-size="8.5"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										fill="rgba(255,255,255,0.45)"
+										letter-spacing="0.1em"
+										text-anchor="middle">WIPE</text
+									>
+									<text
+										x="160"
+										y="84"
+										font-size="6.5"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										fill="rgba(255,255,255,0.3)"
+										letter-spacing="0.05em"
+										text-anchor="middle">water + salt · 4–8 ft</text
+									>
+									<!-- Zone 3: DRY -->
+									<rect
+										x="25"
+										y="98"
+										width="270"
+										height="40"
+										rx="2"
+										fill="rgba(255,255,255,0.05)"
+										stroke="rgba(255,255,255,0.28)"
+										stroke-width="0.8"
+										stroke-dasharray="4 2"
+										opacity="0.65"
+									/>
+									<text
+										x="160"
+										y="120"
+										font-size="8.5"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										fill="rgba(255,255,255,0.45)"
+										letter-spacing="0.1em"
+										text-anchor="middle">DRY</text
+									>
+									<text
+										x="160"
+										y="130"
+										font-size="6.5"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										fill="rgba(255,255,255,0.3)"
+										letter-spacing="0.05em"
+										text-anchor="middle">finish floor · 8–12 ft</text
+									>
+								</g>
+							</svg>
+						</div>
+					{:else if material === 'hardwood'}
+						<div class="feature-flips">
+							<div class="hw-flips" role="group" aria-label="Hardwood type cards">
+								{#each hardwoodCards as card (card.id)}
+									<button
+										type="button"
+										class="hw-flip"
+										class:hw-flip--flipped={flippedCard === card.id}
+										aria-pressed={flippedCard === card.id}
+										aria-label="{card.label} — {flippedCard === card.id
+											? 'showing specs, tap to flip back'
+											: 'tap to see specs'}"
+										onclick={() => toggleHwFlip(card.id)}
+									>
+										<div class="hw-flip-inner">
+											<div class="hw-flip-face hw-flip-front" aria-hidden={flippedCard === card.id}>
+												<span class="hw-flip-label">{card.label}</span>
+												<span class="hw-flip-front-text">{card.front}</span>
+											</div>
+											<div class="hw-flip-face hw-flip-back" aria-hidden={flippedCard !== card.id}>
+												<span class="hw-flip-back-heading">Thickness</span>
+												<span class="hw-flip-back-text">{card.thickness}</span>
+												<span class="hw-flip-back-heading">Best for</span>
+												<span class="hw-flip-back-text">{card.bestFor}</span>
+												<span class="hw-flip-back-heading">Install</span>
+												<span class="hw-flip-back-text">{card.install}</span>
+											</div>
+										</div>
+									</button>
+								{/each}
+							</div>
+							<p class="grout-caption">Tap a card to flip and see specs.</p>
+						</div>
+					{:else if material === 'sheet'}
+						<div class="feature-cove">
+							<svg viewBox="0 0 240 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+								<defs>
+									<pattern
+										id="cove-hatch"
+										patternUnits="userSpaceOnUse"
+										width="6"
+										height="6"
+										patternTransform="rotate(45)"
+									>
+										<line
+											x1="0"
+											y1="0"
+											x2="0"
+											y2="6"
+											stroke="rgba(255,255,255,0.12)"
+											stroke-width="1"
+										/>
+									</pattern>
+								</defs>
+								<!-- Wall substrate -->
+								<rect x="36" y="20" width="24" height="140" fill="url(#cove-hatch)" />
+								<!-- Slab substrate -->
+								<rect x="60" y="160" width="170" height="20" fill="url(#cove-hatch)" />
+								<!-- Wall edge -->
+								<line
+									x1="60"
+									y1="20"
+									x2="60"
+									y2="160"
+									stroke="rgba(255,255,255,0.35)"
+									stroke-width="1.4"
+								/>
+								<!-- Slab edge -->
+								<line
+									x1="60"
+									y1="160"
+									x2="230"
+									y2="160"
+									stroke="rgba(255,255,255,0.35)"
+									stroke-width="1.4"
+								/>
+								<!-- Step 1: Cap strip -->
+								<g class="grout-step" class:grout-step--in={coveStep >= 1}>
+									<rect
+										x="50"
+										y="96"
+										width="22"
+										height="8"
+										rx="1.5"
+										fill="rgba(255,255,255,0.4)"
+										stroke="rgba(255,255,255,0.5)"
+										stroke-width="0.8"
+									/>
+									<line
+										x1="74"
+										y1="100"
+										x2="93"
+										y2="100"
+										stroke="rgba(255,255,255,0.3)"
+										stroke-width="0.6"
+									/>
+									<text
+										x="97"
+										y="103"
+										font-size="9"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										fill="rgba(255,255,255,0.45)"
+										letter-spacing="0.05em">CAP STRIP</text
+									>
+								</g>
+								<!-- Step 2: Cove stick -->
+								<g class="grout-step" class:grout-step--in={coveStep >= 2}>
+									<path
+										d={COVE_STICK_D}
+										fill="rgba(255,255,255,0.35)"
+										stroke="rgba(255,255,255,0.45)"
+										stroke-width="0.8"
+									/>
+									<circle cx="82" cy="138" r="0.9" fill="rgba(255,255,255,0.45)" />
+									<line
+										x1="82"
+										y1="138"
+										x2="66.4"
+										y2="153.6"
+										stroke="rgba(255,255,255,0.45)"
+										stroke-width="0.6"
+									/>
+									<polygon
+										points="66.4,153.6 67.5,150.4 69.6,152.5"
+										fill="rgba(255,255,255,0.45)"
+									/>
+									<text
+										x="86"
+										y="134"
+										font-size="9"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										fill="rgba(255,255,255,0.45)"
+										letter-spacing="0.05em">COVE STICK</text
+									>
+									<text
+										x="86"
+										y="144"
+										font-size="7"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										fill="rgba(255,255,255,0.45)"
+										letter-spacing="0.05em">R 7/8&quot;</text
+									>
+								</g>
+								<!-- Step 3: Sheet vinyl -->
+								<g class="grout-step" class:grout-step--in={coveStep >= 3}>
+									<path
+										class="cove-sheet-stroke"
+										d={BORDER_PIECE_D}
+										fill="none"
+										stroke="rgba(255,255,255,0.6)"
+										stroke-width="4"
+										stroke-linecap="butt"
+										stroke-linejoin="round"
+										stroke-dasharray={SHEET_BORDER_LEN}
+										stroke-dashoffset={SHEET_BORDER_LEN}
+									/>
+									<path
+										class="cove-sheet-stroke"
+										d={FIELD_PIECE_D}
+										fill="none"
+										stroke="rgba(255,255,255,0.6)"
+										stroke-width="4"
+										stroke-linecap="butt"
+										stroke-linejoin="round"
+										stroke-dasharray={SHEET_FIELD_LEN}
+										stroke-dashoffset={SHEET_FIELD_LEN}
+									/>
+									<line
+										x1="180"
+										y1="124"
+										x2="180"
+										y2="153"
+										stroke="rgba(255,255,255,0.3)"
+										stroke-width="0.6"
+									/>
+									<text
+										x="180"
+										y="120"
+										font-size="9"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										fill="rgba(255,255,255,0.45)"
+										letter-spacing="0.05em"
+										text-anchor="middle">SHEET VINYL</text
+									>
+								</g>
+								<!-- Step 4: Heat-welded seam -->
+								<g class="grout-step" class:grout-step--in={coveStep >= 4}>
+									<line
+										x1="160"
+										y1="148"
+										x2="160"
+										y2="158"
+										stroke="rgba(255,255,255,0.5)"
+										stroke-width="1.2"
+										stroke-dasharray="2 2"
+									/>
+									<line
+										x1="160"
+										y1="160"
+										x2="180"
+										y2="190"
+										stroke="rgba(255,255,255,0.3)"
+										stroke-width="0.6"
+									/>
+									<text
+										x="184"
+										y="194"
+										font-size="9"
+										font-family="ui-monospace, 'SF Mono', monospace"
+										fill="rgba(255,255,255,0.45)"
+										letter-spacing="0.05em">HEAT WELD</text
+									>
+								</g>
+							</svg>
+							<p class="grout-caption">
+								Monolithic floor-to-wall &mdash; no seam, no shadow line, nowhere for bacteria to
+								hide.
+							</p>
+							<button type="button" class="grout-replay" onclick={() => playCoveSequence()}>
 								&#x21bb;&ensp;Replay anatomy
 							</button>
 						</div>
@@ -1312,5 +2070,387 @@
 		color: rgba(255, 255, 255, 0.3);
 		line-height: 1.5;
 		margin: 0.85rem 0 0;
+	}
+
+	/* ── Rubber: impact absorption ── */
+	.feature-impact {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.5rem;
+	}
+
+	.feature-impact svg {
+		display: block;
+		width: 100%;
+		max-width: 280px;
+		height: auto;
+		overflow: visible;
+	}
+
+	@keyframes impact-weight-thin {
+		0%,
+		10% {
+			transform: translateY(20px);
+		}
+		35% {
+			transform: translateY(82px);
+		}
+		45% {
+			transform: translateY(78px);
+		}
+		55%,
+		80% {
+			transform: translateY(82px);
+		}
+		90%,
+		100% {
+			transform: translateY(20px);
+		}
+	}
+
+	@keyframes impact-weight-mid {
+		0%,
+		10% {
+			transform: translateY(20px);
+		}
+		35% {
+			transform: translateY(80px);
+		}
+		45% {
+			transform: translateY(76px);
+		}
+		55%,
+		80% {
+			transform: translateY(80px);
+		}
+		90%,
+		100% {
+			transform: translateY(20px);
+		}
+	}
+
+	@keyframes impact-weight-thick {
+		0%,
+		10% {
+			transform: translateY(20px);
+		}
+		35% {
+			transform: translateY(74px);
+		}
+		45% {
+			transform: translateY(71px);
+		}
+		55%,
+		80% {
+			transform: translateY(74px);
+		}
+		90%,
+		100% {
+			transform: translateY(20px);
+		}
+	}
+
+	@keyframes impact-flash-thin {
+		0%,
+		34% {
+			opacity: 0;
+		}
+		36% {
+			opacity: 0.75;
+		}
+		50% {
+			opacity: 0.55;
+		}
+		65%,
+		100% {
+			opacity: 0;
+		}
+	}
+
+	@keyframes impact-flash-mid {
+		0%,
+		36% {
+			opacity: 0;
+		}
+		40% {
+			opacity: 0.35;
+		}
+		52% {
+			opacity: 0.15;
+		}
+		65%,
+		100% {
+			opacity: 0;
+		}
+	}
+
+	@keyframes impact-flash-thick {
+		0%,
+		38% {
+			opacity: 0;
+		}
+		44% {
+			opacity: 0.1;
+		}
+		52%,
+		100% {
+			opacity: 0;
+		}
+	}
+
+	.impact-weight--thin {
+		animation: impact-weight-thin 4s ease-in-out infinite;
+	}
+
+	.impact-weight--mid {
+		animation: impact-weight-mid 4s ease-in-out infinite;
+	}
+
+	.impact-weight--thick {
+		animation: impact-weight-thick 4s ease-in-out infinite;
+	}
+
+	.impact-flash--thin {
+		animation: impact-flash-thin 4s ease-in-out infinite;
+	}
+
+	.impact-flash--mid {
+		animation: impact-flash-mid 4s ease-in-out infinite;
+	}
+
+	.impact-flash--thick {
+		animation: impact-flash-thick 4s ease-in-out infinite;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.impact-weight--thin,
+		.impact-weight--mid,
+		.impact-weight--thick {
+			animation: none;
+			transform: translateY(20px);
+		}
+
+		.impact-flash--thin,
+		.impact-flash--mid,
+		.impact-flash--thick {
+			animation: none;
+			opacity: 0;
+		}
+	}
+
+	/* ── Matting: lobby heatmap ── */
+	.feature-heatmap {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 0.5rem;
+	}
+
+	.feature-heatmap svg {
+		display: block;
+		width: 100%;
+		max-width: 280px;
+		height: auto;
+	}
+
+	@keyframes hm-breathe {
+		0%,
+		100% {
+			opacity: 0.55;
+		}
+		50% {
+			opacity: 1;
+		}
+	}
+
+	.hm-pulse {
+		animation: hm-breathe 3.5s ease-in-out infinite;
+	}
+
+	.hm-pulse-2 {
+		animation-delay: -1.2s;
+	}
+
+	.hm-pulse-3 {
+		animation-delay: -2.4s;
+	}
+
+	.hm-zones {
+		opacity: 0;
+		transition: opacity 480ms cubic-bezier(0.2, 0.9, 0.25, 1.05);
+	}
+
+	.hm-zones-visible {
+		opacity: 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hm-pulse {
+			animation: none;
+			opacity: 0.75;
+		}
+
+		.hm-zones {
+			transition: none;
+			opacity: 1;
+		}
+	}
+
+	/* ── Hardwood: flip cards ── */
+	.feature-flips {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 0.5rem 0.25rem;
+		min-height: 0;
+	}
+
+	.hw-flips {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.5rem;
+		width: 100%;
+		max-width: 340px;
+		perspective: 1200px;
+	}
+
+	.hw-flip {
+		position: relative;
+		aspect-ratio: 3 / 4;
+		min-height: 120px;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		cursor: pointer;
+		font: inherit;
+		color: inherit;
+	}
+
+	.hw-flip-inner {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		transition: transform 600ms cubic-bezier(0.2, 0.9, 0.25, 1.05);
+		transform-style: preserve-3d;
+	}
+
+	.hw-flip--flipped .hw-flip-inner {
+		transform: rotateY(180deg);
+	}
+
+	.hw-flip-face {
+		position: absolute;
+		inset: 0;
+		display: flex;
+		flex-direction: column;
+		padding: 0.55rem 0.45rem;
+		border-radius: var(--radius-sm);
+		background: rgba(255, 255, 255, 0.04);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+		transition: border-color var(--base);
+	}
+
+	.hw-flip:focus-visible {
+		outline: 2px solid rgba(255, 255, 255, 0.5);
+		outline-offset: 2px;
+		border-radius: var(--radius-sm);
+	}
+
+	@media (hover: hover) {
+		.hw-flip:hover .hw-flip-face {
+			border-color: rgba(255, 255, 255, 0.18);
+		}
+	}
+
+	.hw-flip-front {
+		justify-content: space-between;
+		align-items: center;
+		text-align: center;
+	}
+
+	.hw-flip-label {
+		font-family: var(--font-body);
+		font-size: 0.65rem;
+		font-weight: 500;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--color-text);
+	}
+
+	.hw-flip-front-text {
+		font-size: 0.55rem;
+		line-height: 1.4;
+		color: var(--color-text-muted);
+	}
+
+	.hw-flip-back {
+		transform: rotateY(180deg);
+		justify-content: flex-start;
+		gap: 0.1rem;
+		overflow: hidden;
+	}
+
+	.hw-flip-back-heading {
+		font-family: ui-monospace, 'SF Mono', monospace;
+		font-size: 0.48rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: rgba(255, 255, 255, 0.45);
+		margin-top: 0.25rem;
+	}
+
+	.hw-flip-back-heading:first-child {
+		margin-top: 0;
+	}
+
+	.hw-flip-back-text {
+		font-size: 0.5rem;
+		line-height: 1.35;
+		color: var(--color-text);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hw-flip-inner {
+			transition: none;
+		}
+	}
+
+	/* ── Sheet Vinyl: cove-build anatomy ── */
+	.feature-cove {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		padding: 0.5rem;
+	}
+
+	.feature-cove svg {
+		display: block;
+		width: 100%;
+		max-width: 280px;
+		height: auto;
+		margin-bottom: 0.5rem;
+	}
+
+	.cove-sheet-stroke {
+		transition: stroke-dashoffset 1100ms cubic-bezier(0.4, 0, 0.2, 1) 100ms;
+	}
+
+	.grout-step--in .cove-sheet-stroke {
+		stroke-dashoffset: 0 !important;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cove-sheet-stroke {
+			transition: none;
+			stroke-dashoffset: 0 !important;
+		}
 	}
 </style>
