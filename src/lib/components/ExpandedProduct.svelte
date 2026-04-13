@@ -8,21 +8,23 @@
 		product: Product;
 		badgeRect: { x: number; y: number; w: number; h: number };
 		textRect: { x: number; y: number } | null;
+		iconRect: { x: number; y: number; w: number; h: number } | null;
 		onclose: () => void;
 	}
 
-	let { product: prod, badgeRect, textRect, onclose }: Props = $props();
+	let { product: prod, badgeRect, textRect, iconRect, onclose }: Props = $props();
 
 	let cardEl: HTMLDivElement | undefined = $state();
 	let titleEl: HTMLDivElement | undefined = $state();
 	let glowEl: HTMLDivElement | undefined = $state();
+	let iconEl: HTMLDivElement | undefined = $state();
 	let animating = $state(true);
 	let closing = $state(false);
 	let tabsVisible = $state(false);
 	let contentVisible = $state(false);
 	const previouslyFocused = document.activeElement as HTMLElement | null;
 
-	const EXPAND_MS = 600;
+	const EXPAND_MS = 900;
 	const EASING = 'cubic-bezier(0.22, 1, 0.36, 1)';
 
 	$effect(() => {
@@ -57,6 +59,19 @@
 			titleEl.style.transformOrigin = 'top left';
 		}
 
+		if (iconRect && iconEl) {
+			const cardRect = cardEl.parentElement!.getBoundingClientRect();
+			const iElRect = iconEl.getBoundingClientRect();
+			const iconCurrentX = iElRect.left - cardRect.left;
+			const iconCurrentY = iElRect.top - cardRect.top;
+			const sizeRatio = iconRect.w / 44;
+			const dx = (iconRect.x - iconCurrentX) / scaleX;
+			const dy = (iconRect.y - iconCurrentY) / scaleY;
+			iconEl.style.transition = 'none';
+			iconEl.style.transform = `translate(${dx}px, ${dy}px) scale(${sizeRatio / scaleX}, ${sizeRatio / scaleY})`;
+			iconEl.style.transformOrigin = 'top left';
+		}
+
 		requestAnimationFrame(() => {
 			requestAnimationFrame(() => {
 				if (!cardEl || !titleEl) return;
@@ -68,6 +83,12 @@
 				// Animate title to header position
 				titleEl.style.transition = `transform ${EXPAND_MS}ms ${EASING}`;
 				titleEl.style.transform = '';
+
+				// Animate icon to header position
+				if (iconEl) {
+					iconEl.style.transition = `transform ${EXPAND_MS}ms ${EASING}`;
+					iconEl.style.transform = '';
+				}
 
 				const onEnd = (e: TransitionEvent) => {
 					if (e.target !== cardEl) return;
@@ -124,6 +145,19 @@
 					titleEl.style.transition = `transform ${EXPAND_MS}ms ${EASING}`;
 					titleEl.style.transform = `translate(${dx}px, ${dy}px) scale(${0.714 / scaleX}, ${0.714 / scaleY})`;
 					titleEl.style.transformOrigin = 'top left';
+				}
+
+				if (iconRect && iconEl) {
+					const cardRect = cardEl.parentElement!.getBoundingClientRect();
+					const iElRect = iconEl.getBoundingClientRect();
+					const iconCurrentX = iElRect.left - cardRect.left;
+					const iconCurrentY = iElRect.top - cardRect.top;
+					const sizeRatio = iconRect.w / 44;
+					const dx = (iconRect.x - badgeRect.x) / scaleX - iconCurrentX;
+					const dy = (iconRect.y - badgeRect.y) / scaleY - iconCurrentY;
+					iconEl.style.transition = `transform ${EXPAND_MS}ms ${EASING}`;
+					iconEl.style.transform = `translate(${dx}px, ${dy}px) scale(${sizeRatio / scaleX}, ${sizeRatio / scaleY})`;
+					iconEl.style.transformOrigin = 'top left';
 				}
 
 				cardEl.style.transition = `transform ${EXPAND_MS}ms ${EASING}`;
@@ -192,7 +226,7 @@
 	bind:this={cardEl}
 >
 	<div class="expanded-header">
-		<div class="expanded-icon" aria-hidden="true">
+		<div class="expanded-icon" aria-hidden="true" bind:this={iconEl}>
 			<ProductTexture material={prod.material} />
 		</div>
 		<div class="expanded-title-group" bind:this={titleEl}>
@@ -323,19 +357,16 @@
 		width: 44px;
 		height: 44px;
 		flex-shrink: 0;
-		color: rgba(255, 255, 255, 0.45);
-		opacity: 0;
-		transition: opacity 300ms var(--ease-out);
+		color: rgba(255, 255, 255, 0.55);
+		opacity: 0.55;
+		transform-origin: top left;
+		will-change: transform;
 	}
 
 	:global(.expanded-icon svg) {
 		width: 100%;
 		height: 100%;
 		display: block;
-	}
-
-	.expanded-product:not(.expanded-product--animating) .expanded-icon {
-		opacity: 1;
 	}
 
 	.expanded-close {

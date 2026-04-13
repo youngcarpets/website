@@ -12,6 +12,7 @@
 	let hiddenIndex: number | null = $state(null);
 	let badgeRect: { x: number; y: number; w: number; h: number } | null = $state(null);
 	let textRect: { x: number; y: number } | null = $state(null);
+	let iconRect: { x: number; y: number; w: number; h: number } | null = $state(null);
 	let gridEl: HTMLDivElement | undefined = $state();
 
 	function openBadge(index: number, e: MouseEvent) {
@@ -23,6 +24,9 @@
 		const bodyEl = (e.currentTarget as HTMLElement).querySelector('.product-badge__body');
 		const bodyRect = bodyEl?.getBoundingClientRect();
 
+		const svgEl = (e.currentTarget as HTMLElement).querySelector('.product-badge__texture svg');
+		const svgBounds = svgEl?.getBoundingClientRect();
+
 		gridEl.style.minHeight = `${gridEl.offsetHeight}px`;
 
 		badgeRect = {
@@ -32,6 +36,14 @@
 			h: bRect.height
 		};
 		textRect = bodyRect ? { x: bodyRect.left - gRect.left, y: bodyRect.top - gRect.top } : null;
+		iconRect = svgBounds
+			? {
+					x: svgBounds.left - gRect.left,
+					y: svgBounds.top - gRect.top,
+					w: svgBounds.width,
+					h: svgBounds.height
+				}
+			: null;
 		expandedIndex = index;
 		hiddenIndex = index;
 	}
@@ -41,6 +53,7 @@
 		hiddenIndex = null;
 		badgeRect = null;
 		textRect = null;
+		iconRect = null;
 		if (gridEl) gridEl.style.minHeight = '';
 	}
 
@@ -100,6 +113,7 @@
 				product={featureProducts[expandedIndex]!}
 				{badgeRect}
 				{textRect}
+				{iconRect}
 				onclose={closeBadge}
 			/>
 		{/if}

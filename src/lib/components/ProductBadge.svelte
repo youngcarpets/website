@@ -102,15 +102,9 @@
 		pointer-events: none;
 		z-index: 0;
 		color: rgba(255, 255, 255, 0.55);
-		opacity: 0.15;
-		mix-blend-mode: screen;
-		transition:
-			opacity var(--illuminate-speed) var(--ease-out),
-			transform 600ms var(--ease-out);
-	}
-
-	:global(.illuminated) .product-badge__texture {
 		opacity: 0.55;
+		mix-blend-mode: screen;
+		transition: transform 600ms var(--ease-out);
 	}
 
 	:global(.product-badge__texture svg) {
