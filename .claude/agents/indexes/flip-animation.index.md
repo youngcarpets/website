@@ -60,6 +60,10 @@ The FLIP grow and shrink animations are working perfectly. Do NOT modify the tra
 
 ## Workarounds / Patterns
 
+### SVG sub-pixel jitter during box-shadow transitions
+**Problem:** SVG textures in product badges (especially 2nd/3rd grid columns) shift ~1px during illumination box-shadow transitions. Caused by browser re-rasterizing compositor layers at sub-pixel grid positions. Eliminated major causes (permanent GPU layer, mix-blend-mode, mismatched shadow counts, scale in animation) but residual jitter remained at fast transition speeds.
+**Workaround:** Slowing `--illuminate-speed` eliminates the visible jitter. At 0.35s the per-frame change is large enough to expose sub-pixel rounding shifts; at ~3s the shift per frame is imperceptible. Root cause is not fully understood — likely browser compositor behavior on fractional-pixel grid columns during box-shadow interpolation. Tune speed for the best balance between snappiness and jitter elimination.
+
 ### backdrop-filter + transform: scale() = broken blur
 **Problem:** `backdrop-filter` gets rasterized at pre-scale size then stretched by GPU. Blur looks wrong during FLIP.
 **Solution:** Remove `backdrop-filter` entirely. Replace with opaque-enough CSS gradients that provide legibility without needing blur. CSS gradients are math — they scale perfectly with transforms.

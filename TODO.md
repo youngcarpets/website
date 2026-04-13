@@ -1,6 +1,6 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-13 (Product badge background fixed — v0.4.39).
+Last updated: 2026-04-13 (Product badge → modal transition complete — v0.4.51).
 
 This file is the durable cross-session to-do list. Both Claude and you read it at session start.
 
@@ -15,7 +15,7 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - **Dark mode is the working mode.** Body `#0b0b0d`, text `#e6e6e8`. Grayscale only — no color accents until color phase at the end.
 - **System font stack.** SF Pro Display (Apple), Segoe UI (Windows), system-ui fallback. Square721 for YOUNG wordmark only.
 - **Global CSS foundation.** `src/app.css` with color tokens, glass/glow tokens, motion tokens, radius tokens, font tokens, CSS reset, light theme overrides, reduced-motion/transparency media queries.
-- **Product badge FLIP animation (v0.4.39).** Container-transform animation: badge grows to fill grid, inner elements (title, SVG icon) FLIP to header positions with size ratios. Glow overlay uses layout animation (top/left/width/height) for Safari compatibility. 900ms duration, ease-out curve. All endpoints matched for brightness/size. Background: shared opaque dark gradient (no backdrop-filter — removed because it breaks during transform: scale()). Backup at `backup/v0.4.26`.
+- **Product badge FLIP animation (v0.4.51 — LOCKED).** Container-transform animation: badge grows to fill grid, inner elements (title, SVG icon) FLIP to header positions with size ratios. Glow overlay uses layout animation for Safari. 900ms duration, ease-out curve. Background: shared opaque dark gradient (no backdrop-filter). Smooth scroll to center products section on open. Stagger return on close: badges fade in sequentially (unlit), then illuminate sequentially. Selected badge stays lit throughout. SVG jitter fix: removed permanent GPU layer, matched shadow structure, 2s illuminate speed. Backups at `backup/v0.4.26`, `backup/v0.4.49`.
 - **Agent system organized.** `.claude/agents/INDEX.md` is the single router. FLIP animation agent with full index. Agents accumulate project-specific knowledge. Check project agents before generic dispatch.
 
 ## Resume here next session
@@ -26,10 +26,11 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - `.claude/agents/motion-expert.md` — easing, timing, GPU compositing
 - `.claude/agents/design.md` — design tokens, glass effects
 
-**Current task: Products section — continue building.**
-1. **Products section — in progress.** Carpet Tile badge is the prototype. Get it perfect, then clone for the other 10 badges. 11 badges total. See `.claude/reference/site-layout-structure.md` for full product tree.
-2. **Carpet Tile badge status:** Badge renders with code (CPTT) + name + SVG texture. FLIP animation grows badge to full grid with title/icon counter-FLIP. Modal has 3-tab layout (Product/Installation/Maintenance) with sticky tabs and scrollable panels. Pattern morph animation (6 patterns). Glow overlay for Safari. A11y: focus trap, keyboard nav, roving tabindex. Codes: CPTT, LVT, CPT, CT, RBR, MAT, WD, SVF.
-3. **Next on Carpet Tile:** Refine SVG drawings, finalize badge spacing, build sub-category navigation within the modal.
+**Current task: Product modal content.**
+The badge → modal transition is complete and locked. Next: build out the product modal content itself.
+1. **Carpet Tile modal content** — refine the 3-tab content (Product/Installation/Maintenance), sub-category navigation within the modal.
+2. **Then clone for other 10 badges.** 11 badges total. See `.claude/reference/site-layout-structure.md` for full product tree. Codes: CPTT, LVT, CPT, CT, RBR, MAT, WD, SVF.
+3. **Refine SVG drawings** — improve texture icons for each product type.
 4. **Then Services section.** 4 service cards.
 5. **Then Contact/Map section.** Team, info, Google Maps embed. Counter badges already placed.
 6. **Footer reconcile.** After all sections done.
@@ -60,7 +61,9 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] Section: Suppliers (18-brand marquee, "Trusted Brands Include:")
 - [x] Hero context blurb (est. 1991, commercial flooring, Ottawa area)
 - [x] Products section: 11 badges scaffolded, FLIP animation prototype on Carpet Tile
-- [x] Product badge background — removed backdrop-filter, shared opaque gradient (v0.4.39)
+- [x] Product badge background — shared opaque gradient, no backdrop-filter (v0.4.39)
+- [x] Badge → modal transition LOCKED (FLIP grow/shrink, stagger return, scroll-to-center, SVG jitter fix — v0.4.51)
+- [ ] Product modal content (Carpet Tile first, then clone to other 10)
 - [ ] Section: Services (4 cards)
 - [ ] Section: Contact/Map (team, info, Google Maps, counter badges already placed)
 - [ ] Section: Footer (reconcile with final content)
@@ -153,6 +156,12 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] FLIP animation agent created with full index
 - [x] Agent system organized: INDEX.md router, lean files, on-demand loading
 - [x] Backup branch: `backup/v0.4.26`
+- [x] Product badge background: removed backdrop-filter, shared opaque dark gradient with radial depth
+- [x] Stagger return: badges fade in sequentially (unlit), then illuminate sequentially after modal close
+- [x] Selected badge stays illuminated throughout return sequence
+- [x] SVG jitter fix: removed permanent GPU layer, mix-blend-mode, matched shadow structure, 2s illuminate speed
+- [x] Scroll-to-center: smooth scroll products section into view on badge open
+- [x] Backup branch: `backup/v0.4.49`
 
 ---
 

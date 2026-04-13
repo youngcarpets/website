@@ -47,6 +47,10 @@
 			: null;
 		expandedIndex = index;
 		hiddenIndex = index;
+
+		// Scroll products section into view simultaneously with FLIP
+		const productsSection = gridEl.closest('#products');
+		productsSection?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 	}
 
 	function closeBadge() {
