@@ -1,6 +1,6 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-13 (Hero/About complete, BrandMark component extracted, v0.2.11).
+Last updated: 2026-04-13 (Products section in progress — Carpet Tile badge prototype, v0.3.4).
 
 This file is the durable cross-session to-do list. Both Claude and you read it at session start.
 
@@ -34,13 +34,13 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 **Follow the migration workflow:** `.claude/reference/migration-workflow.md`
 **Layout structure reference:** `.claude/reference/site-layout-structure.md`
 
-1. **Suppliers section — next up.** 18-brand logo marquee. Relatively simple — get it out of the way first.
-2. **Then Products section.** Top badges + More Flooring + Accessories + Installation. Product badges will be "a little bit more opaque because they have drawings/icons on them."
-3. **Then Services section.** 4 service cards.
-4. **Then Contact/Map section.** Team, info, Google Maps embed. Counter badges already placed.
-5. **Footer reconcile.** After all sections done.
-6. **Design rules:** Gold `#d4b87a` only (no yellow), glass effect, glow, 16px radii, system font, motion respected.
-7. **Grayscale rule still applies.** Color phase is last.
+1. **Products section — in progress.** Carpet Tile badge is the prototype. Get it perfect (badge design, 3-tab modal, pattern animation, sub-categories), then clone for the other 10 badges. 11 badges total (not 9). See `.claude/reference/site-layout-structure.md` for full product tree.
+2. **Carpet Tile badge status:** Badge renders with code (CPTT) + name + SVG texture. Modal opens with 3-tab layout (Product/Installation/Maintenance). Pattern morph animation works (6 patterns). A11y: focus trap, keyboard nav, roving tabindex all implemented. Codes updated to architectural standards (CPTT, LVT, CPT, CT, RBR, MAT, WD, SVF). No codes on More/Accessories/Installation.
+3. **Next on Carpet Tile:** Refine SVG drawings, finalize badge spacing, build out sub-category navigation within the modal.
+4. **Then Services section.** 4 service cards.
+5. **Then Contact/Map section.** Team, info, Google Maps embed. Counter badges already placed.
+6. **Footer reconcile.** After all sections done.
+7. **Design rules:** Grayscale only. No gold/yellow until color phase at the end. All visual properties must use CSS custom properties from app.css — never hardcode. Opacity-based color hierarchy (one base color, opacity controls emphasis).
 8. **Error checking on-demand.** User will ask for `pnpm check` + `pnpm lint` when needed.
 
 ## Site content (building out)
@@ -64,8 +64,8 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] Counter badges (35+ / 50,000+ / 250+) — placed in Contact section
 - [x] countUp action with IntersectionObserver
 - [x] Maple leaf SVG (currentColor, scale 0.0063)
-- [ ] Section: Suppliers (18-brand logo marquee) ← NEXT
-- [ ] Section: Products (top badges + More Flooring + Accessories + Installation)
+- [x] Section: Suppliers (18-brand marquee, "Trusted Brands Include:")
+- [ ] Section: Products (11 badges — Carpet Tile prototype in progress) ← IN PROGRESS
 - [ ] Section: Services (4 cards)
 - [ ] Section: Contact/Map (team, info, Google Maps, counter badges already placed)
 - [ ] Section: Footer (reconcile with final content)
@@ -130,6 +130,18 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] bind:clientWidth technique for SVG-to-text width matching
 - [x] Footer restructured: BrandMark above grid, 3-col grid below
 - [x] Hero/About section complete (v0.2.11)
+- [x] Footer: SVG icons for phone/email/clock/address, 2-col layout, AP email removed
+- [x] BrandMark: maple leaf outline with warm glow filter, COMMERCIAL FLOORING weight 200 + 0.25em tracking
+- [x] Suppliers section: 18 brands, "Trusted Brands Include:" heading, marquee with black band, 70s scroll
+- [x] Section heading standard: weight 200, 0.25em tracking, uppercase
+- [x] Background image darkened (opacity 0.55 → 0.45)
+- [x] Products section scaffolded: ProductBadge, ProductModal, ModalTabs, CarpetTileModal components
+- [x] Carpet Tile modal: 3-tab layout, 6-pattern morph animation, full content
+- [x] A11y: modal focus trap, keyboard nav on tabs + radio pills, roving tabindex, focus-visible
+- [x] Product codes updated to architectural standards (CPTT, LVT, CPT, CT, RBR, MAT, WD, SVF)
+- [x] Badge grid: 3-col on iPhone, 4/5/6 cols on wider screens
+- [x] Design tokens enforced: CSS custom properties as single source of truth
+- [x] Site layout structure doc updated with 11-badge plan + build approach
 
 ---
 

@@ -24,15 +24,27 @@ Footer     → Brand, address, contact, hours, copyright
 
 ```
 Hero/About   ("Since 1991", counters, company identity — merged, no standalone About)
-Products
+Products     (11 top-level badges — 8 product types + More Flooring + Accessories + Installation)
 Services
-Suppliers    (18-brand logo marquee — COREtec removed)
+Suppliers    (18-brand marquee, "Trusted Brands We Carry Include:")
 Contact/Map  (combined into one section)
 Footer
 ```
 
 Gallery deferred to later phase.
 Quote removed from section list.
+
+## Build Approach — Products Section
+
+- **11 badges total** (not 9 like ay3). Added Accessories and Installation as top-level badges.
+- **One component, many instances.** All badges are the same ProductBadge component with different content/props.
+- **Build Carpet Tile first** as the prototype. Get design, animations, sub-categories, and 3-tab modal exactly right.
+- **Then clone the pattern** for the other 10 badges — same component, different data.
+- **Each badge is self-contained** — content stays within its own container/constraints.
+- **Grid layout:** minimum 3 badges across on iPhone portrait (375px). Condensed cards — code + name + SVG texture only, no blurb.
+- **Sub-categories exist in the data model** but top-level badges are built first, deeper taxonomy later.
+- **Grayscale only** during build phase. Color accents added at the end.
+- **Design tokens are single source of truth.** All visual properties flow through CSS custom properties in app.css. Never hardcode rgba/px values in components.
 
 ---
 
@@ -113,7 +125,7 @@ Services
 └── Seasonal Matting
 
 Suppliers
-└── 18-brand logo marquee
+└── 18-brand marquee ("Trusted Brands We Carry Include:")
 
 Contact/Map
 ├── Sales team
@@ -142,7 +154,7 @@ Comprehensive commercial flooring taxonomy (expert-reviewed). This is the **data
 - **Employee portal (future):** Full category browsing, search by category/supplier/product, master index. The taxonomy drives navigation and filtering here.
 - **Supplier ↔ Product mapping:** Each supplier is tagged to the products they actually offer. Filtering by supplier shows only relevant product badges. Filtering by product shows only relevant suppliers. This relationship is bidirectional and lives in the data layer.
 - **Category filtering:** Taxonomy groups (Soft, Resilient, Hard Surface, Specialty, Entryway) are metadata tags, not visible page sections. Filtering by a group (e.g. "Soft Floor Coverings") narrows the product badges shown to only those that belong to that group. The page layout stays flat — cards don't rearrange into category sections.
-- **More Flooring badge:** Opens the full product catalog organized by expert taxonomy categories. Contains every product including best sellers. Selecting a best-seller item from here opens the same detail view (3-tab layer) as tapping its top badge directly. Non-best-seller items get a basic info version of the same view. Detail layer design deferred.
+- **More Flooring badge:** The full catalog — every flooring type lives here. If you tap a product that already has its own top-level badge (e.g. Carpet Tile, LVT), it routes to that badge's detail view. Products without their own badge get a simpler treatment (format TBD). Organized by expert taxonomy categories.
 
 ### Flooring Products
 

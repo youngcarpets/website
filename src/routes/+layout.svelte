@@ -246,7 +246,7 @@
 		object-position: center;
 		z-index: -1;
 		pointer-events: none;
-		opacity: 0.55;
+		opacity: 0.45;
 		filter: invert(0.92) hue-rotate(180deg) brightness(0.7) contrast(1.1) saturate(0.25);
 		-webkit-mask-image: radial-gradient(
 			ellipse 65% 55% at 50% 45%,

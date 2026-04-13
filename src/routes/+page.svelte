@@ -1,8 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { countUp } from '$lib/actions/countUp';
 	import BrandMark from '$lib/components/BrandMark.svelte';
+	import ProductBadge from '$lib/components/ProductBadge.svelte';
+	import ProductModal from '$lib/components/ProductModal.svelte';
 	import SupplierMarquee from '$lib/components/SupplierMarquee.svelte';
+	import { countUp } from '$lib/actions/countUp';
+	import { featureProducts, type Product } from '$lib/content/products';
+
+	let openProduct: Product | null = $state(null);
 
 	let wordmarkReady = $state(false);
 
@@ -37,7 +42,18 @@
 	</div>
 </section>
 
-<section id="products" class="section-placeholder" aria-label="Products"></section>
+<section id="products" class="products" aria-label="Products">
+	<h2 class="section-heading">Products</h2>
+	<div class="products-grid">
+		{#each featureProducts as product, i (product.material)}
+			<ProductBadge {product} index={i} onclick={() => (openProduct = featureProducts[0]!)} />
+		{/each}
+	</div>
+</section>
+
+{#if openProduct}
+	<ProductModal product={openProduct} onclose={() => (openProduct = null)} />
+{/if}
 <section id="services" class="section-placeholder" aria-label="Services"></section>
 <SupplierMarquee />
 
@@ -87,6 +103,61 @@
 <style>
 	.section-placeholder {
 		min-height: 0;
+	}
+
+	/* --- Products ----------------------------------- */
+
+	.products {
+		padding: 2rem 0.75rem;
+		max-width: 1200px;
+		margin: 0 auto;
+	}
+
+	.section-heading {
+		font-family: var(--font-body);
+		font-size: 1.5rem;
+		font-weight: 200;
+		letter-spacing: 0.25em;
+		text-transform: uppercase;
+		color: var(--color-text);
+		text-align: center;
+		margin-bottom: 1rem;
+	}
+
+	.products-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.5rem;
+	}
+
+	@media (min-width: 521px) {
+		.products {
+			padding: 4rem 1.5rem;
+		}
+
+		.section-heading {
+			font-size: 2.5rem;
+			margin-bottom: 2.5rem;
+		}
+
+		.products-grid {
+			grid-template-columns: repeat(4, 1fr);
+			gap: 0.75rem;
+		}
+	}
+
+	@media (min-width: 768px) {
+		.products-grid {
+			grid-template-columns: repeat(5, 1fr);
+			gap: 1rem;
+		}
+	}
+
+	@media (min-width: 1024px) {
+		.products-grid {
+			grid-template-columns: repeat(6, 1fr);
+			gap: 1rem;
+		}
 	}
 
 	.hero {
