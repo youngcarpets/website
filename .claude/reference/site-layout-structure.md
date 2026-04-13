@@ -54,10 +54,8 @@ Quote removed from section list.
 Hero/About
 ├── "COMMERCIAL FLOORING" label
 ├── "YOUNG" animated wordmark
-├── Tagline
-├── "Since 1991" eyebrow
-├── 250+ years experience counter
-└── 50,000+ jobs counter
+├── BrandMark component (maple leaf, subtitle)
+└── Context blurb (est. 1991, Young Carpets Inc., commercial flooring, Ottawa area — format TBD)
 
 Products
 ├── Carpet Tile          (top badge)

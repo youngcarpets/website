@@ -65,6 +65,7 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] countUp action with IntersectionObserver
 - [x] Maple leaf SVG (currentColor, scale 0.0063)
 - [x] Section: Suppliers (18-brand marquee, "Trusted Brands Include:")
+- [ ] Hero context blurb (est. 1991, Young Carpets Inc., commercial flooring, Ottawa area — format TBD)
 - [ ] Section: Products (11 badges — Carpet Tile prototype in progress) ← IN PROGRESS
 - [ ] Section: Services (4 cards)
 - [ ] Section: Contact/Map (team, info, Google Maps, counter badges already placed)
@@ -129,7 +130,7 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] BrandMark.svelte extracted — reusable component, hero + footer instances
 - [x] bind:clientWidth technique for SVG-to-text width matching
 - [x] Footer restructured: BrandMark above grid, 3-col grid below
-- [x] Hero/About section complete (v0.2.11)
+- [x] Hero/About section layout done (v0.2.11) — context blurb still needed
 - [x] Footer: SVG icons for phone/email/clock/address, 2-col layout, AP email removed
 - [x] BrandMark: maple leaf outline with warm glow filter, COMMERCIAL FLOORING weight 200 + 0.25em tracking
 - [x] Suppliers section: 18 brands, "Trusted Brands Include:" heading, marquee with black band, 70s scroll

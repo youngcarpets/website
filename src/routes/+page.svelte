@@ -5,6 +5,7 @@
 	import ProductModal from '$lib/components/ProductModal.svelte';
 	import SupplierMarquee from '$lib/components/SupplierMarquee.svelte';
 	import { countUp } from '$lib/actions/countUp';
+	import { illuminateOnScroll } from '$lib/actions/illuminateOnScroll';
 	import { featureProducts, type Product } from '$lib/content/products';
 
 	let openProduct: Product | null = $state(null);
@@ -46,7 +47,9 @@
 	<h2 class="section-heading">Products</h2>
 	<div class="products-grid">
 		{#each featureProducts as product, i (product.material)}
-			<ProductBadge {product} index={i} onclick={() => (openProduct = featureProducts[0]!)} />
+			<div use:illuminateOnScroll>
+				<ProductBadge {product} index={i} onclick={() => (openProduct = featureProducts[0]!)} />
+			</div>
 		{/each}
 	</div>
 </section>

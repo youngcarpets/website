@@ -244,14 +244,20 @@
 		text-align: left;
 		cursor: pointer;
 		transform: translateY(0) scale(1);
-		transition:
-			transform var(--base) var(--ease-out),
-			box-shadow var(--base) var(--ease-out),
-			border-color var(--base) var(--ease-out);
 		opacity: 0;
 		animation: badge-in 700ms var(--ease-out) forwards;
 		animation-delay: calc(var(--i, 0) * 90ms + 200ms);
 		touch-action: manipulation;
+		transition:
+			transform var(--base) var(--ease-out),
+			box-shadow var(--illuminate-speed) var(--ease-out),
+			border-color var(--illuminate-speed) var(--ease-out);
+	}
+
+	/* Dimmed state (default after entrance animation) */
+	:global(.illuminated) .product-badge {
+		box-shadow: var(--glass-shadow), var(--illuminate-glow);
+		border-color: rgba(255, 255, 255, 0.18);
 	}
 
 	@keyframes badge-in {
@@ -274,11 +280,15 @@
 		pointer-events: none;
 		z-index: 0;
 		color: rgba(255, 255, 255, 0.55);
-		opacity: 0.22;
+		opacity: 0.15;
 		mix-blend-mode: screen;
 		transition:
-			opacity 500ms var(--ease-out),
+			opacity var(--illuminate-speed) var(--ease-out),
 			transform 600ms var(--ease-out);
+	}
+
+	:global(.illuminated) .product-badge__texture {
+		opacity: 0.55;
 	}
 
 	.product-badge__texture svg {
@@ -302,8 +312,13 @@
 		letter-spacing: 0.1em;
 		text-transform: uppercase;
 		color: var(--color-text);
-		opacity: 0.4;
+		opacity: 0.3;
 		line-height: 1;
+		transition: opacity var(--illuminate-speed) var(--ease-out);
+	}
+
+	:global(.illuminated) .product-badge__code {
+		opacity: 0.55;
 	}
 
 	.product-badge__name {
@@ -312,16 +327,20 @@
 		letter-spacing: 0.06em;
 		text-transform: uppercase;
 		color: var(--color-text);
+		opacity: 0.6;
 		line-height: 1.2;
+		transition: opacity var(--illuminate-speed) var(--ease-out);
+	}
+
+	:global(.illuminated) .product-badge__name {
+		opacity: 1;
 	}
 
 	@media (hover: hover) {
 		.product-badge:hover {
 			transform: translateY(-3px) scale(1.02);
-			border-color: rgba(255, 255, 255, 0.15);
-			box-shadow:
-				inset 0 1px 0 rgba(255, 255, 255, 0.12),
-				0 4px 12px rgba(0, 0, 0, 0.35);
+			border-color: rgba(255, 255, 255, 0.2);
+			box-shadow: var(--glass-shadow), var(--illuminate-glow);
 		}
 
 		.product-badge:hover .product-badge__texture {

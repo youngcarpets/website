@@ -86,6 +86,14 @@ a {
 	--glass-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 8px 24px rgba(0, 0, 0, 0.45);
 	--glass-highlight: rgba(255, 255, 255, 0.08);
 
+	/* Illuminate (scroll-activated glow) */
+	--illuminate-dim: 0.5;
+	--illuminate-full: 1;
+	--illuminate-speed: 0.35s;
+	--illuminate-glow:
+		0 0 4px rgba(255, 255, 255, 0.55), 0 0 10px rgba(255, 255, 255, 0.18),
+		inset 0 0 6px rgba(255, 255, 255, 0.12);
+
 	/* Interactive */
 	--hover-bg: rgba(255, 255, 255, 0.06);
 

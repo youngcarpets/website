@@ -5,7 +5,7 @@
 <section id="suppliers" class="suppliers" aria-label="Suppliers">
 	<h2 class="suppliers-heading">
 		<span class="heading-accent">Trusted Brands</span>
-		<span class="heading-dim">We Carry Include:</span>
+		<span class="heading-dim">Include:</span>
 	</h2>
 	<div class="marquee" aria-hidden="true">
 		<div class="marquee-track">
