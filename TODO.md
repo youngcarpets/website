@@ -1,6 +1,6 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-12 (Phase 0 complete, Hero/About in progress, v0.1.88).
+Last updated: 2026-04-13 (Hero/About complete, BrandMark component extracted, v0.2.11).
 
 This file is the durable cross-session to-do list. Both Claude and you read it at session start.
 
@@ -10,34 +10,38 @@ This file is the durable cross-session to-do list. Both Claude and you read it a
 
 https://youngcarpets-website.pages.dev — stable production URL on Cloudflare Pages. Updates on `pnpm run deploy`.
 
-## Where we landed (2026-04-12)
+## Where we landed (2026-04-13)
 
 - **Dark mode is the working mode.** Body `#0b0b0d`, text `#e6e6e8`. Grayscale only — no color accents until color phase at the end.
 - **System font stack.** SF Pro Display (Apple), Segoe UI (Windows), system-ui fallback. Square721 for YOUNG wordmark only.
 - **Global CSS foundation.** `src/app.css` with color tokens, glass/glow tokens, motion tokens, radius tokens, font tokens, CSS reset, light theme overrides, reduced-motion/transparency media queries.
 - **Site-wide bg image.** Fixed full-viewport `object-fit: cover`, dark-mode filter, radial mask.
 - **Glass effect.** `rgba(18, 18, 21, 0.18)` bg, `blur(8px) saturate(1.4)` — light enough to see background detail through.
-- **Hero section.** YOUNG wordmark (Square721, bounce-in animation) + "COMMERCIAL FLOORING 🍁" subtitle as SVG with `textLength` auto-scaling (matches YOUNG width in all orientations). Maple leaf positioned via calculated SVG transform. Font-weight 500, opacity 0.7.
-- **Counter badges.** Three glass cards (35+ years / 50,000+ jobs / 250+ experience) with `countUp` action, IntersectionObserver trigger, `prefers-reduced-motion` respected. Moved to Contact/Map section (bottom of page, before footer).
-- **Nav bar.** Glass pill, safe-area-inset support. Links: Products, Services, Suppliers, Contact. Same transparency as badges.
-- **Footer.** Semi-transparent (`rgba(7, 7, 10, 0.7)`, `blur(12px)`), 4-col grid, responsive breakpoints.
+- **BrandMark component.** `src/lib/components/BrandMark.svelte` — reusable for hero + footer. YOUNG wordmark (Square721, near-white, bounce-in in hero) + "COMMERCIAL FLOORING 🍁" SVG subtitle (textLength auto-scaling, font 24px/500, opacity 0.7). `bind:clientWidth` ensures SVG matches YOUNG width at any scale. Drop-shadow behind. Maple leaf at scale 0.0063.
+- **Counter badges.** Three glass cards (35+ years / 50,000+ jobs / 250+ experience) with `countUp` action, IntersectionObserver trigger, `prefers-reduced-motion` respected. In Contact section.
+- **Nav bar.** Glass pill, safe-area-inset support. Links: Products, Services, Suppliers, Contact.
+- **Footer.** Semi-transparent, BrandMark at top, 3-col grid (address/contact/hours), responsive breakpoints.
+- **Component architecture.** Repeated visual elements = one component, instances differ by props only. Tree diagram maps to component classes.
 - **Favicon.** SVG with traced "YCI" glyph paths (1.2KB), PNG fallback, apple-touch-icon.
 - **Meta.** Base OG tags in layout `<svelte:head>`. Page-level title/description in `+page.svelte`.
-- **Accessibility.** `prefers-reduced-transparency` fallback. `prefers-reduced-motion` on all animations. Focus indicators. Footer text passes WCAG 4.5:1 contrast. Skip link. `afterNavigate` focus management.
+- **Accessibility.** `prefers-reduced-transparency` fallback. `prefers-reduced-motion` on all animations. Focus indicators. Skip link. `afterNavigate` focus management.
 - **View Transitions.** `onNavigate` hook with `startViewTransition`.
 - **Section anchors.** Placeholder sections for Products, Services, Suppliers, Contact.
-- **0 errors, 0 warnings** on `pnpm check` + `pnpm lint` (as of v0.1.77).
+- **0 errors, 0 warnings** on `pnpm check` + `pnpm lint` (as of v0.2.0).
 
 ## Resume here next session
 
 **Follow the migration workflow:** `.claude/reference/migration-workflow.md`
 **Layout structure reference:** `.claude/reference/site-layout-structure.md`
 
-1. **Hero/About — fine-tuning.** The hero block (YOUNG + COMMERCIAL FLOORING 🍁) is mostly done. May need minor tweaks. Counter badges are placed in Contact section.
-2. **Phase 1: Sections top-to-bottom.** Products → Services → Suppliers → Contact/Map → Footer reconcile. Pull from ay3, rewrite to Svelte 5 runes, adapt to new design system, expert review each.
-3. **Design rules:** Gold `#d4b87a` only (no yellow), glass effect, glow, 16px radii, system font, motion respected.
-4. **Grayscale rule still applies.** Color phase is last.
-5. **Error checking on-demand.** User will ask for `pnpm check` + `pnpm lint` when needed.
+1. **Suppliers section — next up.** 18-brand logo marquee. Relatively simple — get it out of the way first.
+2. **Then Products section.** Top badges + More Flooring + Accessories + Installation. Product badges will be "a little bit more opaque because they have drawings/icons on them."
+3. **Then Services section.** 4 service cards.
+4. **Then Contact/Map section.** Team, info, Google Maps embed. Counter badges already placed.
+5. **Footer reconcile.** After all sections done.
+6. **Design rules:** Gold `#d4b87a` only (no yellow), glass effect, glow, 16px radii, system font, motion respected.
+7. **Grayscale rule still applies.** Color phase is last.
+8. **Error checking on-demand.** User will ask for `pnpm check` + `pnpm lint` when needed.
 
 ## Site content (building out)
 
@@ -46,22 +50,23 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] Theme toggle (sun/moon, functional)
 - [x] Square721 font (embedded, preloaded) — brand/wordmark only
 - [x] System font stack (SF Pro Display / Segoe UI / system-ui) — body/UI text
-- [x] YOUNG wordmark with bounce-in animation
-- [x] Hero subtitle: "COMMERCIAL FLOORING 🍁" (SVG textLength, auto-scales to match YOUNG)
+- [x] YOUNG wordmark with bounce-in animation (near-white, drop-shadow)
+- [x] Hero subtitle: "COMMERCIAL FLOORING 🍁" (SVG textLength, 24px/500, auto-scales)
+- [x] BrandMark.svelte component (hero + footer, bind:clientWidth for sizing)
 - [x] Version badge (purple pill, top center — dev component)
 - [x] Cache-busting headers for dev
 - [x] Favicon (SVG traced paths + PNG + apple-touch-icon)
-- [x] Footer (semi-transparent, 4-col grid, responsive)
+- [x] Footer (semi-transparent, BrandMark at top, 3-col grid, responsive)
 - [x] Global CSS foundation (app.css — tokens, reset, media queries)
 - [x] Section anchors (Products, Services, Suppliers, Contact)
 - [x] Nav links updated (Products, Services, Suppliers, Contact)
 - [x] Base meta defaults in layout `<svelte:head>`
 - [x] Counter badges (35+ / 50,000+ / 250+) — placed in Contact section
 - [x] countUp action with IntersectionObserver
-- [x] Maple leaf SVG (from ay3, currentColor)
+- [x] Maple leaf SVG (currentColor, scale 0.0063)
+- [ ] Section: Suppliers (18-brand logo marquee) ← NEXT
 - [ ] Section: Products (top badges + More Flooring + Accessories + Installation)
 - [ ] Section: Services (4 cards)
-- [ ] Section: Suppliers (18-brand marquee)
 - [ ] Section: Contact/Map (team, info, Google Maps, counter badges already placed)
 - [ ] Section: Footer (reconcile with final content)
 - [ ] Header nav links wired to real sections
@@ -104,7 +109,7 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] Output formatting rules in project CLAUDE.md (syncs via git)
 - [x] Global `~/.claude/CLAUDE.md` with interaction preferences
 - [x] Favicon: SVG traced paths (1.2KB), PNG 32x32, apple-touch-icon 180x180
-- [x] Footer: semi-transparent, 4-col grid, responsive breakpoints
+- [x] Footer: semi-transparent, BrandMark component at top, 3-col grid, responsive breakpoints
 - [x] 20 agents ported from ay3 + ay3-expert + motion-expert created
 - [x] Master INDEX.md for all agents/resources/references
 - [x] Design standards: `.claude/reference/design-standards.md`
@@ -121,6 +126,10 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] Glass transparency tuned (0.18 opacity, 8px blur for badges/nav)
 - [x] Footer transparency added (0.7 opacity, 12px blur)
 - [x] SVG textLength technique for subtitle auto-scaling across orientations
+- [x] BrandMark.svelte extracted — reusable component, hero + footer instances
+- [x] bind:clientWidth technique for SVG-to-text width matching
+- [x] Footer restructured: BrandMark above grid, 3-col grid below
+- [x] Hero/About section complete (v0.2.11)
 
 ---
 
