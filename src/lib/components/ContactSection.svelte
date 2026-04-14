@@ -189,13 +189,13 @@
 
 	@media (hover: hover) {
 		.contact-card:hover {
-			background: rgba(212, 184, 122, 0.08);
-			border-color: rgba(212, 184, 122, 0.35);
+			background: rgba(var(--color-accent-rgb), 0.08);
+			border-color: rgba(var(--color-accent-rgb), 0.35);
 			transform: translateY(-2px);
 			box-shadow:
 				inset 0 1px 0 rgba(255, 255, 255, 0.12),
 				0 12px 32px rgba(0, 0, 0, 0.55),
-				0 0 0 1px rgba(212, 184, 122, 0.15);
+				0 0 0 1px rgba(var(--color-accent-rgb), 0.15);
 		}
 	}
 
@@ -215,15 +215,15 @@
 	}
 
 	.contact-card:focus-visible {
-		background: rgba(212, 184, 122, 0.08);
-		border-color: rgba(212, 184, 122, 0.35);
-		outline: 2px solid rgba(212, 184, 122, 0.7);
+		background: rgba(var(--color-accent-rgb), 0.08);
+		border-color: rgba(var(--color-accent-rgb), 0.35);
+		outline: 2px solid rgba(var(--color-accent-rgb), 0.7);
 		outline-offset: 2px;
 	}
 
 	.contact-card:active {
 		transform: translateY(0);
-		background: rgba(212, 184, 122, 0.12);
+		background: rgba(var(--color-accent-rgb), 0.12);
 	}
 
 	/* ── Info row (company + accounting side by side) ── */
@@ -265,13 +265,13 @@
 	}
 
 	.accounting-row:focus-visible {
-		outline: 2px solid rgba(212, 184, 122, 0.7);
+		outline: 2px solid rgba(var(--color-accent-rgb), 0.7);
 		outline-offset: 2px;
 	}
 
 	@media (hover: hover) {
 		.accounting-row:hover .card-name {
-			color: rgba(212, 184, 122, 0.9);
+			color: rgba(var(--color-accent-rgb), 0.9);
 		}
 	}
 
@@ -341,7 +341,7 @@
 	}
 
 	.contact-map-link:focus-visible {
-		outline: 2px solid rgba(212, 184, 122, 0.7);
+		outline: 2px solid rgba(var(--color-accent-rgb), 0.7);
 		outline-offset: 2px;
 	}
 

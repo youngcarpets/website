@@ -75,9 +75,10 @@ a {
 	--color-border-glass: rgba(255, 255, 255, 0.1);
 	--color-border-glass-strong: rgba(255, 255, 255, 0.2);
 
-	/* Gold accent — defined but NOT applied until color phase */
-	--color-accent: #d4b87a;
-	--color-accent-glow: rgba(212, 184, 122, 0.08);
+	/* Accent color — electric blue-cyan */
+	--color-accent: #00e5ff;
+	--color-accent-rgb: 0, 229, 255;
+	--color-accent-glow: rgba(0, 229, 255, 0.08);
 
 	/* Glass */
 	--glass-bg: rgba(18, 18, 21, 0.18);
@@ -90,7 +91,7 @@ a {
 	--illuminate-dim: 0.5;
 	--illuminate-full: 1;
 	--illuminate-speed: 2s;
-	--illuminate-color: 255, 255, 255;
+	--illuminate-color: 0, 229, 255;
 	--illuminate-glow:
 		0 0 4px rgba(var(--illuminate-color), 0.55), 0 0 10px rgba(var(--illuminate-color), 0.18),
 		inset 0 0 6px rgba(var(--illuminate-color), 0.12);

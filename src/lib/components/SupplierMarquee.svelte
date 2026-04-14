@@ -58,7 +58,7 @@
 
 	.heading-accent {
 		color: #f5f5f7;
-		text-shadow: 0 0 12px rgba(212, 184, 122, 0.15);
+		text-shadow: 0 0 12px rgba(var(--color-accent-rgb), 0.15);
 	}
 
 	.heading-dim {
