@@ -9,7 +9,7 @@
 </script>
 
 {#if material === 'carpet'}
-	<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+	<svg viewBox="13 23 174 174" xmlns="http://www.w3.org/2000/svg">
 		<g stroke="currentColor" stroke-width="1.4" fill="none">
 			<path d="M 38 150 L 38 82 Q 38 80 40 80 Q 42 80 42 82 L 42 150 Z" />
 			<path d="M 50 150 L 50 74 Q 50 72 52 72 Q 54 72 54 74 L 54 150 Z" />

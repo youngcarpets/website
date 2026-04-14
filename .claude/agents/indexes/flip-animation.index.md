@@ -42,8 +42,8 @@ background:
 - Radial gradients add depth (highlight top-left, shadow bottom-right)
 - All CSS gradients scale perfectly with `transform: scale()` — no rasterization artifacts
 
-## LOCKED — Grow/Shrink Animation (v0.4.86)
-The FLIP grow and shrink animations are working perfectly — zero wiggle. Do NOT modify the transform logic, timing, easing, title/icon counter-FLIP, glow overlay, or badge illuminate approach. All visual properties snap instantly (no transitions except transform). Any future work on the products section must preserve this behavior exactly. Backup at `backup/v0.4.86` if created.
+## LOCKED — Grow/Shrink Animation (v0.4.93)
+The FLIP grow and shrink animations are working perfectly — zero wiggle, confirmed flawless. Do NOT modify the transform logic, timing, easing, title/icon counter-FLIP, glow overlay, or badge illuminate approach. All visual properties snap instantly (no transitions except transform). Dimmed badges use `visibility: hidden`. Illuminate zone rootMargin: `-28% 0px -35% 0px`. Backup at `backup/v0.4.93`.
 
 ## Brightness Matching
 | Element | Badge | Expanded | Match Method |

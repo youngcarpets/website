@@ -63,8 +63,16 @@ Note: `max-height` is an exception for expand/collapse patterns where `transform
 
 ## Known Workarounds
 
-### box-shadow transitions cause SVG sub-pixel jitter — FIXED (v0.4.86)
-**Root cause:** Any property transition (box-shadow, border-color, opacity) on elements containing SVGs triggers per-frame repaints that re-rasterize SVG content at shifting sub-pixel positions. **Fix:** Never transition visual properties on elements during motion. All glow/border/opacity changes snap instantly via class toggle. Only `transform` is allowed to transition. Elements in motion must be frozen static images — no internal property changes while moving.
+### box-shadow transitions cause SVG sub-pixel jitter — FIXED (v0.4.93, LOCKED)
+**Root cause:** Any property transition (box-shadow, border-color, opacity) on elements containing SVGs triggers per-frame repaints that re-rasterize SVG content at shifting sub-pixel positions. This includes opacity transitions on dimmed/hidden states.
+**Fix (confirmed flawless):**
+1. Never transition visual properties on elements during motion — only `transform` may transition
+2. All glow/border/opacity changes snap instantly via class toggle
+3. Dimmed badges use `visibility: hidden` (not opacity) — visibility doesn't trigger repaint
+4. Badge illuminated state uses exact same box-shadow values as expanded card: `var(--glass-shadow), var(--illuminate-glow)`
+5. Elements in motion are frozen static images — no internal property changes while moving
+6. SVG coordinates can be freely adjusted for centering without causing wiggle (confirmed with Ceramic and Carpet Tile)
+7. SVG sizing via viewBox zoom (e.g. Carpet `viewBox="13 23 174 174"`) is safe — no coordinate changes needed
 
 ## Checklist for Every Animation
 - [ ] Only animates `opacity` and/or `transform` (or justified exception)
