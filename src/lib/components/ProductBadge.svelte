@@ -57,11 +57,7 @@
 			radial-gradient(ellipse 50% 50% at 80% 85%, rgba(0, 0, 0, 0.2) 0%, transparent 70%),
 			rgba(11, 11, 13, 0.82);
 		border: 1px solid var(--color-border-glass);
-		box-shadow:
-			var(--glass-shadow),
-			0 0 4px rgba(255, 255, 255, 0.001),
-			0 0 10px rgba(255, 255, 255, 0.001),
-			inset 0 0 6px rgba(255, 255, 255, 0.001);
+		box-shadow: var(--glass-shadow);
 		font: inherit;
 		color: inherit;
 		text-align: left;
@@ -70,18 +66,13 @@
 		animation: badge-in 700ms var(--ease-out) backwards;
 		animation-delay: calc(var(--i, 0) * 90ms + 200ms);
 		touch-action: manipulation;
-		transition:
-			transform var(--base) var(--ease-out),
-			box-shadow var(--illuminate-speed) var(--ease-out),
-			border-color var(--illuminate-speed) var(--ease-out);
+		user-select: none;
+		-webkit-user-select: none;
+		transition: transform var(--base) var(--ease-out);
 	}
 
 	:global(.illuminated) .product-badge {
-		box-shadow:
-			var(--glass-shadow),
-			0 0 4px rgba(255, 255, 255, 0.55),
-			0 0 10px rgba(255, 255, 255, 0.18),
-			inset 0 0 6px rgba(255, 255, 255, 0.12);
+		box-shadow: var(--glass-shadow), var(--illuminate-glow);
 		border-color: rgba(255, 255, 255, 0.18);
 	}
 
@@ -128,7 +119,6 @@
 		color: var(--color-text);
 		opacity: 0.3;
 		line-height: 1;
-		transition: opacity var(--illuminate-speed) var(--ease-out);
 	}
 
 	:global(.illuminated) .product-badge__code {
@@ -143,7 +133,6 @@
 		color: var(--color-text);
 		opacity: 0.6;
 		line-height: 1.2;
-		transition: opacity var(--illuminate-speed) var(--ease-out);
 	}
 
 	:global(.illuminated) .product-badge__name {
@@ -153,12 +142,8 @@
 	@media (hover: hover) {
 		.product-badge:hover {
 			transform: translateY(-3px) scale(1.02);
-			border-color: rgba(255, 255, 255, 0.2);
-			box-shadow:
-				var(--glass-shadow),
-				0 0 4px rgba(255, 255, 255, 0.55),
-				0 0 10px rgba(255, 255, 255, 0.18),
-				inset 0 0 6px rgba(255, 255, 255, 0.12);
+			box-shadow: var(--glass-shadow), var(--illuminate-glow);
+			border-color: rgba(255, 255, 255, 0.18);
 		}
 
 		.product-badge:hover .product-badge__texture {
@@ -177,12 +162,7 @@
 	}
 
 	.product-badge--dimmed {
-		opacity: 0 !important;
-		transition: opacity 200ms var(--ease-out);
-	}
-
-	.product-badge--dimmed .product-badge__texture {
-		transition: none;
+		visibility: hidden;
 	}
 
 	@media (prefers-reduced-motion: reduce) {

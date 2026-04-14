@@ -42,8 +42,8 @@ background:
 - Radial gradients add depth (highlight top-left, shadow bottom-right)
 - All CSS gradients scale perfectly with `transform: scale()` — no rasterization artifacts
 
-## LOCKED — Grow/Shrink Animation (v0.4.41)
-The FLIP grow and shrink animations are working perfectly. Do NOT modify the transform logic, timing, easing, title/icon counter-FLIP, or glow overlay. Any future work on the products section must preserve this behavior exactly.
+## LOCKED — Grow/Shrink Animation (v0.4.86)
+The FLIP grow and shrink animations are working perfectly — zero wiggle. Do NOT modify the transform logic, timing, easing, title/icon counter-FLIP, glow overlay, or badge illuminate approach. All visual properties snap instantly (no transitions except transform). Any future work on the products section must preserve this behavior exactly. Backup at `backup/v0.4.86` if created.
 
 ## Brightness Matching
 | Element | Badge | Expanded | Match Method |
@@ -60,9 +60,10 @@ The FLIP grow and shrink animations are working perfectly. Do NOT modify the tra
 
 ## Workarounds / Patterns
 
-### SVG sub-pixel jitter during box-shadow transitions
-**Problem:** SVG textures in product badges (especially 2nd/3rd grid columns) shift ~1px during illumination box-shadow transitions. Caused by browser re-rasterizing compositor layers at sub-pixel grid positions. Eliminated major causes (permanent GPU layer, mix-blend-mode, mismatched shadow counts, scale in animation) but residual jitter remained at fast transition speeds.
-**Workaround:** Slowing `--illuminate-speed` eliminates the visible jitter. At 0.35s the per-frame change is large enough to expose sub-pixel rounding shifts; at ~3s the shift per frame is imperceptible. Root cause is not fully understood — likely browser compositor behavior on fractional-pixel grid columns during box-shadow interpolation. Tune speed for the best balance between snappiness and jitter elimination.
+### SVG sub-pixel jitter — ROOT CAUSE FIXED (v0.4.86)
+**Root cause:** Any CSS property transition (box-shadow, border-color, opacity) on badge elements triggers per-frame repaints, which re-rasterize SVG content at different sub-pixel positions on fractional CSS grid columns.
+**Fix:** Make ALL visual properties static — no transitions on glow, border, opacity, or text. Only `transform` transitions (for hover lift). The illuminate glow snaps on/off instantly via class toggle, no animation. Badge illuminated state uses the exact same `box-shadow: var(--glass-shadow), var(--illuminate-glow)` as the expanded card — identical at every point in the FLIP chain.
+**Rule:** During any motion (FLIP expand/shrink, stagger return), nothing inside the badge should be transitioning. The badge moves as a frozen static image. Transitions only exist for `transform` (hover). Dimmed badges use `visibility: hidden` (not opacity) to avoid repaint.
 
 ### backdrop-filter + transform: scale() = broken blur
 **Problem:** `backdrop-filter` gets rasterized at pre-scale size then stretched by GPU. Blur looks wrong during FLIP.

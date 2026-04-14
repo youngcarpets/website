@@ -27,15 +27,15 @@
 {:else if material === 'carpet-tile'}
 	<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
 		<g stroke="currentColor" stroke-width="1.5" fill="none">
-			<rect x="30" y="40" width="38" height="38" rx="3" />
-			<rect x="72" y="40" width="38" height="38" rx="3" />
-			<rect x="114" y="40" width="38" height="38" rx="3" />
-			<rect x="50" y="82" width="38" height="38" rx="3" />
-			<rect x="92" y="82" width="38" height="38" rx="3" />
-			<rect x="134" y="82" width="38" height="38" rx="3" />
-			<rect x="30" y="124" width="38" height="38" rx="3" />
-			<rect x="72" y="124" width="38" height="38" rx="3" />
-			<rect x="114" y="124" width="38" height="38" rx="3" />
+			<rect x="30" y="34" width="38" height="38" rx="3" />
+			<rect x="72" y="34" width="38" height="38" rx="3" />
+			<rect x="114" y="34" width="38" height="38" rx="3" />
+			<rect x="50" y="76" width="38" height="38" rx="3" />
+			<rect x="92" y="76" width="38" height="38" rx="3" />
+			<rect x="134" y="76" width="38" height="38" rx="3" />
+			<rect x="30" y="118" width="38" height="38" rx="3" />
+			<rect x="72" y="118" width="38" height="38" rx="3" />
+			<rect x="114" y="118" width="38" height="38" rx="3" />
 		</g>
 	</svg>
 {:else if material === 'lvt'}
@@ -130,17 +130,17 @@
 {:else if material === 'ceramic'}
 	<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
 		<g stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="square">
-			<rect x="30" y="42" width="42" height="42" />
-			<rect x="78" y="42" width="42" height="42" />
-			<rect x="126" y="42" width="42" height="42" />
-			<rect x="30" y="90" width="42" height="42" />
-			<g transform="translate(99, 111) rotate(45)">
+			<rect x="30" y="30" width="42" height="42" />
+			<rect x="78" y="30" width="42" height="42" />
+			<rect x="126" y="30" width="42" height="42" />
+			<rect x="30" y="78" width="42" height="42" />
+			<g transform="translate(99, 99) rotate(45)">
 				<rect x="-21" y="-21" width="42" height="42" />
 			</g>
-			<rect x="126" y="90" width="42" height="42" />
-			<rect x="30" y="138" width="42" height="42" />
-			<rect x="78" y="138" width="42" height="42" />
-			<rect x="126" y="138" width="42" height="42" />
+			<rect x="126" y="78" width="42" height="42" />
+			<rect x="30" y="126" width="42" height="42" />
+			<rect x="78" y="126" width="42" height="42" />
+			<rect x="126" y="126" width="42" height="42" />
 		</g>
 	</svg>
 {:else if material === 'sheet'}

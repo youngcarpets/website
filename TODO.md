@@ -92,7 +92,7 @@ Shared `ProductContentModal.svelte` renders all 8 real products from `product-de
 
 ## Known Bugs — Revisit Later
 
-- [ ] **SVG texture sub-pixel wiggle on illumination.** SVGs in product badges (especially 2nd/3rd grid columns) shift ~1px when badges illuminate or de-illuminate. Caused by sub-pixel rounding in CSS grid fractional column widths. We eliminated the major causes (permanent GPU compositor layer from `transform: translateY(0)`, `mix-blend-mode: screen`, mismatched shadow counts, `scale()` in badge-in animation) but a residual wiggle remains. Likely browser-level sub-pixel rounding during box-shadow repaint on fractional grid positions. Revisit when project is complete — possible approaches: fixed-pixel SVG sizes, integer-aligned grid widths, or SVG `transform` with pixel-snapping.
+- [x] **SVG texture sub-pixel wiggle — FIXED (v0.4.86).** Root cause: any CSS property transition (box-shadow, border-color, opacity) triggers per-frame repaints that re-rasterize SVGs at shifting sub-pixel positions. Fix: all visual properties snap instantly via class toggle, no transitions except `transform`. Badge illuminated state matches expanded card exactly.
 
 ## Phase 2 (deferred — not started)
 

@@ -63,8 +63,8 @@ Note: `max-height` is an exception for expand/collapse patterns where `transform
 
 ## Known Workarounds
 
-### box-shadow transitions cause SVG sub-pixel jitter
-When transitioning `box-shadow` on elements in a CSS grid with fractional column widths, SVGs centered via flexbox percentages (`width: 60%`) can shift ~1px due to sub-pixel re-rounding during repaint. Mitigations applied: removed permanent GPU layers (`transform: translateY(0)`), removed `mix-blend-mode: screen`, matched shadow count between states (transparent placeholders → visible), removed `scale()` from entrance animations. Residual jitter remains at fast speeds (~0.35s) but disappears at slower speeds (~3s). The per-frame change at fast speeds exposes sub-pixel rounding; slower speeds keep it imperceptible. **Workaround: increase transition duration until jitter is invisible.** Root cause is browser compositor behavior, not CSS logic.
+### box-shadow transitions cause SVG sub-pixel jitter — FIXED (v0.4.86)
+**Root cause:** Any property transition (box-shadow, border-color, opacity) on elements containing SVGs triggers per-frame repaints that re-rasterize SVG content at shifting sub-pixel positions. **Fix:** Never transition visual properties on elements during motion. All glow/border/opacity changes snap instantly via class toggle. Only `transform` is allowed to transition. Elements in motion must be frozen static images — no internal property changes while moving.
 
 ## Checklist for Every Animation
 - [ ] Only animates `opacity` and/or `transform` (or justified exception)
