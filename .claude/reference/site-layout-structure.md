@@ -20,19 +20,24 @@ Footer     → Brand, address, contact, hours, copyright
 
 ---
 
-## New Site Sections (decided)
+## New Site Sections (current as of v0.5.17)
 
 ```
-Hero/About   ("Since 1991", counters, company identity — merged, no standalone About)
-Products     (11 top-level badges — 8 product types + More Flooring + Accessories + Installation)
-Services
-Suppliers    (18-brand marquee, "Trusted Brands We Carry Include:")
-Contact/Map  (combined into one section)
-Footer
+Skip Link         (a11y, targets #main)
+Site Background   (enhanced:img, fixed, dark-filtered floor plan)
+Version Badge     (top center, dev only)
+Header / Nav      (glass pill, brand "YOUNG" link, theme toggle, hamburger + mobile menu)
+Hero              (BrandMark + animated YOUNG wordmark, subtitle, context blurb)
+Products          (10 badges: 8 product types + More + Accessories)
+Suppliers         (18-brand marquee, "Trusted Brands Include:")
+Services          (eyebrow + 4 glass cards + 3 counter badges)
+Contact           (Sales 6 + Accounting 2 team directory, Google Maps iframe)
+Footer            (glass bg, BrandMark, 2-col: address + contact/hours, copyright)
 ```
 
 Gallery deferred to later phase.
 Quote removed from section list.
+Installation badge removed — content moves to More badge.
 
 ## Build Approach — Products Section
 
@@ -118,23 +123,10 @@ Products
 │       ├── Entrance Tile
 │       ├── Elevator Cab
 │       └── Drainage / Anti-Fatigue
-├── Accessories          (badge)
-│   ├── Wall Base & Millwork
-│   │   ├── Vinyl Base
-│   │   ├── Rubber Base
-│   │   ├── Millwork Profiles
-│   │   └── Corner Guards & Wall Protection
-│   ├── Stairwell Systems
-│   │   ├── Treads & Risers
-│   │   ├── Nosings
-│   │   └── Tactile Warning
-│   └── Trims & Transitions
-│       ├── Transition Strips
-│       ├── Reducers
-│       ├── Metal Profiles
-│       └── Feature Strips
-└── Installation         (badge)
-    └── Adhesives, Floor Prep, Moisture Mitigation, Setting Materials
+└── Accessories          (badge — divergent layout, deferred)
+    ├── Wall Base & Millwork
+    ├── Stairwell Systems
+    └── Trims & Transitions
 
 Services
 ├── Commercial Installation

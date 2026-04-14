@@ -28,8 +28,7 @@ Quick lookup — find the right agent by topic. Agents with index files have acc
 | Agent | Has Index | Knows About |
 |-------|-----------|-------------|
 | [structure](structure.md) | [yes](indexes/structure.index.md) | Route layout, component organization |
-| [optimize](optimize.md) | [yes](indexes/optimize.index.md) | Performance, bundle size, CWV |
-| [performance](performance.md) | [yes](indexes/performance.index.md) | Lighthouse, loading, runtime perf |
+| [performance](performance.md) | [yes](indexes/performance.index.md) | Performance, bundle size, CWV, Lighthouse, runtime perf |
 
 ## Domain Knowledge
 | Agent | Has Index | Knows About |

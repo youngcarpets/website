@@ -1,6 +1,6 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-14 (Contact section + services + wiggle fix + color token — v0.5.16).
+Last updated: 2026-04-14 (indexes + layout tree refreshed — v0.5.17).
 
 This file is the durable cross-session to-do list. Both Claude and you read it at session start.
 
@@ -22,7 +22,11 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 
 ## Resume here next session
 
-**All 8/8 interactive features complete + wiggle permanently fixed (v0.4.93).** Backup at `backup/v0.4.93`.
+**Branch:** `main` · **Version:** v0.5.17 · **Last session:** 2026-04-14
+
+All major sections built. Products work (More/Accessories badges, Install/Care tabs) deferred — finishing rest of site first. Next: architect caption font, footer reconcile, color phase, landscape tuning.
+
+**Backup:** `backup/v0.4.93` (all 8 interactive features + wiggle fix locked).
 
 **Interactive features (all done):**
 - Carpet Tile: tile morph patterns (6 patterns, pill selector)
@@ -41,28 +45,36 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - Care tab: care icon is a generic placeholder SVG — needs per-product icon/drawing
 - Interactive features: may be tweaked later
 
-**Layout tree (top to bottom):**
+**Layout tree (top to bottom, matches +layout.svelte → +page.svelte):**
 ```
-✅ Nav Bar (glass pill, hamburger, theme toggle)
-✅ Hero (YOUNG wordmark 180ms stagger, subtitle 1000ms, blurb fade-up 1800ms)
-✅ Products Section (10 badges: 8 product + Accessories + More)
-│   ✅ 8 product badges (FLIP animation, wiggle-free, 3-tab modals)
-│   ⬜ More badge — 2-wide, accordion tree, caption "If it goes on a floor..."
-│   ⬜ Accessories badge — divergent layout
-✅ Suppliers Section (18-brand marquee)
-✅ Services Section (4 glass cards + 3 counter badges)
-✅ Contact Section (team directory + Google Maps)
-✅ Footer (glass bg 0.35, 2-col, condensed address)
+✅ Skip Link (a11y, targets #main)
+✅ Site Background (enhanced:img, fixed)
+✅ Version Badge (top center, dev only)
+✅ Header / Nav (glass pill, brand link, theme toggle, hamburger + mobile menu)
+✅ Main
+│  ✅ Hero Section (BrandMark + YOUNG wordmark 180ms stagger, subtitle 1000ms, blurb fade-up 1800ms)
+│  ✅ Products Section (10 badges: 8 product + Accessories + More)
+│  │   ✅ 8 product badges (FLIP animation, wiggle-free, 3-tab modals, interactive features)
+│  │   ⬜ More badge — standard size, simple layout (deferred)
+│  │   ⬜ Accessories badge — divergent layout (deferred)
+│  ✅ Suppliers Section (18-brand marquee)
+│  ✅ Services Section (4 glass cards + eyebrow)
+│  │   ✅ 3 counter badges (35+ / 50,000+ / 250+, countUp on scroll)
+│  ✅ Contact Section (Sales 6 + Accounting 2 team directory, Google Maps iframe)
+✅ Footer (glass bg 0.35, BrandMark, 2-col: address + contact/hours, copyright)
 ```
 
-**Next up:**
-1. **More badge** — spans 2 columns. Nested tree/accordion: tap to expand categories, tap category to see items. File-explorer style. Third column space: caption — "If it goes on a floor, we probably do it." Data exists in ay3 `moreSubcards` array.
-2. **Accessories badge** — simple list or similar divergent layout.
-3. **Architect caption font** — self-hosted WOFF2, one weight. Architectural hand-lettering for page captions/annotations. Candidates: Architects Daughter, Caveat, or similar.
-4. **Footer reconcile** — final content review after all sections done.
-5. **Color phase** — `--illuminate-color` token ready (tested pink-orange, gold, blue-green). Full palette system deferred.
-6. **Landscape/desktop tuning** — deferred, more work needed.
-7. **Error checking on-demand.** User will ask for `pnpm check` + `pnpm lint` when needed.
+**Next up (finish the rest of the site first, products later):**
+1. **Architect caption font** — self-hosted WOFF2, one weight. Architectural hand-lettering for page captions/annotations. Candidates: Architects Daughter, Caveat, or similar.
+2. **Footer reconcile** — final content review after all sections done.
+3. **Color phase** — `--illuminate-color` token ready (tested pink-orange, gold, blue-green). Full palette system deferred.
+4. **Landscape/desktop tuning** — deferred, more work needed.
+5. **Error checking on-demand.** User will ask for `pnpm check` + `pnpm lint` when needed.
+
+**Products (deferred — come back after rest of site is done):**
+- Install tab + Care & Warranty tab — finalize content for all 8 products
+- More badge — standard size (not 2-wide), simple layout
+- Accessories badge — divergent layout
 
 ## Site content (building out)
 

@@ -25,6 +25,9 @@
 | [review-checklist.md](../reference/review-checklist.md) | Pre-commit review checklist |
 | [shell-commands.md](../reference/shell-commands.md) | Useful shell commands |
 | [site-layout-structure.md](../reference/site-layout-structure.md) | Route and page layout |
+| [supplier-product-mapping.md](../reference/supplier-product-mapping.md) | 18 suppliers → product material mapping |
+| [product-port-procedure.md](../reference/product-port-procedure.md) | Procedure for porting product content from ay3 |
+| [migration-workflow.md](../reference/migration-workflow.md) | ay3 → new site migration workflow |
 | [standards.md](../reference/standards.md) | Coding standards |
 
 ## Agent Resources (accumulated agent knowledge)
