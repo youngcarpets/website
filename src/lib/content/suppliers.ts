@@ -14,16 +14,7 @@ export const suppliers: Supplier[] = [
 		name: 'Tarkett',
 		slug: 'tarkett',
 		url: 'https://commercial.tarkett.com/',
-		materials: [
-			'carpet-tile',
-			'lvt',
-			'carpet',
-			'rubber',
-			'sheet',
-			'matting',
-			'accessories',
-			'installation'
-		]
+		materials: ['carpet-tile', 'lvt', 'carpet', 'rubber', 'sheet', 'matting', 'accessories', 'more']
 	},
 	{
 		name: 'Beaulieu Canada',
@@ -87,32 +78,32 @@ export const suppliers: Supplier[] = [
 			'hardwood',
 			'sheet',
 			'accessories',
-			'installation'
+			'more'
 		]
 	},
 	{
 		name: 'Euro Tile & Stone',
 		slug: 'euro-tile',
 		url: 'https://eurotilestone.com/',
-		materials: ['ceramic', 'accessories', 'installation', 'more']
+		materials: ['ceramic', 'accessories', 'more']
 	},
 	{
 		name: 'Olympia Tile',
 		slug: 'olympia',
 		url: 'https://www.olympiatile.com/',
-		materials: ['ceramic', 'lvt', 'accessories', 'installation', 'more']
+		materials: ['ceramic', 'lvt', 'accessories', 'more']
 	},
 	{
 		name: 'Ceratec Surfaces',
 		slug: 'ceratec',
 		url: 'https://www.ceratec.com/en/',
-		materials: ['ceramic', 'lvt', 'sheet', 'accessories', 'installation']
+		materials: ['ceramic', 'lvt', 'sheet', 'accessories', 'more']
 	},
 	{
 		name: 'Ceragres',
 		slug: 'ceragres',
 		url: 'https://www.ceragres.ca/',
-		materials: ['ceramic', 'accessories', 'installation', 'more']
+		materials: ['ceramic', 'accessories', 'more']
 	},
 	{
 		name: 'Stone Tile International',
@@ -136,7 +127,7 @@ export const suppliers: Supplier[] = [
 		name: 'CIOT',
 		slug: 'ciot',
 		url: 'https://www.ciot.com/',
-		materials: ['ceramic', 'hardwood', 'accessories', 'installation', 'more']
+		materials: ['ceramic', 'hardwood', 'accessories', 'more']
 	}
 ];
 

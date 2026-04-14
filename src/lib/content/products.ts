@@ -14,8 +14,7 @@ export type Product = {
 		| 'sheet'
 		| 'matting'
 		| 'more'
-		| 'accessories'
-		| 'installation';
+		| 'accessories';
 };
 
 export const featureProducts: Product[] = [
@@ -85,13 +84,6 @@ export const featureProducts: Product[] = [
 		material: 'sheet'
 	},
 	{
-		name: 'More…',
-		blurb: 'Epoxy, raised access, treads, base, ESD — and a dozen more.',
-		details:
-			'Our actual product list runs to dozens of categories. If you have a spec, send it. If you have a problem, describe it. We will tell you what works.',
-		material: 'more'
-	},
-	{
 		name: 'Accessories',
 		blurb: 'Wall base, stair treads, trims, transitions.',
 		details:
@@ -99,9 +91,10 @@ export const featureProducts: Product[] = [
 		material: 'accessories'
 	},
 	{
-		name: 'Installation',
-		blurb: 'Adhesives, floor prep, moisture mitigation.',
-		details: 'Adhesives, floor prep compounds, moisture mitigation systems, and setting materials.',
-		material: 'installation'
+		name: 'More…',
+		blurb: 'Epoxy, raised access, treads, base, ESD — and a dozen more.',
+		details:
+			'Our actual product list runs to dozens of categories. If you have a spec, send it. If you have a problem, describe it. We will tell you what works.',
+		material: 'more'
 	}
 ];

@@ -1,6 +1,6 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-13 (All 8/8 interactive features + wiggle fix — v0.4.93).
+Last updated: 2026-04-14 (Services section + wiggle fix + layout tweaks — v0.4.99).
 
 This file is the durable cross-session to-do list. Both Claude and you read it at session start.
 
@@ -41,13 +41,28 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - Care tab: care icon is a generic placeholder SVG — needs per-product icon/drawing
 - Interactive features: may be tweaked later
 
+**Layout tree (top to bottom):**
+```
+✅ Nav Bar (glass pill, hamburger, theme toggle)
+✅ Hero (YOUNG wordmark, subtitle, context blurb)
+✅ Products Section
+│   ✅ 8 product badges (FLIP animation, wiggle-free, 3-tab modals)
+│   ⬜ 2 utility badges — More + Accessories (divergent layout)
+✅ Suppliers Section (18-brand marquee)
+✅ Services Section (4 glass cards)
+⬜ Contact/Map Section
+│   ✅ Counter badges (replay on scroll re-entry)
+│   ⬜ Team / contact / Google Maps
+✅ Footer (needs final reconcile)
+```
+
 **Next up:**
-1. **More/Accessories/Installation badges** — divergent layout (no ModalTabs)
-2. **Then Services section.** 4 service cards.
-3. **Then Contact/Map section.** Team, info, Google Maps embed. Counter badges already placed.
-4. **Footer reconcile.** After all sections done.
-5. **Design rules:** Grayscale only. No gold/yellow until color phase. All visual properties use CSS custom properties. Opacity-based color hierarchy.
-6. **Error checking on-demand.** User will ask for `pnpm check` + `pnpm lint` when needed.
+1. **More/Accessories badges** — divergent layout (no ModalTabs)
+2. **Contact/Map section.** Team, info, Google Maps embed.
+3. **Footer reconcile.** After all sections done.
+4. **Design rules:** Grayscale only. No gold/yellow until color phase. All visual properties use CSS custom properties.
+5. **Error checking on-demand.** User will ask for `pnpm check` + `pnpm lint` when needed.
+6. **Landscape/desktop tuning** — deferred, more work needed.
 
 ## Site content (building out)
 
@@ -81,8 +96,15 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] Badge SVGs restored from ay3 originals (200x200 viewBox, hand-crafted geometry)
 - [x] Interactive features: Carpet Tile (tile morph), LVT (exploded layers), Carpet (noise IIC), Ceramic (grout anatomy)
 - [x] Interactive features: Rubber (impact), Matting (heatmap), Wood+ (flip cards), Sheet Vinyl (cove anatomy)
-- [ ] More/Accessories/Installation badges (divergent layout)
-- [ ] Section: Services (4 cards)
+- [x] Services section: 4 glass cards (Commercial Installation, Consultation, Maintenance & Repair, Seasonal Matting)
+- [x] Supplier marquee moved below Products (before Services)
+- [x] Installation badge removed (content moves to More badge)
+- [x] Accessories and More badges swapped (10 badges total)
+- [x] Counter badges replay on scroll re-entry (same illuminate zone)
+- [x] Illuminate zone top edge extended (-35% → -28%) to catch top row
+- [x] Carpet SVG enlarged 15% via viewBox zoom
+- [x] SVG wiggle permanently fixed: static glow, visibility-based dimming, no transitions except transform
+- [ ] More/Accessories badges (divergent layout — no ModalTabs)
 - [ ] Section: Contact/Map (team, info, Google Maps, counter badges already placed)
 - [ ] Section: Footer (reconcile with final content)
 - [ ] Header nav links wired to real sections

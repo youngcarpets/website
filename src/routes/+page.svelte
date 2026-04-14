@@ -157,8 +157,41 @@
 		{/if}
 	</div>
 </section>
-<section id="services" class="section-placeholder" aria-label="Services"></section>
 <SupplierMarquee />
+<section id="services" class="services" aria-label="Services">
+	<p class="services-eyebrow">Supply &middot; Installation &middot; Maintenance</p>
+	<h2 class="section-heading">Services</h2>
+	<div class="services-grid">
+		<div class="service-card">
+			<h3 class="service-card__title">Commercial Installation</h3>
+			<p class="service-card__text">
+				From new construction to renovations &mdash; offices, schools, healthcare facilities, retail
+				spaces, gyms, and industrial buildings.
+			</p>
+		</div>
+		<div class="service-card">
+			<h3 class="service-card__title">Consultation</h3>
+			<p class="service-card__text">
+				Material selection and specification for commercial projects, with sample boards and on-site
+				mockups for design teams.
+			</p>
+		</div>
+		<div class="service-card">
+			<h3 class="service-card__title">Maintenance &amp; Repair</h3>
+			<p class="service-card__text">
+				Hardwood maintenance, screening and recoats, repairs, and full replacement across the
+				National Capital Region.
+			</p>
+		</div>
+		<div class="service-card">
+			<h3 class="service-card__title">Seasonal Matting</h3>
+			<p class="service-card__text">
+				We remove and store your entrance matting at the end of winter, then return it when the
+				season comes back around.
+			</p>
+		</div>
+	</div>
+</section>
 
 <section id="contact" class="section-placeholder" aria-label="Contact">
 	<div class="stats-bar">
@@ -253,15 +286,27 @@
 
 	@media (min-width: 768px) {
 		.products-grid {
-			grid-template-columns: repeat(5, 1fr);
+			grid-template-columns: repeat(4, 1fr);
 			gap: 1rem;
 		}
 	}
 
 	@media (min-width: 1024px) {
 		.products-grid {
-			grid-template-columns: repeat(6, 1fr);
+			grid-template-columns: repeat(5, 1fr);
 			gap: 1rem;
+		}
+	}
+
+	@media (min-width: 1280px) {
+		.products-grid {
+			grid-template-columns: repeat(6, 1fr);
+		}
+	}
+
+	@media (orientation: landscape) and (max-height: 500px) {
+		.products-grid {
+			grid-template-columns: repeat(4, 1fr);
 		}
 	}
 
@@ -357,6 +402,82 @@
 
 		.stats-counters {
 			gap: 1rem;
+		}
+	}
+
+	/* --- Services ---------------------------------- */
+
+	.services {
+		padding: 2rem 0.75rem;
+		max-width: 640px;
+		margin: 0 auto;
+		scroll-margin-top: 5rem;
+	}
+
+	.services-eyebrow {
+		font-family: var(--font-body);
+		font-size: 0.65rem;
+		font-weight: 400;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--color-text-muted);
+		text-align: center;
+		margin-bottom: 0.25rem;
+	}
+
+	.services-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.5rem;
+	}
+
+	.service-card {
+		padding: 1rem 0.75rem;
+		border-radius: var(--radius-lg);
+		background: rgba(18, 18, 21, 0.18);
+		border: 1px solid var(--color-border-glass);
+		backdrop-filter: blur(8px) saturate(1.4);
+		-webkit-backdrop-filter: blur(8px) saturate(1.4);
+		box-shadow: var(--glass-shadow);
+	}
+
+	.service-card__title {
+		font-family: var(--font-body);
+		font-size: 0.7rem;
+		font-weight: 500;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--color-text);
+		margin: 0 0 0.4rem;
+	}
+
+	.service-card__text {
+		font-size: 0.72rem;
+		font-weight: 400;
+		line-height: 1.45;
+		color: var(--color-text-muted);
+		margin: 0;
+	}
+
+	@media (min-width: 521px) {
+		.services {
+			padding: 4rem 1.5rem;
+		}
+
+		.services-grid {
+			gap: 0.75rem;
+		}
+
+		.service-card {
+			padding: 1.25rem 1rem;
+		}
+
+		.service-card__title {
+			font-size: 0.8rem;
+		}
+
+		.service-card__text {
+			font-size: 0.82rem;
 		}
 	}
 </style>

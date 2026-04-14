@@ -9,8 +9,6 @@ export function countUp(node: HTMLElement) {
 		return {};
 	}
 
-	let started = false;
-
 	const animate = () => {
 		const t0 = performance.now();
 		const tick = (now: number) => {
@@ -26,14 +24,13 @@ export function countUp(node: HTMLElement) {
 	const io = new IntersectionObserver(
 		(entries) => {
 			for (const e of entries) {
-				if (e.isIntersecting && !started) {
-					started = true;
+				if (e.isIntersecting) {
+					node.textContent = fmt(0);
 					animate();
-					io.disconnect();
 				}
 			}
 		},
-		{ threshold: 0.5 }
+		{ rootMargin: '-28% 0px -35% 0px', threshold: 0 }
 	);
 	io.observe(node);
 
