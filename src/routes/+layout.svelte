@@ -164,7 +164,8 @@
 					<address class="site-footer-address">
 						Young Carpets Inc.<br />
 						Unit 316-1228 Old Innes Rd<br />
-						Ottawa, ON K1B 3V3
+						Ottawa, ON K1B 3V3<br />
+						Canada
 					</address>
 				</div>
 			</div>
@@ -497,7 +498,7 @@
 	/* --- Footer --------------------------------------------- */
 
 	.site-footer {
-		background: rgba(18, 18, 21, 0.35);
+		background: rgba(18, 18, 21, 0.22);
 		backdrop-filter: blur(12px) saturate(1.4);
 		-webkit-backdrop-filter: blur(12px) saturate(1.4);
 		color: var(--color-text-muted);
@@ -530,7 +531,8 @@
 		display: flex;
 		flex-direction: column;
 		align-items: start;
-		margin-bottom: 1.25rem;
+		margin-bottom: 1.5rem;
+		margin-top: -0.75rem;
 	}
 
 	.site-footer-address-row {
@@ -541,12 +543,13 @@
 
 	.site-footer-address-row .site-footer-list-key {
 		margin-top: 0.15rem;
+		color: rgba(230, 230, 232, 0.8);
 	}
 
 	.site-footer-address {
 		font-style: normal;
 		margin: 0;
-		color: var(--color-text);
+		color: var(--color-text-subtle);
 		font-size: 0.82rem;
 		line-height: 1.6;
 		user-select: text;
@@ -570,12 +573,12 @@
 	.site-footer-list-key {
 		display: flex;
 		align-items: center;
-		color: var(--color-text-subtle);
+		color: rgba(230, 230, 232, 0.8);
 	}
 
 	.site-footer-list-val {
 		font-size: 0.82rem;
-		color: var(--color-text);
+		color: var(--color-text-subtle);
 		font-feature-settings: 'tnum';
 		user-select: text;
 		text-decoration: none;

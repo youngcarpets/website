@@ -1,6 +1,6 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-14 (indexes + layout tree refreshed — v0.5.17).
+Last updated: 2026-04-14 (contact section redesign + footer polish — v0.5.30).
 
 This file is the durable cross-session to-do list. Both Claude and you read it at session start.
 
@@ -22,9 +22,11 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 
 ## Resume here next session
 
-**Branch:** `main` · **Version:** v0.5.17 · **Last session:** 2026-04-14
+**Branch:** `main` · **Version:** v0.5.30 · **Last session:** 2026-04-14
 
-All major sections built. Products work (More/Accessories badges, Install/Care tabs) deferred — finishing rest of site first. Next: architect caption font, footer reconcile, color phase, landscape tuning.
+Contact section redesigned: sales 2×3 grid of individual glass cards with staggered scroll-reveal + illuminate glow, company info (Head Office) + accounting as matching cards below, Google Maps with spacing. Footer polished: more transparent bg (0.22), dimmed text, brighter icons, BrandMark pushed higher, Canada added to address. A11y fixes applied (focus-visible, target sizes).
+
+Products deferred — finishing rest of site first. Next: architect caption font, footer reconcile, color phase, landscape tuning.
 
 **Backup:** `backup/v0.4.93` (all 8 interactive features + wiggle fix locked).
 
@@ -60,8 +62,8 @@ All major sections built. Products work (More/Accessories badges, Install/Care t
 │  ✅ Suppliers Section (18-brand marquee)
 │  ✅ Services Section (4 glass cards + eyebrow)
 │  │   ✅ 3 counter badges (35+ / 50,000+ / 250+, countUp on scroll)
-│  ✅ Contact Section (Sales 6 + Accounting 2 team directory, Google Maps iframe)
-✅ Footer (glass bg 0.35, BrandMark, 2-col: address + contact/hours, copyright)
+│  ✅ Contact Section (Sales 2×3 grid, Head Office + Accounting cards, illuminate glow, Google Maps)
+✅ Footer (glass bg 0.22, BrandMark top-edge, dimmed text, bright icons, 2-col, Canada in address)
 ```
 
 **Next up (finish the rest of the site first, products later):**
@@ -116,9 +118,9 @@ All major sections built. Products work (More/Accessories badges, Install/Care t
 - [x] Illuminate zone top edge extended (-35% → -28%) to catch top row
 - [x] Carpet SVG enlarged 15% via viewBox zoom
 - [x] SVG wiggle permanently fixed: static glow, visibility-based dimming, no transitions except transform
-- [x] Contact section: team directory (Sales 6 + Accounting 2), Google Maps iframe, scroll-reveal
+- [x] Contact section: Sales 2×3 grid cards, Head Office + Accounting cards, illuminate glow, Google Maps, a11y fixes
 - [x] Hero choreography: YOUNG 180ms stagger, subtitle 1000ms, blurb fade-up 1800ms + text-shadow
-- [x] Footer redesign: glass bg 0.35, softer border, 2-col on mobile, condensed address
+- [x] Footer redesign: glass bg 0.22, BrandMark top-edge, dimmed text, bright icons, 2-col, Canada in address
 - [x] Illuminate color tokenized: `--illuminate-color` RGB triplet (tested colors, currently white)
 - [x] Counter badges moved to Services section bottom
 - [x] Landscape: max 4 badge columns (deferred for further tuning)

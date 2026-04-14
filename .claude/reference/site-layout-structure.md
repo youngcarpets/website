@@ -31,8 +31,8 @@ Hero              (BrandMark + animated YOUNG wordmark, subtitle, context blurb)
 Products          (10 badges: 8 product types + More + Accessories)
 Suppliers         (18-brand marquee, "Trusted Brands Include:")
 Services          (eyebrow + 4 glass cards + 3 counter badges)
-Contact           (Sales 6 + Accounting 2 team directory, Google Maps iframe)
-Footer            (glass bg, BrandMark, 2-col: address + contact/hours, copyright)
+Contact           (Sales 2×3 grid cards, Head Office + Accounting cards, illuminate glow, Google Maps)
+Footer            (glass bg 0.22, BrandMark top-edge, dimmed text, bright icons, 2-col, copyright)
 ```
 
 Gallery deferred to later phase.
