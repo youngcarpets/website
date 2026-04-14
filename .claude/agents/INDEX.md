@@ -1,6 +1,6 @@
 # Agent Index
 
-> Last updated: 2026-04-13
+> Last updated: 2026-04-14
 
 Quick lookup — find the right agent by topic. Agents with index files have accumulated knowledge; check there before external research.
 

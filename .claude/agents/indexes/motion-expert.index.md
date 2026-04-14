@@ -1,6 +1,6 @@
 # Motion Expert — Resource Index
 
-> Last updated: 2026-04-12
+> Last updated: 2026-04-14
 
 ## Core Resources
 | File | What's In It |
@@ -87,5 +87,10 @@ Note: `max-height` is an exception for expand/collapse patterns where `transform
 ## Key Files in This Project
 | File | Animations Present |
 |------|-------------------|
-| `src/routes/+layout.svelte` | Nav glass, hamburger bars, theme toggle, footer expand/collapse, view transitions |
-| `src/routes/+page.svelte` | Hero label fade, wordmark letter bounce, tagline fade |
+| `src/routes/+layout.svelte` | Nav glass, hamburger bars, theme toggle, view transitions |
+| `src/routes/+page.svelte` | Hero blurb fade-up (1800ms), badge-in stagger, countUp replay |
+| `src/lib/components/BrandMark.svelte` | YOUNG letter bounce (180ms stagger), subtitle fade-up (1000ms delay) |
+| `src/lib/components/ProductBadge.svelte` | Illuminate glow snap (NO transition), hover transform only |
+| `src/lib/components/ExpandedProduct.svelte` | FLIP grow/shrink 900ms, glow overlay layout animation |
+| `src/lib/components/ContactSection.svelte` | Team + map scroll-reveal fade-up (600ms) |
+| `src/lib/components/ProductContentModal.svelte` | Per-product interactive features (keyframes, state toggles) |

@@ -1,6 +1,6 @@
 # FLIP Animation Expert — Resource Index
 
-> Last updated: 2026-04-13
+> Last updated: 2026-04-14
 
 ## Core Knowledge (embedded in agent)
 | Topic | What's Covered |
@@ -48,10 +48,15 @@ The FLIP grow and shrink animations are working perfectly — zero wiggle, confi
 ## Brightness Matching
 | Element | Badge | Expanded | Match Method |
 |---------|-------|----------|-------------|
-| Title text | opacity via illuminate CSS | full opacity white | Same effective color |
+| Title text | opacity snaps via `.illuminated` | full opacity white | Same effective color |
 | SVG icon | color 0.55 × opacity 0.55 | color 0.55 × opacity 0.55 | Identical values |
-| Border glow | --illuminate-glow | --illuminate-glow | Same CSS variable |
+| Border glow | `rgba(var(--illuminate-color), 0.3)` | `rgba(var(--illuminate-color), 0.3)` | Same token |
+| Box-shadow | `var(--glass-shadow), var(--illuminate-glow)` | same | Same tokens |
 | Background | identical gradient | identical gradient | Same CSS declaration |
+| Dimmed state | `visibility: hidden` (no opacity) | N/A | No repaint |
+
+## Color Token
+`--illuminate-color: R, G, B` in `app.css` — RGB triplet used by `--illuminate-glow` and border-color on both badge + expanded card. Change one value to change the entire glow color site-wide. Currently `255, 255, 255` (white/grayscale).
 
 ## Timing
 - Duration: 900ms (EXPAND_MS constant)

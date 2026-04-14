@@ -1,6 +1,6 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-14 (Services section + wiggle fix + layout tweaks — v0.4.99).
+Last updated: 2026-04-14 (Contact section + services + wiggle fix + color token — v0.5.16).
 
 This file is the durable cross-session to-do list. Both Claude and you read it at session start.
 
@@ -10,7 +10,7 @@ This file is the durable cross-session to-do list. Both Claude and you read it a
 
 https://youngcarpets-website.pages.dev — stable production URL on Cloudflare Pages. Updates on `pnpm run deploy`.
 
-## Where we landed (2026-04-13)
+## Where we landed (2026-04-14)
 
 - **Dark mode is the working mode.** Body `#0b0b0d`, text `#e6e6e8`. Grayscale only — no color accents until color phase at the end.
 - **System font stack.** SF Pro Display (Apple), Segoe UI (Windows), system-ui fallback. Square721 for YOUNG wordmark only.
@@ -44,27 +44,25 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 **Layout tree (top to bottom):**
 ```
 ✅ Nav Bar (glass pill, hamburger, theme toggle)
-✅ Hero (YOUNG wordmark, subtitle, context blurb)
-✅ Products Section
+✅ Hero (YOUNG wordmark 180ms stagger, subtitle 1000ms, blurb fade-up 1800ms)
+✅ Products Section (10 badges: 8 product + Accessories + More)
 │   ✅ 8 product badges (FLIP animation, wiggle-free, 3-tab modals)
-│   ⬜ 2 utility badges — More + Accessories (divergent layout)
+│   ⬜ More badge — 2-wide, accordion tree, caption "If it goes on a floor..."
+│   ⬜ Accessories badge — divergent layout
 ✅ Suppliers Section (18-brand marquee)
-✅ Services Section (4 glass cards)
-⬜ Contact/Map Section
-│   ✅ Counter badges (replay on scroll re-entry)
-│   ⬜ Team / contact / Google Maps
-✅ Footer (needs final reconcile)
+✅ Services Section (4 glass cards + 3 counter badges)
+✅ Contact Section (team directory + Google Maps)
+✅ Footer (glass bg 0.35, 2-col, condensed address)
 ```
 
 **Next up:**
 1. **More badge** — spans 2 columns. Nested tree/accordion: tap to expand categories, tap category to see items. File-explorer style. Third column space: caption — "If it goes on a floor, we probably do it." Data exists in ay3 `moreSubcards` array.
 2. **Accessories badge** — simple list or similar divergent layout.
-3. **Contact/Map section.** Team, info, Google Maps embed.
-4. **Architect caption font** — self-hosted WOFF2, one weight. Used for all page captions/annotations (More badge caption, services eyebrow, supplier tagline, etc.). Architectural hand-lettering feel — like notes scribbled on a floor plan. Candidates: Architects Daughter, Caveat, or similar. Not body text — captions only.
-5. **Footer reconcile.** After all sections done.
-4. **Design rules:** Grayscale only. No gold/yellow until color phase. All visual properties use CSS custom properties.
-5. **Error checking on-demand.** User will ask for `pnpm check` + `pnpm lint` when needed.
+3. **Architect caption font** — self-hosted WOFF2, one weight. Architectural hand-lettering for page captions/annotations. Candidates: Architects Daughter, Caveat, or similar.
+4. **Footer reconcile** — final content review after all sections done.
+5. **Color phase** — `--illuminate-color` token ready (tested pink-orange, gold, blue-green). Full palette system deferred.
 6. **Landscape/desktop tuning** — deferred, more work needed.
+7. **Error checking on-demand.** User will ask for `pnpm check` + `pnpm lint` when needed.
 
 ## Site content (building out)
 
@@ -106,9 +104,16 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 - [x] Illuminate zone top edge extended (-35% → -28%) to catch top row
 - [x] Carpet SVG enlarged 15% via viewBox zoom
 - [x] SVG wiggle permanently fixed: static glow, visibility-based dimming, no transitions except transform
-- [ ] More/Accessories badges (divergent layout — no ModalTabs)
-- [ ] Section: Contact/Map (team, info, Google Maps, counter badges already placed)
-- [ ] Section: Footer (reconcile with final content)
+- [x] Contact section: team directory (Sales 6 + Accounting 2), Google Maps iframe, scroll-reveal
+- [x] Hero choreography: YOUNG 180ms stagger, subtitle 1000ms, blurb fade-up 1800ms + text-shadow
+- [x] Footer redesign: glass bg 0.35, softer border, 2-col on mobile, condensed address
+- [x] Illuminate color tokenized: `--illuminate-color` RGB triplet (tested colors, currently white)
+- [x] Counter badges moved to Services section bottom
+- [x] Landscape: max 4 badge columns (deferred for further tuning)
+- [x] user-select: none on product badges
+- [ ] More badge (2-wide accordion + caption)
+- [ ] Accessories badge (divergent layout)
+- [ ] Footer final reconcile
 - [ ] Header nav links wired to real sections
 - [ ] `<svelte:head>` per-page meta (title, description, og)
 - [ ] JSON-LD `LocalBusiness` on home page
