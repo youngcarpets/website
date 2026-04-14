@@ -1,6 +1,6 @@
 # TODO — Young Carpets Website
 
-Last updated: 2026-04-13 (Shared ProductContentModal + 4/8 interactive features + ay3 badge SVGs — v0.4.73).
+Last updated: 2026-04-13 (All 8/8 interactive features + wiggle fix — v0.4.93).
 
 This file is the durable cross-session to-do list. Both Claude and you read it at session start.
 
@@ -22,24 +22,21 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 
 ## Resume here next session
 
-**Current task: Product modal interactive features — 4 remaining.**
-Shared `ProductContentModal.svelte` renders all 8 real products from `product-details.ts`. Content (spec rows, install, care tabs) done for all 8. Badge SVGs restored from ay3 originals.
+**All 8/8 interactive features complete + wiggle permanently fixed (v0.4.93).** Backup at `backup/v0.4.93`.
 
-**Interactive features done (4/8):**
+**Interactive features (all done):**
 - Carpet Tile: tile morph patterns (6 patterns, pill selector)
 - LVT: exploded layer diagram (4-layer auto-animate)
 - Carpet: noise path IIC dampening (hard floor vs carpet+pad toggle, wave animation)
 - Ceramic: grout anatomy (5-step auto-reveal + replay button)
+- Rubber: impact absorption by thickness (3-column dumbbell drop + slab flash)
+- Matting: lobby heatmap zones (pulsing gradient + 3-zone SCRAPE/WIPE/DRY fade-in)
+- Wood+: flip cards (6-card 3×2 grid, 3D rotateY front/back)
+- Sheet Vinyl: cove-build anatomy (4-step stroke-draw reveal + replay button)
 
-**Interactive features remaining (4/8) — port from ay3:**
-1. **Rubber** — impact absorption by thickness (3-column SVG, thickness comparison)
-2. **Matting** — lobby heatmap zones (bird's-eye entrance with 3-zone overlay)
-3. **Wood+** — flip cards (6-card grid, front/back reveal)
-4. **Sheet Vinyl** — cove-build anatomy (4-step sheet vinyl install sequence)
+**Wiggle fix (v0.4.86–v0.4.93 LOCKED):** No CSS transitions except `transform`. Illuminate glow snaps instantly. Dimmed badges use `visibility:hidden`. Badge illuminated state matches expanded card exactly. Ceramic + Carpet Tile SVGs centered. Carpet SVG enlarged 15%.
 
-**Procedure:** `.claude/reference/product-port-procedure.md` — read ay3 source, map color tokens to grayscale, add state + SVG + CSS to ProductContentModal, deploy, verify.
-
-**After all 8 interactive features:**
+**Next up:**
 1. **More/Accessories/Installation badges** — divergent layout (no ModalTabs)
 2. **Then Services section.** 4 service cards.
 3. **Then Contact/Map section.** Team, info, Google Maps embed. Counter badges already placed.
@@ -78,7 +75,7 @@ Shared `ProductContentModal.svelte` renders all 8 real products from `product-de
 - [x] Shared ProductContentModal — data-driven, all 8 real products rendered from product-details.ts
 - [x] Badge SVGs restored from ay3 originals (200x200 viewBox, hand-crafted geometry)
 - [x] Interactive features: Carpet Tile (tile morph), LVT (exploded layers), Carpet (noise IIC), Ceramic (grout anatomy)
-- [ ] Interactive features: Rubber, Matting, Wood+, Sheet Vinyl (port from ay3)
+- [x] Interactive features: Rubber (impact), Matting (heatmap), Wood+ (flip cards), Sheet Vinyl (cove anatomy)
 - [ ] More/Accessories/Installation badges (divergent layout)
 - [ ] Section: Services (4 cards)
 - [ ] Section: Contact/Map (team, info, Google Maps, counter badges already placed)
