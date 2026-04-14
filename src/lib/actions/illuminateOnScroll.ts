@@ -14,7 +14,7 @@ export function illuminateOnScroll(node: HTMLElement) {
 			}
 		},
 		{
-			rootMargin: '-35% 0px -35% 0px',
+			rootMargin: '-28% 0px -35% 0px',
 			threshold: 0
 		}
 	);
