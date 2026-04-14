@@ -57,9 +57,11 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 ```
 
 **Next up:**
-1. **More/Accessories badges** — divergent layout (no ModalTabs)
-2. **Contact/Map section.** Team, info, Google Maps embed.
-3. **Footer reconcile.** After all sections done.
+1. **More badge** — spans 2 columns. Nested tree/accordion: tap to expand categories, tap category to see items. File-explorer style. Third column space: caption — "If it goes on a floor, we probably do it." Data exists in ay3 `moreSubcards` array.
+2. **Accessories badge** — simple list or similar divergent layout.
+3. **Contact/Map section.** Team, info, Google Maps embed.
+4. **Architect caption font** — self-hosted WOFF2, one weight. Used for all page captions/annotations (More badge caption, services eyebrow, supplier tagline, etc.). Architectural hand-lettering feel — like notes scribbled on a floor plan. Candidates: Architects Daughter, Caveat, or similar. Not body text — captions only.
+5. **Footer reconcile.** After all sections done.
 4. **Design rules:** Grayscale only. No gold/yellow until color phase. All visual properties use CSS custom properties.
 5. **Error checking on-demand.** User will ask for `pnpm check` + `pnpm lint` when needed.
 6. **Landscape/desktop tuning** — deferred, more work needed.

@@ -120,7 +120,7 @@
 
 	.brand-mark__wordmark--ready .brand-mark__char--animated {
 		animation: brandmark-letter-in 1000ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-		animation-delay: calc(var(--young-i, 0) * 120ms);
+		animation-delay: calc(var(--young-i, 0) * 180ms);
 		will-change: transform, opacity;
 	}
 
@@ -143,7 +143,7 @@
 	}
 
 	.brand-mark__subtitle--ready {
-		animation: brandmark-fade-up 600ms var(--ease-out) 800ms forwards;
+		animation: brandmark-fade-up 600ms var(--ease-out) 1000ms forwards;
 	}
 
 	@keyframes brandmark-fade-up {

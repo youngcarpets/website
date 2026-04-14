@@ -326,12 +326,31 @@
 
 	.hero-blurb {
 		font-family: var(--font-body);
-		font-size: 0.85rem;
-		font-weight: 300;
+		font-size: 1rem;
+		font-weight: 350;
 		color: var(--color-text-muted);
 		max-width: 28ch;
-		line-height: 1.5;
+		line-height: 1.6;
 		margin-top: 1.25rem;
+		text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+		opacity: 0;
+		transform: translateY(12px);
+		animation: hero-blurb-in 850ms var(--ease-out) 1800ms forwards;
+	}
+
+	@keyframes hero-blurb-in {
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero-blurb {
+			opacity: 1;
+			transform: none;
+			animation: none;
+		}
 	}
 
 	/* --- Stats / Counters ----------------------------------- */
