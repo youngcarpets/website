@@ -36,6 +36,11 @@ https://youngcarpets-website.pages.dev — stable production URL on Cloudflare P
 
 **Wiggle fix (v0.4.86–v0.4.93 LOCKED):** No CSS transitions except `transform`. Illuminate glow snaps instantly. Dimmed badges use `visibility:hidden`. Badge illuminated state matches expanded card exactly. Ceramic + Carpet Tile SVGs centered. Carpet SVG enlarged 15%.
 
+**Product modal tabs — remaining polish (deferred):**
+- Install tab: video placeholder still present — decide if install videos are happening
+- Care tab: care icon is a generic placeholder SVG — needs per-product icon/drawing
+- Interactive features: may be tweaked later
+
 **Next up:**
 1. **More/Accessories/Installation badges** — divergent layout (no ModalTabs)
 2. **Then Services section.** 4 service cards.
