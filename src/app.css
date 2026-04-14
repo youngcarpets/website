@@ -90,9 +90,10 @@ a {
 	--illuminate-dim: 0.5;
 	--illuminate-full: 1;
 	--illuminate-speed: 2s;
+	--illuminate-color: 255, 255, 255;
 	--illuminate-glow:
-		0 0 4px rgba(255, 255, 255, 0.55), 0 0 10px rgba(255, 255, 255, 0.18),
-		inset 0 0 6px rgba(255, 255, 255, 0.12);
+		0 0 4px rgba(var(--illuminate-color), 0.55), 0 0 10px rgba(var(--illuminate-color), 0.18),
+		inset 0 0 6px rgba(var(--illuminate-color), 0.12);
 
 	/* Interactive */
 	--hover-bg: rgba(255, 255, 255, 0.06);

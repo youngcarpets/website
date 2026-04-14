@@ -73,7 +73,7 @@
 
 	:global(.illuminated) .product-badge {
 		box-shadow: var(--glass-shadow), var(--illuminate-glow);
-		border-color: rgba(255, 255, 255, 0.18);
+		border-color: rgba(var(--illuminate-color), 0.3);
 	}
 
 	@keyframes badge-in {
@@ -143,7 +143,7 @@
 		.product-badge:hover {
 			transform: translateY(-3px) scale(1.02);
 			box-shadow: var(--glass-shadow), var(--illuminate-glow);
-			border-color: rgba(255, 255, 255, 0.18);
+			border-color: rgba(var(--illuminate-color), 0.3);
 		}
 
 		.product-badge:hover .product-badge__texture {

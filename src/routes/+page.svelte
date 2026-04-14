@@ -4,6 +4,7 @@
 	import ProductBadge from '$lib/components/ProductBadge.svelte';
 	import ExpandedProduct from '$lib/components/ExpandedProduct.svelte';
 	import SupplierMarquee from '$lib/components/SupplierMarquee.svelte';
+	import ContactSection from '$lib/components/ContactSection.svelte';
 	import { countUp } from '$lib/actions/countUp';
 	import { illuminateOnScroll } from '$lib/actions/illuminateOnScroll';
 	import { featureProducts } from '$lib/content/products';
@@ -191,9 +192,6 @@
 			</p>
 		</div>
 	</div>
-</section>
-
-<section id="contact" class="section-placeholder" aria-label="Contact">
 	<div class="stats-bar">
 		<div class="stats-counters">
 			<div class="stats-item">
@@ -236,11 +234,9 @@
 	</div>
 </section>
 
-<style>
-	.section-placeholder {
-		min-height: 0;
-	}
+<ContactSection />
 
+<style>
 	/* --- Products ----------------------------------- */
 
 	.products {
@@ -358,7 +354,7 @@
 	.stats-bar {
 		display: flex;
 		justify-content: center;
-		padding: 2rem 1rem;
+		padding: 2rem 0 0;
 		max-width: 640px;
 		margin: 0 auto;
 	}

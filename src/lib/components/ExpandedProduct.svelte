@@ -269,7 +269,7 @@
 			radial-gradient(ellipse 80% 60% at 25% 15%, rgba(255, 255, 255, 0.04) 0%, transparent 70%),
 			radial-gradient(ellipse 50% 50% at 80% 85%, rgba(0, 0, 0, 0.2) 0%, transparent 70%),
 			rgba(11, 11, 13, 0.82);
-		border: 1px solid rgba(255, 255, 255, 0.18);
+		border: 1px solid rgba(var(--illuminate-color), 0.3);
 		box-shadow: var(--glass-shadow), var(--illuminate-glow);
 		padding: 0.75rem;
 		transform-origin: top left;
@@ -374,7 +374,7 @@
 		height: 100%;
 		z-index: 11;
 		border-radius: var(--radius-sm);
-		border: 1px solid rgba(255, 255, 255, 0.18);
+		border: 1px solid rgba(var(--illuminate-color), 0.3);
 		box-shadow: var(--illuminate-glow);
 		pointer-events: none;
 		transition:
